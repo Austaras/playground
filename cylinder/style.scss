@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    color: lightgray
+}
+
+@mixin on-circle($item-count, $circle-size, $item-size) {
+    position: relative;
+    width:  $circle-size;
+    height: $circle-size;
+    padding: 0;
+    border-radius: 50%; 
+    
+    > * {
+        display: block;
+        position: absolute;
+        top:  50%; 
+        left: 50%;
+        width:  $item-size;
+        height: $item-size;
+        margin: -($item-size / 2);
+        
+        $angle: (360 / $item-count);
+        $rot: 0;
+        
+        @for $i from 1 through $item-count {
+            &:nth-of-type(#{$i}) {
+                transform: 
+                    rotate($rot * 1deg) 
+                    translate(($circle-size - $item-size) / 2)
+                    rotate($rot * -1deg);
+            }
+        
+            $rot: $rot + $angle;
+        }
+    }
+}
+
+#warpper {
+    background-color: lightslategray;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center
+}
+
+#container {
+    @include on-circle($item-count: 8, $circle-size: 40em, $item-size: 6em); 
+    background-color: darkgoldenrod;
+    overflow: hidden
+}
+
+.item {
+    width: 5em;
+    height: 5em;
+    line-height: 5em;
+    border-radius: 50%;
+    background-color: cornflowerblue;
+    text-align: center
+}
