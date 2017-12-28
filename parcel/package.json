@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Austaras/Playground/issues"
   },
-  "homepage": "https://github.com/Austaras/Playground#readme"
+  "homepage": "https://github.com/Austaras/Playground#readme",
+  "devDependencies": {
+    "typescript": "^2.6.2"
+  }
 }
