@@ -45,7 +45,7 @@ body {
 }
 
 #container {
-    @include on-circle($item-count: 8, $circle-size: 40em, $item-size: 6em); 
+    @include on-circle($item-count: 8, $circle-size: 40em, $item-size: 5em); 
     background-color: darkgoldenrod;
     overflow: hidden
 }
