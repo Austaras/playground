@@ -1,0 +1,22 @@
+.container {
+    background-color: darkkhaki;
+    width: 116px;
+    white-space: nowrap;
+    >span {
+        width: 50%;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        +span {
+            direction: rtl;
+        }
+    }
+}
+
+.firefox {
+    text-overflow: "" !important
+}
+
+.clip {
+    text-overflow: clip !important
+}
