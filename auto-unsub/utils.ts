@@ -13,7 +13,7 @@ export function trace(obj: any, watch: Function[]) {
                 const result = origMethod.apply(this, args)
                 if (typeof args[0] === 'function') watch.push(...args)
                 return result
-            };
+            }
         }
     };
     return new Proxy(obj, handler)
