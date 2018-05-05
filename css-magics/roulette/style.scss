@@ -1,8 +1,7 @@
 body {
     margin: 0;
-    // background-color: skyblue;
+    background-color: skyblue;
     height: 100vh;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -11,12 +10,12 @@ body {
 
 $width: 200px;
 $height: 200px;
-
 .circle {
     width: 2 * $width;
     height: 2* $height;
     overflow: hidden;
 }
+
 .sector {
     width: $width;
     height: $height;
@@ -35,12 +34,14 @@ $height: 200px;
         }
     }
     transform-origin: right bottom;
-    @for $ind from 1 through 12 {
+    $total: 12;
+    $skew: 90deg - 360deg / $total;
+    @for $ind from 1 through $total {
         &:nth-child(#{$ind}) {
             top: -$height * ($ind - 1);
-            transform: rotate(($ind - 1) * 30deg) skew(60deg) ;
+            transform: rotate(($ind - 1) * 360deg / $total) skew($skew);
             >.item {
-                transform: skew(-60deg);
+                transform: skew(-$skew);
             }
         }
     }

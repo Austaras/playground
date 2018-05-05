@@ -10,9 +10,8 @@ export function trace(obj: any, watch: Function[]) {
             const origMethod = target[propKey]
             if (typeof origMethod !== "function") return origMethod
             return function (...args: any[]) {
-                const result = origMethod.apply(this, args)
                 if (typeof args[0] === 'function') watch.push(...args)
-                return result
+                return origMethod.apply(this, args)
             }
         }
     };
