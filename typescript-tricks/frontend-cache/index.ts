@@ -37,6 +37,7 @@ class Wiki {
     get(term: string) {
         return fetch("https://en.wikipedia.org/w/api.php" +
             `?origin=*&action=opensearch&search=${term}&limit=1`)
+            .then((res) => res.json())
     }
 }
 

@@ -1,0 +1,53 @@
+body {
+    background-color: dimgray;
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: space-around
+}
+
+.container {
+    perspective: 1000px;
+    &:hover .flipper {
+        transform: rotateY(180deg);
+    }
+}
+
+.flipper,
+.cover,
+.text {
+    height: 450px;
+    width: 400px;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.flipper {
+    transition: 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+
+.cover,
+.text {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.cover {
+    background-color: black;
+    z-index: 2;
+}
+
+.text {
+    transform: rotateY(180deg);
+    background-color: red;
+    color: black;
+    border: 4px yellow solid;
+    padding: 1em;
+    font-weight: bold;
+}
