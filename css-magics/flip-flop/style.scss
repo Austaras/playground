@@ -17,7 +17,7 @@ body {
 .flipper,
 .cover,
 .text {
-    height: 450px;
+    height: 400px;
     width: 400px;
     box-sizing: border-box;
     display: inline-block;
@@ -40,7 +40,8 @@ body {
 
 .cover {
     background-color: black;
-    z-index: 2;
+    color: silver;
+    padding: 30% 1em 0 1em;
 }
 
 .text {

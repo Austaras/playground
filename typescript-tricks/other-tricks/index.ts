@@ -27,5 +27,3 @@ a.length = 1
 console.log(a)
 a.length = 2
 console.log(a)
-
-

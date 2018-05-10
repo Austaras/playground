@@ -4,6 +4,15 @@
     "module": "esnext",                     
     "strict": true,                  
     "noImplicitThis": false,
+    "strictPropertyInitialization": false,
+
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "*",
+        "node_modules/*"
+      ]
+    },
 
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -11,7 +20,6 @@
     "lib": ["dom", "esnext"],
     "types": [
       "esnext",
-      "chrome",
       "reflect-metadata"
     ]
   }
