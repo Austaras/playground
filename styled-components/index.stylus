@@ -2,6 +2,7 @@
     width                   100%
     padding                 20px 0 0 15%
     box-sizing              border-box
+    font-style              italic
 
 .quote 
     width                   100%
