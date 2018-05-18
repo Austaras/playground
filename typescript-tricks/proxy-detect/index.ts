@@ -7,6 +7,7 @@ class Person {
             width: 50
         }
     }
+    children: number[]
 }
 
 function trap<T extends any>(object: T, key?: string) {
@@ -38,17 +39,18 @@ function trap<T extends any>(object: T, key?: string) {
     return new Proxy(object, handler)
 }
 
-const person = new Person()
-const proxy = trap(person)
-proxy.money = 7
-proxy.money++
-delete proxy.money
-proxy.house.window.width = 75
-proxy.house = {
+const person = trap(new Person())
+person.money = 7
+person.money++
+delete person.money
+person.house.window.width = 75
+person.house = {
     door: "Hodor",
     window: {
         height: 100,
         width: 50
     }
 }
-delete proxy.house.door
+delete person.house.door
+person.children = [1, 2, 3, 4, 5]
+person.children.reverse()
