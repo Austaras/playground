@@ -1,15 +1,17 @@
 import { Router } from "./router"
-const view = document.getElementById("view")
+import { Saber, Lancer, Archer } from "./component"
+import { RouterConfig } from "./routerConfig"
+
+const saber = new Saber()
+const lancer = new Lancer()
+const archer = new Archer()
+
 const config: RouterConfig = {
     routes: [
-        { path: "Foo", content: "Foo" },
-        { path: "Bar", content: "Bar" },
-        { path: "Baz", content: "Baz" }
+        { path: "Saber", content: saber },
+        { path: "Lancer", content: lancer },
+        { path: "Archer", content: archer }
     ]
 }
 
 const router = new Router(config)
-
-
-
-

@@ -1,9 +1,11 @@
-interface route {
+import { Component } from "./component"
+
+interface Route {
     path: string
-    content: any
+    content: Component
     keepAlive?: boolean
 }
 interface RouterConfig {
     legacy?: boolean
-    routes: Array<route>
+    routes: Array<Route>
 }

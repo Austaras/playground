@@ -1,12 +1,16 @@
+import { Route, RouterConfig } from "./routerConfig"
+
 export class Router {
-    private routes: Array<route>
+    private routes: { [path: string]: Route } = {}
+    private view: Element
 
     constructor(init: RouterConfig) {
-        this.routes = init.routes
-        this.preProcess()
+        init.routes.forEach(route => this.routes[route.path] = route)
+        this.procHtml()
         this.handelPopState()
         if (location.pathname !== "/") {
             const current = "/" + this.match(location.pathname).path
+            this.setView(this.match(location.pathname).content.element)
             history.replaceState({ current }, undefined, location.pathname)
         }
     }
@@ -15,12 +19,12 @@ export class Router {
         const path = pathStr.split("/").filter(i => i !== "")
         let res = this.routes[0]
         for (const name of path) {
-            res = this.routes.filter(i => i.path === name)[0]
+            res = this.routes[name]
         }
         return res
     }
 
-    private preProcess() {
+    private procHtml() {
         const links = Array.from(document.querySelectorAll("a"))
         links.forEach(item => {
             const to = item.getAttribute("route-to")
@@ -29,16 +33,45 @@ export class Router {
             item.removeAttribute("route-to")
             item.href = to
             item.onclick = e => {
-                console.log(to)
                 e.preventDefault()
+                this.setView(this.match(to).content.element)
                 history.pushState({ current: to }, undefined, to)
             }
         })
+        const view = document.querySelector("router-view")
+        if (view) { 
+            this.view = view 
+            this.setView(document.createElement("div")) // make template a legal html
+        }
     }
 
     private handelPopState() {
         window.addEventListener("popstate", e => {
             console.log(e.state)
         })
+    }
+
+    private setView(ele: Element) {
+        const parent = this.view.parentElement
+        if (parent) {
+            parent.replaceChild(ele, this.view)
+            this.view = ele
+        }
+    }
+
+    public to() {
+
+    }
+
+    public setData() {
+
+    }
+
+    public back(step: number) {
+        history.back(step)
+    }
+
+    public forward(step: number) {
+        history.forward(step)
     }
 }
