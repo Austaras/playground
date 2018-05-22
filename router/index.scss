@@ -1,0 +1,14 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: navajowhite;
+    padding: 10% 30% 0 30%
+}
+
+.links {
+    display: flex;
+    justify-content: space-between;
+}
