@@ -14,13 +14,13 @@ type rule = keyof typeof rules
 
 function validate(...ruleName: rule[]) {
     return (target: any, key: string, descriptor: PropertyDescriptor) => {
-        let original: Function = descriptor.value
-        descriptor.value = function () {
+        const original: Function = descriptor.value
+        descriptor.value = function() {
             let error = ""
-            let errorInd = 0
+            const errorInd = 0
             for (const ind in arguments) {
                 const ruleInd = ruleName[ind]
-                const arg = arguments[ind] as undefined
+                const arg = arguments[ind]
                 if (ruleInd && !(rules[ruleInd] as Function)(arg)) {
                     error = ruleName[ind]
                     break

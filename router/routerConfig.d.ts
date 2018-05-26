@@ -6,10 +6,10 @@ interface RouterConfig {
 interface Route {
     path: string
 
-    redirect: string,
-    match: "full" | "prefix"
+    redirect?: string,
+    match?: "full" | "prefix"
 
-    content: { new(): Object }
+    content?: { new(): Object }
     keepAlive?: boolean
     children?: Array<Route>
 }
