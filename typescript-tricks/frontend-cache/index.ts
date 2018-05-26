@@ -10,22 +10,22 @@ interface Req {
 const requests: Req = {}
 
 function cache(interval: number) {
-    return function (target: any, prop: string, descriptor: PropertyDescriptor) {
+    return function(target: any, prop: string, descriptor: PropertyDescriptor) {
         requests[prop] = {}
         const orig = descriptor.value
-        descriptor.value = function (...args: any[]) {
+        descriptor.value = function(...args: any[]) {
             const argStr = args.join("&")
-            let cache = requests[prop][argStr]
-            if (cache && Date.now() - cache.time < interval) {
-                return cache.result
+            let cached = requests[prop][argStr]
+            if (cached && Date.now() - cached.time < interval) {
+                return cached.result
             } else {
                 const result = orig.apply(this, args)
                 if (!cache) {
                     (requests[prop][argStr] as any) = {}
-                    cache = requests[prop][argStr]
+                    cached = requests[prop][argStr]
                 }
-                cache.result = result
-                cache.time = Date.now()
+                cached.result = result
+                cached.time = Date.now()
                 return result
             }
         }
@@ -34,7 +34,7 @@ function cache(interval: number) {
 
 class Wiki {
     @cache(1000)
-    get(term: string) {
+    public get(term: string) {
         return fetch("https://en.wikipedia.org/w/api.php" +
             `?origin=*&action=opensearch&search=${term}&limit=1`)
             .then((res) => res.json())

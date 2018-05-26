@@ -1,24 +1,34 @@
-import { Route, RouterConfig } from "./routerConfig"
+import { Component } from "./component"
+
+type intRoute = Route & {
+    cache?: Component
+}
 
 export class Router {
-    private routes: { [path: string]: Route } = {}
+    private routes: { [path: string]: intRoute } = {}
     private view: Element
+    private current: string
 
     constructor(init: RouterConfig) {
         init.routes.forEach(route => this.routes[route.path] = route)
         this.procHtml()
         this.handelPopState()
-        if (location.pathname !== "/") {
-            const current = "/" + this.match(location.pathname).path
-            this.setView(this.match(location.pathname).content.element)
-            history.replaceState({ current }, undefined, location.pathname)
-        }
+        const current = "/" + this.match(location.pathname).path
+        this.setView(this.match(location.pathname))
+
+    }
+
+    private stripSlash(str: string) {
+        if (str[0] === "/") return str.slice(1)
+        return str
     }
 
     private match(pathStr: string) {
-        const path = pathStr.split("/").filter(i => i !== "")
+        console.log(pathStr)
+        const path = pathStr.split("/")
         let res = this.routes[0]
         for (const name of path) {
+            if (name === "") continue
             res = this.routes[name]
         }
         return res
@@ -34,44 +44,44 @@ export class Router {
             item.href = to
             item.onclick = e => {
                 e.preventDefault()
-                this.setView(this.match(to).content.element)
-                history.pushState({ current: to }, undefined, to)
+                this.setView(this.match(to))
+                history.pushState(null, undefined, to)
             }
         })
         const view = document.querySelector("router-view")
-        if (view) { 
-            this.view = view 
-            this.setView(document.createElement("div")) // make template a legal html
+        if (view) {
+            this.view = view
+            // this.setView(document.createElement("div")) // make template a legal html
         }
     }
 
     private handelPopState() {
         window.addEventListener("popstate", e => {
-            console.log(e.state)
+            this.setView(this.match(location.pathname))
         })
     }
 
-    private setView(ele: Element) {
-        const parent = this.view.parentElement
-        if (parent) {
-            parent.replaceChild(ele, this.view)
-            this.view = ele
+    private setView(route: intRoute) {
+        const parent = this.view.parentElement as HTMLElement
+        if (!route.cache) {
+            route.cache = new route.content() as Component
         }
+        parent.replaceChild(route.cache.element, this.view)
+        this.view = route.cache.element
     }
 
     public to() {
-
     }
 
     public setData() {
 
     }
 
-    public back(step: number) {
-        history.back(step)
+    public back(distance?: number) {
+        history.back(distance)
     }
 
-    public forward(step: number) {
-        history.forward(step)
+    public forward(distance?: number) {
+        history.forward(distance)
     }
 }

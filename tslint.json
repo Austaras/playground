@@ -1,0 +1,39 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "rules": {
+        "semicolon": false,
+        "trailing-comma": false,
+        "no-console": false,
+        "curly": [
+            true,
+            "ignore-same-line"
+        ],
+        "arrow-parens": false,
+        "member-ordering": [
+            true,
+            {
+                "order": [
+                    "private-static-field",
+                    "protected-static-field",
+                    "public-static-method",
+                    "constructor",
+                    "protected-static-method",
+                    "private-static-method",
+                    "protected-static-method",
+                    "public-static-method",
+                    "private-method",
+                    "protected-method",
+                    "public-method"
+                ]
+            }
+        ],
+        "max-classes-per-file": false,
+        "ban-types": false,
+        "only-arrow-functions": false,
+        "interface-name": false
+    },
+    "rulesDirectory": []
+}

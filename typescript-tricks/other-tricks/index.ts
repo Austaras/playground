@@ -1,5 +1,5 @@
 function timeoutPromise(time: number) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         setTimeout(resolve, time)
     })
 }
@@ -7,8 +7,6 @@ function timeoutPromise(time: number) {
 console.log(performance.now())
 timeoutPromise(1000)
     .then(() => console.log(performance.now()))
-
-// 
 
 function warn() {
     console.warn("need argument")

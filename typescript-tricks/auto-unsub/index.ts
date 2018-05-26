@@ -2,9 +2,9 @@ import { Component } from "./component"
 import { BasicService } from "./service"
 import { mount, unmount } from "./utils";
 
-const services: Services = { 'basic': new BasicService() } // Init services
+const services: Services = { basic: new BasicService() } // Init services
 
-const component = mount(Component, services)//new Component(services.ser) // Init components
+const component = mount(Component, services)// new Component(services.ser) // Init components
 
 services.basic.pub()  // serive publish message
 unmount(component, services)

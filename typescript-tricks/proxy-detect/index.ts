@@ -1,13 +1,13 @@
 class Person {
-    money = 100
-    house = {
+    public money = 100
+    public house = {
         door: "Hodor",
         window: {
             height: 100,
             width: 50
         }
     }
-    children: number[]
+    public children: number[]
 }
 
 function trap<T extends any>(object: T, key?: string) {

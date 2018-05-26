@@ -1,16 +1,11 @@
+import { Archer, Lancer, Saber } from "./component"
 import { Router } from "./router"
-import { Saber, Lancer, Archer } from "./component"
-import { RouterConfig } from "./routerConfig"
-
-const saber = new Saber()
-const lancer = new Lancer()
-const archer = new Archer()
 
 const config: RouterConfig = {
     routes: [
-        { path: "Saber", content: saber },
-        { path: "Lancer", content: lancer },
-        { path: "Archer", content: archer }
+        { path: "Saber", content: Saber },
+        { path: "Lancer", content: Lancer },
+        { path: "Archer", content: Archer }
     ]
 }
 
