@@ -2,6 +2,9 @@
   "name": "playground",
   "version": "99.99",
   "license": "WTFPL",
+  "scripts": {
+    "build": "parcel build index.html --public-url='/' --no-source-maps"
+  },
   "dependencies": {
     "node-sass": "^4.9.0",
     "reflect-metadata": "^0.1.12",

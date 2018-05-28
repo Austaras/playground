@@ -6,27 +6,20 @@ export class Router {
     private routes: IntRoute[] = []
     private view: Element
     private base: string // TODO: handle base href
+    private current: IntRoute = { path: "" }
 
     constructor(init: RouterConfig) {
         this.routes = init.routes
         this.procHtml()
         window.addEventListener("popstate", e => {
             e.preventDefault()
-            this.match(location.pathname)
+            this.match(this.parsePath(location.pathname))
         })
-        this.match(location.pathname)
+        this.match(this.parsePath(location.pathname))
     }
 
-    private match(pathStr: string) {
-        console.log(pathStr)
+    private match(paths: string[]) {
         let needRedirect = false
-        if (pathStr[0] === "/") {
-            // is absolute route
-        } else {
-            pathStr = location.pathname + pathStr
-        }
-        pathStr = pathStr.slice(1)
-        const paths = pathStr.split("/")
 
         let res
         for (const key in paths) {
@@ -44,15 +37,39 @@ export class Router {
                 }
             } while (!res || res.redirect)
         }
-        if (res) {
-            if (res.content) {
-                const ele = res.cache || new res.content().element
-                this.setView(ele)
+        if (res && res.content) {
+            const ele = res.cache || new res.content().element
+            res.cache = ele
+            this.setView(ele)
+            if (!this.current.keepAlive) {
+                this.current.cache = undefined
             }
+            this.current = res
+        } else {
+            console.error("You are doomed!")
         }
         if (needRedirect) {
-            history.replaceState(null, undefined, "/" + paths.join("/"))
+            history.replaceState(null, undefined, this.genPath(paths))
         }
+    }
+
+    private parsePath(pathStr: string) {
+        const paths = pathStr.split("/")
+        if (pathStr[0] === "/") {
+            paths.shift()
+            return paths
+        }
+        paths.pop()
+        const to = pathStr.split("/")
+        to.forEach(path => {
+            path === ".." ? paths.pop() : paths.push(path)
+        })
+        if (paths.length === 0) paths.push("")
+        return paths
+    }
+
+    private genPath(paths: string[]) {
+        return "/" + paths.join("/")
     }
 
     private procHtml() {
@@ -66,7 +83,7 @@ export class Router {
             item.href = to
             item.onclick = e => {
                 e.preventDefault()
-                this.match(to)
+                this.match(this.parsePath(to))
                 history.pushState(null, undefined, to)
             }
         })
@@ -83,12 +100,18 @@ export class Router {
         this.view = ele
     }
 
-    // public to() {
-    // }
+    public to(pathStr: string) {
+        const paths = this.parsePath(pathStr)
+        this.match(paths)
+        history.replaceState(null, undefined, "/" + paths.join(""))
+    }
 
-    // public setData() {
-
-    // }
+    public setData(data: { [key: string]: number | string | boolean }) {
+        const dataStr = "?" + Object.entries(data).map(
+            ([key, value]) => key + "=" + value)
+            .join("&")
+        history.replaceState(null, undefined, location.pathname + dataStr)
+    }
 
     public back(distance?: number) {
         history.back(distance)

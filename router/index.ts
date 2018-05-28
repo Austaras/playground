@@ -13,3 +13,6 @@ const config: RouterConfig = {
 }
 
 const router = new Router(config)
+
+const test = document.getElementById("test") as HTMLButtonElement
+test.onclick = () => router.to("/")
