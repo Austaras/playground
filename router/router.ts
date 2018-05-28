@@ -1,40 +1,62 @@
-import { Component } from "./component"
-
-type intRoute = Route & {
-    cache?: Component
+interface IntRoute extends Route {
+    cache?: Element
 }
 
 export class Router {
-    private routes: { [path: string]: intRoute } = {}
+    private routes: IntRoute[] = []
     private view: Element
-    private current: string
+    private base: string // TODO: handle base href
 
     constructor(init: RouterConfig) {
-        init.routes.forEach(route => this.routes[route.path] = route)
+        this.routes = init.routes
         this.procHtml()
-        this.handelPopState()
-        const current = "/" + this.match(location.pathname).path
-        this.setView(this.match(location.pathname))
-
-    }
-
-    private stripSlash(str: string) {
-        if (str[0] === "/") return str.slice(1)
-        return str
+        window.addEventListener("popstate", e => {
+            e.preventDefault()
+            this.match(location.pathname)
+        })
+        this.match(location.pathname)
     }
 
     private match(pathStr: string) {
         console.log(pathStr)
-        const path = pathStr.split("/")
-        let res = this.routes[0]
-        for (const name of path) {
-            if (name === "") continue
-            res = this.routes[name]
+        let needRedirect = false
+        if (pathStr[0] === "/") {
+            // is absolute route
+        } else {
+            pathStr = location.pathname + pathStr
         }
-        return res
+        pathStr = pathStr.slice(1)
+        const paths = pathStr.split("/")
+
+        let res
+        for (const key in paths) {
+            do {
+                for (const route of this.routes) {
+                    if (paths[key] === route.path) {
+                        res = route
+                        break
+                    }
+                    if (route.path === "**") res = route
+                }
+                if (res && res.redirect) {
+                    paths[key] = res.redirect
+                    needRedirect = true
+                }
+            } while (!res || res.redirect)
+        }
+        if (res) {
+            if (res.content) {
+                const ele = res.cache || new res.content().element
+                this.setView(ele)
+            }
+        }
+        if (needRedirect) {
+            history.replaceState(null, undefined, "/" + paths.join("/"))
+        }
     }
 
     private procHtml() {
+        this.base = document.getElementsByTagName("base")[0].href
         const links = Array.from(document.querySelectorAll("a"))
         links.forEach(item => {
             const to = item.getAttribute("route-to")
@@ -44,38 +66,29 @@ export class Router {
             item.href = to
             item.onclick = e => {
                 e.preventDefault()
-                this.setView(this.match(to))
+                this.match(to)
                 history.pushState(null, undefined, to)
             }
         })
         const view = document.querySelector("router-view")
         if (view) {
             this.view = view
-            // this.setView(document.createElement("div")) // make template a legal html
+            this.setView(document.createElement("div")) // make template a legal html
         }
     }
 
-    private handelPopState() {
-        window.addEventListener("popstate", e => {
-            this.setView(this.match(location.pathname))
-        })
-    }
-
-    private setView(route: intRoute) {
+    private setView(ele: Element) {
         const parent = this.view.parentElement as HTMLElement
-        if (!route.cache) {
-            route.cache = new route.content() as Component
-        }
-        parent.replaceChild(route.cache.element, this.view)
-        this.view = route.cache.element
+        parent.replaceChild(ele, this.view)
+        this.view = ele
     }
 
-    public to() {
-    }
+    // public to() {
+    // }
 
-    public setData() {
+    // public setData() {
 
-    }
+    // }
 
     public back(distance?: number) {
         history.back(distance)

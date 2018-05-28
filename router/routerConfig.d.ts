@@ -9,7 +9,11 @@ interface Route {
     redirect?: string,
     match?: "full" | "prefix"
 
-    content?: { new(): Object }
+    content?: { new(): IComponent }
     keepAlive?: boolean
     children?: Array<Route>
+}
+
+interface IComponent {
+    element: Element
 }

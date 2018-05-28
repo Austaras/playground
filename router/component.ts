@@ -1,8 +1,9 @@
-export class Component {
+export class Component implements IComponent {
     public element: Element
-    constructor(private name: string) {
-        this.element = document.createElement("b")
-        this.element.innerHTML = this.name
+    constructor(name: string) {
+        this.element = document.createElement("p")
+        this.element.innerHTML = `You are currently choosing Servant <b>${name}</b>`
+        this.element.classList.add("component")
     }
 }
 
@@ -24,8 +25,20 @@ export class Archer extends Component {
     }
 }
 
-export class Undefined extends Component {
+export class Defalut {
+    public element: Element
     constructor() {
-        super("undefined")
+        this.element = document.createElement("p")
+        this.element.innerHTML = `Please choose your servant`
+        this.element.classList.add("component")
+    }
+}
+
+export class NotFound {
+    public element: Element
+    constructor() {
+        this.element = document.createElement("p")
+        this.element.innerHTML = `This Servant doesn't exist!`
+        this.element.classList.add("component")
     }
 }
