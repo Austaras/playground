@@ -1,4 +1,4 @@
-export class Component implements IComponent {
+export class Component {
     public element: Element
     constructor(name: string) {
         this.element = document.createElement("p")

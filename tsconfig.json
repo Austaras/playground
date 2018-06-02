@@ -7,7 +7,6 @@
     "strictPropertyInitialization": false,
 
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
 
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

@@ -59,13 +59,12 @@ export class Router {
             paths.shift()
             return paths
         }
-        paths.pop()
-        const to = pathStr.split("/")
-        to.forEach(path => {
-            path === ".." ? paths.pop() : paths.push(path)
+        const to = location.pathname.split("/").slice(1, -1)
+        paths.forEach(path => {
+            path === ".." ? to.pop() : to.push(path)
         })
-        if (paths.length === 0) paths.push("")
-        return paths
+        if (to.length === 0) to.push("")
+        return to
     }
 
     private genPath(paths: string[]) {
@@ -103,7 +102,7 @@ export class Router {
     public to(pathStr: string) {
         const paths = this.parsePath(pathStr)
         this.match(paths)
-        history.replaceState(null, undefined, "/" + paths.join(""))
+        history.replaceState(null, undefined, this.genPath(paths))
     }
 
     public setData(data: { [key: string]: number | string | boolean }) {
