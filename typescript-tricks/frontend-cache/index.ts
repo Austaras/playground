@@ -15,10 +15,12 @@ function cache(interval: number) {
         const orig = descriptor.value
         descriptor.value = function(...args: any[]) {
             const argStr = args.join("&")
-            const cached = requests[prop][argStr]
-            if (!cached || Date.now() - cached.time < interval) {
-                cached.result = orig.apply(this, args)
-                cached.time = Date.now()
+            let cached = requests[prop][argStr]
+            if (!cached || Date.now() - cached.time > interval) {
+                cached = {
+                    result: orig.apply(this, args),
+                    time: Date.now()
+                }
                 requests[prop][argStr] = cached // in case cached is undefined
             }
             return cached.result
