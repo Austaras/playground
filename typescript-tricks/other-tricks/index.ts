@@ -20,8 +20,8 @@ foo()
 
 // absolutly EVIL
 
-const a = [1, 2, 3]
-a.length = 1
-console.log(a)
-a.length = 2
-console.log(a)
+const arr = [1, 2, 3]
+arr.length = 1
+console.log(arr)
+arr.length = 2
+console.log(arr)
