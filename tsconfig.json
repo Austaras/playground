@@ -1,17 +1,17 @@
 {
   "compilerOptions": {
-    "target": "esnext",                          
-    "module": "esnext",                     
-    "strict": true,                  
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
     "noImplicitThis": false,
     "strictPropertyInitialization": false,
-
     "noUnusedLocals": true,
-
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-
-    "lib": ["dom", "esnext"],
+    "lib": [
+      "dom",
+      "esnext"
+    ],
     "types": [
       "esnext",
       "reflect-metadata"
