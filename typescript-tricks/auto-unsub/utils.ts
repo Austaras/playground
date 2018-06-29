@@ -5,7 +5,7 @@ function getService(name: string) {
 }
 
 export function trace<T extends { [k: string]: any }>(obj: T, watch: Function[]) {
-    const handler = {
+    const handler: ProxyHandler<T> = {
         get(target: T, propKey: string, receiver: any) {
             const origMethod = target[propKey]
             if (typeof origMethod !== "function") return origMethod

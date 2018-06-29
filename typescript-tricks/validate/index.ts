@@ -13,7 +13,7 @@ const rules = {
 type rule = keyof typeof rules
 
 function validate(...ruleName: rule[]) {
-    return (target: any, key: string, descriptor: PropertyDescriptor) => {
+    return (target: Object, key: string, descriptor: PropertyDescriptor) => {
         const original: Function = descriptor.value
         descriptor.value = function() {
             let error = ""

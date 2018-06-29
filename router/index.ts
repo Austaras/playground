@@ -1,9 +1,11 @@
-import { Archer, Defalut, Lancer, NotFound, Saber } from "./component"
+import { Archer, Default, Lancer, NotFound, Saber } from "./component"
 import { Router } from "./router"
+
+import { RouterConfig } from "./routerConfig"
 
 const config: RouterConfig = {
     routes: [
-        { path: "", content: Defalut },
+        { path: "", content: Default },
         { path: "Saber", content: Saber },
         { path: "Lancer", content: Lancer },
         { path: "Archer", content: Archer },

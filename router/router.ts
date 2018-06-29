@@ -1,3 +1,5 @@
+import { Route, RouterConfig } from "./routerConfig"
+
 interface IntRoute extends Route {
     cache?: Element
 }
@@ -5,12 +7,12 @@ interface IntRoute extends Route {
 export class Router {
     private routes: IntRoute[] = []
     private view: Element
-    private base: string // TODO: handle base href
+    private base: string[]
     private current: IntRoute = { path: "" }
 
     constructor(init: RouterConfig) {
         this.routes = init.routes
-        this.procHtml()
+        this.parseHtml()
         window.addEventListener("popstate", e => {
             e.preventDefault()
             this.match(this.parsePath(location.pathname))
@@ -21,6 +23,7 @@ export class Router {
     private match(paths: string[]) {
         let needRedirect = false
 
+        if (paths.length === 0) paths = [""]
         let res
         for (const key in paths) {
             do {
@@ -56,10 +59,10 @@ export class Router {
     private parsePath(pathStr: string) {
         const paths = pathStr.split("/")
         if (pathStr[0] === "/") {
-            paths.shift()
-            return paths
+            return paths.slice(this.base.length + 1)
         }
-        const to = location.pathname.split("/").slice(1, -1)
+        const to = location.pathname.split("/")
+            .slice(this.base.length + 1, -1)
         paths.forEach(path => {
             path === ".." ? to.pop() : to.push(path)
         })
@@ -68,11 +71,18 @@ export class Router {
     }
 
     private genPath(paths: string[]) {
-        return "/" + paths.join("/")
+        return this.base.join("/") + "/" + paths.join("/")
     }
 
-    private procHtml() {
-        this.base = document.getElementsByTagName("base")[0].href
+    private parseHtml() {
+        const base = document.getElementsByTagName("base")[0]
+        if (base) {
+            const baseHref = (base.getAttribute("href") || "/").split("/")
+            baseHref.shift()
+            this.base = baseHref
+        } else {
+            this.base = []
+        }
         const links = Array.from(document.querySelectorAll("a"))
         links.forEach(item => {
             const to = item.getAttribute("route-to")
@@ -83,7 +93,8 @@ export class Router {
             item.onclick = e => {
                 e.preventDefault()
                 this.match(this.parsePath(to))
-                history.pushState(null, undefined, to)
+                console.log(to)
+                this.to(to)
             }
         })
         const view = document.querySelector("router-view")
@@ -94,15 +105,17 @@ export class Router {
     }
 
     private setView(ele: Element) {
-        const parent = this.view.parentElement as HTMLElement
-        parent.replaceChild(ele, this.view)
-        this.view = ele
+        const parent = this.view.parentElement
+        if (parent) {
+            parent.replaceChild(ele, this.view)
+            this.view = ele
+        }
     }
 
     public to(pathStr: string) {
         const paths = this.parsePath(pathStr)
         this.match(paths)
-        history.replaceState(null, undefined, this.genPath(paths))
+        history.pushState(null, undefined, this.genPath(paths))
     }
 
     public setData(data: { [key: string]: number | string | boolean }) {

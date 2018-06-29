@@ -1,3 +1,5 @@
+import { Component } from "./component"
+
 interface RouterConfig {
     legacy?: boolean
     routes: Array<Route>
@@ -9,11 +11,7 @@ interface Route {
     redirect?: string,
     match?: "full" | "prefix"
 
-    content?: { new(): IComponent }
+    content?: { new(...args: any[]): Component }
     keepAlive?: boolean
     children?: Array<Route>
-}
-
-interface IComponent {
-    element: Element
 }
