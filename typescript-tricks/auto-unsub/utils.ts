@@ -4,12 +4,12 @@ function getService(name: string) {
     return name[0].toLowerCase() + name.replace("Service", "").slice(1)
 }
 
-export function trace(obj: any, watch: Function[]) {
+export function trace<T extends { [k: string]: any }>(obj: T, watch: Function[]) {
     const handler = {
-        get(target: any, propKey: string, receiver: any) {
+        get(target: T, propKey: string, receiver: any) {
             const origMethod = target[propKey]
             if (typeof origMethod !== "function") return origMethod
-            return function(...args: any[]) {
+            return function(this: T, ...args: any[]) {
                 if (typeof args[0] === "function") watch.push(...args)
                 return origMethod.apply(this, args)
             }
