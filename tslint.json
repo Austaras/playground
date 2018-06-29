@@ -11,6 +11,12 @@
             true,
             "ignore-same-line"
         ],
+        "variable-name": [
+            true,
+            "ban-keywords",
+            "check-format",
+            "allow-leading-underscore"
+        ],
         "arrow-parens": false,
         "member-ordering": [
             true,
