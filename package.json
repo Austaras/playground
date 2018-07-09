@@ -2,6 +2,11 @@
   "name": "playground",
   "version": "99.99.99",
   "license": "WTFPL",
+  "browserslist": [
+    "last 2 Firefox versions",
+    "last 2 Chrome versions",
+    "last 2 Safari versions"
+  ],
   "scripts": {
     "build": "parcel build index.html --public-url='/' --no-source-maps"
   },

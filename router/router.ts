@@ -118,9 +118,20 @@ export class Router {
         history.pushState(null, undefined, this.genPath(paths))
     }
 
+    public extractData() {
+        const search = location.search
+        if (search === "") return {}
+        const pair = search.slice(1).split("&")
+        return pair.reduce((obj: Record<string, string>, curr) => {
+            const [key, value] = curr.split("=")
+            obj[key] = decodeURIComponent(value)
+            return obj
+        }, {})
+    }
+
     public setData(data: { [key: string]: number | string | boolean }) {
         const dataStr = "?" + Object.entries(data).map(
-            ([key, value]) => key + "=" + value)
+            ([key, value]) => key + "=" + encodeURIComponent(value.toString()))
             .join("&")
         history.replaceState(null, undefined, location.pathname + dataStr)
     }
