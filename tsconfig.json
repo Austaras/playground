@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es2018",
     "module": "esnext",
+    "moduleResolution": "node",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -13,10 +14,6 @@
     "lib": [
       "dom",
       "esnext"
-    ],
-    "types": [
-      "esnext",
-      "reflect-metadata"
     ]
   }
 }
