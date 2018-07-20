@@ -8,7 +8,7 @@
     "last 2 Safari versions"
   ],
   "scripts": {
-    "build": "parcel build index.html --public-url='/' --no-source-maps"
+    "build": "parcel build index.html --public-url='/'"
   },
   "dependencies": {
     "node-sass": "^4.9.0",
@@ -17,6 +17,8 @@
     "typescript": "^2.6.2"
   },
   "devDependencies": {
+    "cssnano": "^4.0.2",
+    "htmlnano": "^0.1.9",
     "tslint": "^5.10.0"
   }
 }

@@ -2,7 +2,7 @@ import { AsyncSubject } from "rxjs"
 
 const subject = new AsyncSubject()
 
-let i = 0;
+let i = 0
 const handle = setInterval(function() {
     subject.next(i)
     if (++i > 3) {
@@ -11,26 +11,15 @@ const handle = setInterval(function() {
     }
 }, 500)
 
-const subscription = subject.subscribe(
+subject.subscribe(
     x => {
-        console.log("Next: " + x.toString());
-    },
-    err => {
-        console.log("Error: " + err)
-    },
-    () => {
-        console.log("Completed")
+        console.log("Next: " + x.toString(), performance.now())
     })
 
 setTimeout(() => {
-    const subscription1 = subject.subscribe(
+    console.log(performance.now())
+    subject.subscribe(
         x => {
-            console.log("Next: " + x.toString());
-        },
-        err => {
-            console.log("Error: " + err)
-        },
-        () => {
-            console.log("Completed")
+            console.log("Next: " + x.toString(), performance.now())
         })
 }, 3000)

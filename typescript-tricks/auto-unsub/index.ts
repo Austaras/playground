@@ -1,6 +1,6 @@
 import { Component } from "./component"
 import { BasicService } from "./service"
-import { mount, unmount } from "./utils";
+import { mount, unmount } from "./utils"
 
 const services: Services = { basic: new BasicService() } // Init services
 

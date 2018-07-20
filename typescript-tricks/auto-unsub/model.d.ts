@@ -8,7 +8,7 @@ interface Services {
 }
 
 interface Warpped {
-    watch?: {
+    _watch?: {
         [key: string]: Function[]
     }
 }
