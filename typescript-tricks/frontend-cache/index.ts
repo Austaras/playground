@@ -10,7 +10,7 @@ interface Req {
 const requests: Req = {}
 
 function cache(interval: number) {
-    return function(target: any, prop: string, descriptor: PropertyDescriptor) {
+    return function(_: any, prop: string, descriptor: PropertyDescriptor) {
         requests[prop] = {}
         const orig = descriptor.value
         descriptor.value = function(...args: any[]) {

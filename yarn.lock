@@ -210,8 +210,8 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
-  version "1.0.30000869"
-  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000869.tgz#c3da59fa8d9456df88a24bb292ede0e3798798cb"
+  version "1.0.30000872"
+  resolved "https://registry.yarnpkg.com/caniuse-db/-/caniuse-db-1.0.30000872.tgz#3f6e53b63d373768bf99e896133d66ef89c49999"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000865:
   version "1.0.30000865"
@@ -519,8 +519,8 @@ cssnano@^3.4.0:
     postcss-zindex "^2.0.1"
 
 cssnano@^4.0.2:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/cssnano/-/cssnano-4.0.3.tgz#b694d626906bf1844f573465ecc166b2240b8699"
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/cssnano/-/cssnano-4.0.5.tgz#8789b5fdbe7be05d8a0f7e45c4c789ebe712f5aa"
   dependencies:
     cosmiconfig "^5.0.0"
     cssnano-preset-default "^4.0.0"
@@ -621,10 +621,11 @@ dot-prop@^4.1.1:
     is-obj "^1.0.0"
 
 ecc-jsbn@~0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz#0fc73a9ed5f0d53c38193398523ef7e543777505"
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
   dependencies:
     jsbn "~0.1.0"
+    safer-buffer "^2.1.0"
 
 electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.52:
   version "1.3.52"
@@ -675,8 +676,8 @@ esutils@^2.0.2:
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.2.tgz#0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
 
 extend@~3.0.0, extend@~3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.1.tgz#a755ea7bc1adfcc5a31ce7e762dbaadc5e636444"
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
 
 extsprintf@1.3.0:
   version "1.3.0"
@@ -1597,9 +1598,10 @@ postcss-merge-longhand@^2.0.1:
     postcss "^5.0.4"
 
 postcss-merge-longhand@^4.0.0:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/postcss-merge-longhand/-/postcss-merge-longhand-4.0.2.tgz#a2bcd7b0f9dca41ee84ba0cee23a5e6cb465ec3a"
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/postcss-merge-longhand/-/postcss-merge-longhand-4.0.4.tgz#bffc7c6ffa146591c993a0bb8373d65f9a06d4d0"
   dependencies:
+    css-color-names "0.0.4"
     postcss "^6.0.0"
     postcss-value-parser "^3.0.0"
     stylehacks "^4.0.0"
@@ -2126,7 +2128,7 @@ safe-buffer@^5.0.1, safe-buffer@^5.1.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
 
-safer-buffer@^2.0.2:
+safer-buffer@^2.0.2, safer-buffer@^2.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
 
@@ -2407,8 +2409,8 @@ tslint@^5.10.0:
     tsutils "^2.27.2"
 
 tsutils@^2.27.2:
-  version "2.28.0"
-  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.28.0.tgz#6bd71e160828f9d019b6f4e844742228f85169a1"
+  version "2.29.0"
+  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.29.0.tgz#32b488501467acbedd4b85498673a0812aca0b99"
   dependencies:
     tslib "^1.8.1"
 
@@ -2422,9 +2424,9 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
-typescript@^2.6.2:
-  version "2.9.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.9.2.tgz#1cbf61d05d6b96269244eb6a3bce4bd914e0f00c"
+typescript@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.0.1.tgz#43738f29585d3a87575520a4b93ab6026ef11fdb"
 
 uglify-es@^3.3.9:
   version "3.3.9"
