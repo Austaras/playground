@@ -1,7 +1,7 @@
 class Person {
     public money = 100
     public house = {
-        door: "Hodor",
+        door: 'Hodor',
         window: {
             height: 100,
             width: 50
@@ -11,16 +11,16 @@ class Person {
 }
 
 function trap<T extends { [k: string]: any }>(object: T, key?: string) {
-    key = key || "Base"
+    key = key || 'Base'
     for (const i in object) {
-        if (typeof object[i] === "object") {
+        if (typeof object[i] === 'object') {
             object[i] = trap(object[i], i)
         }
     }
     const handler: ProxyHandler<T> = {
         set(obj: T, prop: string, value: any, receiver: any) {
             console.log(`set ${key}.${prop} to ${value}`)
-            if (typeof value === "object") {
+            if (typeof value === 'object') {
                 obj[prop] = trap(value, prop)
             } else {
                 obj[prop] = value
@@ -45,7 +45,7 @@ person.money++
 delete person.money
 person.house.window.width = 75
 person.house = {
-    door: "Hodor",
+    door: 'Hodor',
     window: {
         height: 100,
         width: 50

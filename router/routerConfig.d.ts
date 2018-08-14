@@ -1,4 +1,4 @@
-import { Component } from "./component"
+import { Component } from './component'
 
 interface RouterConfig {
     legacy?: boolean
@@ -9,7 +9,7 @@ interface Route {
     path: string
 
     redirect?: string,
-    match?: "full" | "prefix"
+    match?: 'full' | 'prefix'
 
     content?: { new(...args: any[]): Component }
     keepAlive?: boolean

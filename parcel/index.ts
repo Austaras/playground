@@ -1,4 +1,4 @@
-import message from "./message"
+import message from './message'
 const i = 0
 console.log(message + i)
 
@@ -8,13 +8,13 @@ class Animal {
 
 class Dog extends Animal {
     public bark() {
-        return "汪"
+        return '汪'
     }
 }
 
 class GreyHound extends Dog {
     public bark() {
-        return "test"
+        return 'test'
     }
 }
 

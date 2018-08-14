@@ -1,7 +1,7 @@
-import "reflect-metadata"
+import 'reflect-metadata'
 
 const rules = {
-    "": null,
+    '': null,
     hex(val: string) {
         return val.match(/^(0x|0X)?[a-fA-F\d]+$/) ? true : false
     },
@@ -16,7 +16,7 @@ function validate(...ruleName: rule[]) {
     return (target: Object, key: string, descriptor: PropertyDescriptor) => {
         const original: Function = descriptor.value
         descriptor.value = function() {
-            let error = ""
+            let error = ''
             const errorInd = 0
             for (const ind in arguments) {
                 const ruleInd = ruleName[ind]
@@ -38,13 +38,13 @@ function validate(...ruleName: rule[]) {
 }
 
 class Foo {
-    @validate("hex", "", "moreThan20")
+    @validate('hex', '', 'moreThan20')
     public bar(hex: string, sth: any, num: number) {
         console.log(hex, num - 20)
     }
 }
 
 const foo = new Foo()
-foo.bar("0x123", null, 21)
-foo.bar("test", undefined, 21)
-foo.bar("0xfff", NaN, 19)
+foo.bar('0x123', null, 21)
+foo.bar('test', undefined, 21)
+foo.bar('0xfff', NaN, 19)

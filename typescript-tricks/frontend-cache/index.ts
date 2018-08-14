@@ -14,7 +14,7 @@ function cache(interval: number) {
         requests[prop] = {}
         const orig = descriptor.value
         descriptor.value = function(...args: any[]) {
-            const argStr = args.join("&")
+            const argStr = args.join('&')
             let cached = requests[prop][argStr]
             if (!cached || Date.now() - cached.time > interval) {
                 cached = {
@@ -31,22 +31,22 @@ function cache(interval: number) {
 class Wiki {
     @cache(1000)
     public get(term: string) {
-        return fetch("https://en.wikipedia.org/w/api.php" +
+        return fetch('https://en.wikipedia.org/w/api.php' +
             `?origin=*&action=opensearch&search=${term}&limit=1`)
             .then((res) => res.json())
     }
 }
 
 const wiki = new Wiki()
-wiki.get("test")
+wiki.get('test')
     .then((result) => console.log(result))
-wiki.get("test")
+wiki.get('test')
     .then((result) => console.log(result))
-wiki.get("function")
+wiki.get('function')
     .then((result) => console.log(result))
 setTimeout(() =>
-    wiki.get("test")
+    wiki.get('test')
         .then((result) => console.log(result)), 2000)
 setTimeout(() =>
-    wiki.get("function")
+    wiki.get('function')
         .then((result) => console.log(result)), 500)

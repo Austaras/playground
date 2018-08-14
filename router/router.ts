@@ -1,4 +1,4 @@
-import { Route, RouterConfig } from "./routerConfig"
+import { Route, RouterConfig } from './routerConfig'
 
 interface IntRoute extends Route {
     cache?: Element
@@ -8,12 +8,12 @@ export class Router {
     private routes: IntRoute[] = []
     private view: Element
     private base: string[]
-    private current: IntRoute = { path: "" }
+    private current: IntRoute = { path: '' }
 
     constructor(init: RouterConfig) {
         this.routes = init.routes
         this.parseHtml()
-        window.addEventListener("popstate", e => {
+        window.addEventListener('popstate', e => {
             e.preventDefault()
             this.match(this.parsePath(location.pathname))
         })
@@ -23,7 +23,7 @@ export class Router {
     private match(paths: string[]) {
         let needRedirect = false
 
-        if (paths.length === 0) paths = [""]
+        if (paths.length === 0) paths = ['']
         let res
         for (const key in paths) {
             do {
@@ -32,7 +32,7 @@ export class Router {
                         res = route
                         break
                     }
-                    if (route.path === "**") res = route
+                    if (route.path === '**') res = route
                 }
                 if (res && res.redirect) {
                     paths[key] = res.redirect
@@ -49,7 +49,7 @@ export class Router {
             }
             this.current = res
         } else {
-            console.error("You are doomed!")
+            console.error('You are doomed!')
         }
         if (needRedirect) {
             history.replaceState(null, undefined, this.genPath(paths))
@@ -57,38 +57,38 @@ export class Router {
     }
 
     private parsePath(pathStr: string) {
-        const paths = pathStr.split("/")
-        if (pathStr[0] === "/") {
+        const paths = pathStr.split('/')
+        if (pathStr[0] === '/') {
             return paths.slice(this.base.length + 1)
         }
-        const to = location.pathname.split("/")
+        const to = location.pathname.split('/')
             .slice(this.base.length + 1, -1)
         paths.forEach(path => {
-            path === ".." ? to.pop() : to.push(path)
+            path === '..' ? to.pop() : to.push(path)
         })
-        if (to.length === 0) to.push("")
+        if (to.length === 0) to.push('')
         return to
     }
 
     private genPath(paths: string[]) {
-        return this.base.join("/") + "/" + paths.join("/")
+        return this.base.join('/') + '/' + paths.join('/')
     }
 
     private parseHtml() {
-        const base = document.getElementsByTagName("base")[0]
+        const base = document.getElementsByTagName('base')[0]
         if (base) {
-            const baseHref = (base.getAttribute("href") || "/").split("/")
+            const baseHref = (base.getAttribute('href') || '/').split('/')
             baseHref.shift()
             this.base = baseHref
         } else {
             this.base = []
         }
-        const links = Array.from(document.querySelectorAll("a"))
+        const links = Array.from(document.querySelectorAll('a'))
         links.forEach(item => {
-            const to = item.getAttribute("route-to")
+            const to = item.getAttribute('route-to')
             if (!to) return // is a normal <a> tag
             // make my <a> tags look like normal a tags
-            item.removeAttribute("route-to")
+            item.removeAttribute('route-to')
             item.href = to
             item.onclick = e => {
                 e.preventDefault()
@@ -97,10 +97,10 @@ export class Router {
                 this.to(to)
             }
         })
-        const view = document.querySelector("router-view")
+        const view = document.querySelector('router-view')
         if (view) {
             this.view = view
-            this.setView(document.createElement("div")) // make template a legal html
+            this.setView(document.createElement('div')) // make template a legal html
         }
     }
 
@@ -120,19 +120,19 @@ export class Router {
 
     public extractData() {
         const search = location.search
-        if (search === "") return {}
-        const pair = search.slice(1).split("&")
+        if (search === '') return {}
+        const pair = search.slice(1).split('&')
         return pair.reduce((obj: Record<string, string>, curr) => {
-            const [key, value] = curr.split("=")
+            const [key, value] = curr.split('=')
             obj[key] = decodeURIComponent(value)
             return obj
         }, {})
     }
 
     public setData(data: { [key: string]: number | string | boolean }) {
-        const dataStr = "?" + Object.entries(data).map(
-            ([key, value]) => key + "=" + encodeURIComponent(value.toString()))
-            .join("&")
+        const dataStr = '?' + Object.entries(data).map(
+            ([key, value]) => key + '=' + encodeURIComponent(value.toString()))
+            .join('&')
         history.replaceState(null, undefined, location.pathname + dataStr)
     }
 

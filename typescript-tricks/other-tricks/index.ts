@@ -9,7 +9,7 @@ timeoutPromise(1000)
     .then(() => console.log(performance.now()))
 
 function warn() {
-    console.warn("need argument")
+    console.warn('need argument')
 }
 
 function foo(x = warn() as any) {

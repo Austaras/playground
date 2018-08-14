@@ -1,4 +1,4 @@
-import { AsyncSubject } from "rxjs"
+import { AsyncSubject } from 'rxjs'
 
 const subject = new AsyncSubject()
 
@@ -13,13 +13,13 @@ const handle = setInterval(function() {
 
 subject.subscribe(
     x => {
-        console.log("Next: " + x.toString(), performance.now())
+        console.log('Next: ' + x.toString(), performance.now())
     })
 
 setTimeout(() => {
     console.log(performance.now())
     subject.subscribe(
         x => {
-            console.log("Next: " + x.toString(), performance.now())
+            console.log('Next: ' + x.toString(), performance.now())
         })
 }, 3000)
