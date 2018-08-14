@@ -22,6 +22,12 @@
             "allow-leading-underscore"
         ],
         "arrow-parens": false,
+        "no-shadowed-variable": false,
+        "quotemark": [
+            true,
+            "single",
+            "avoid-escape"
+        ],
         "member-ordering": [
             true,
             {
