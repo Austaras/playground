@@ -110,6 +110,25 @@ $right-color: #ff6633;
     }
 }
 
+.absolute-container {
+    position: relative;
+    .center {
+        margin-left: $left;
+        margin-right: $right
+    }
+    .left {
+        position: absolute;
+        top: 0;
+        bottom: 0
+    }
+    .right {
+        position: absolute;
+        top: 0;
+        bottom:0;
+        right: 0
+    }
+}
+
 .flex-container {
     display: flex;
     .center {
