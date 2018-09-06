@@ -1,0 +1,138 @@
+body {
+    margin: 2em 0 0 4em;
+}
+
+ul {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap
+}
+
+li {
+    width: 500px;
+}
+
+$left: 100px;
+$right: 120px;
+.container {
+    width: 100%
+}
+
+.column {
+    overflow: auto
+}
+
+.center {
+    background-color: #d6d6d6
+}
+
+$left-color: #77bbdd;
+.left {
+    background-color: $left-color;
+    width: $left
+}
+
+$right-color: #ff6633;
+.right {
+    background-color: $right-color;
+    width: $right
+}
+
+.table-container {
+    display: table;
+    .column {
+        display: table-cell
+    }
+}
+
+.holy-grail-container {
+    box-sizing: border-box;
+    padding-left: $left;
+    padding-right: $right;
+    overflow: hidden;
+    .column {
+        position: relative;
+        float: left;
+        padding-bottom: 32767px;
+        margin-bottom: -32767px
+    }
+    .center {
+        width: 100%
+    }
+    .left {
+        margin-left: -100%;
+        right: $left
+    }
+    .right {
+        margin-right: -$right
+    }
+}
+
+.double-wings-container {
+    .column {
+        float: left
+    }
+    .left {
+        margin-left: -100%;
+        right: $left
+    }
+    .right {
+        margin-left: -$right
+    }
+    .center-content {
+        border-left: $left solid $left-color;
+        border-right: $right solid $right-color
+    }
+    &:after {
+        content: " ";
+        display: block;
+        height: 0;
+        clear: both;
+    }
+}
+
+.float-container {
+    overflow: hidden;
+    .column {
+        display: inline-block;
+        padding-bottom: 32767px;
+        margin-bottom: -32767px
+    }
+    .center {
+        width: calc(100% - #{$left + $right})
+    }
+    .left {
+        float: left;
+    }
+    .right {
+        float: right
+    }
+}
+
+.flex-container {
+    display: flex;
+    .center {
+        order: 2;
+        flex-grow: 1
+    }
+    .left,
+    .right {
+        flex-grow: 0;
+        flex-shrink: 0
+    }
+    .right {
+        order: 3;
+    }
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: $left auto $right;
+    .center {
+        order: 2
+    }
+    .right {
+        order: 3
+    }
+}
