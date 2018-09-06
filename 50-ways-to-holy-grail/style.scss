@@ -3,7 +3,7 @@ body {
 }
 
 ul {
-    height: 80vh;
+    height: 90vh;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap
@@ -92,24 +92,6 @@ $right-color: #ff6633;
     }
 }
 
-.float-container {
-    overflow: hidden;
-    .column {
-        display: inline-block;
-        padding-bottom: 32767px;
-        margin-bottom: -32767px
-    }
-    .center {
-        width: calc(100% - #{$left + $right})
-    }
-    .left {
-        float: left;
-    }
-    .right {
-        float: right
-    }
-}
-
 .absolute-container {
     position: relative;
     .center {
@@ -126,6 +108,25 @@ $right-color: #ff6633;
         top: 0;
         bottom:0;
         right: 0
+    }
+}
+
+.float-container {
+    overflow: hidden;
+    .column {
+        display: inline-block;
+        vertical-align: top;
+        padding-bottom: 32767px;
+        margin-bottom: -32767px
+    }
+    .center {
+        width: calc(100% - #{$left + $right})
+    }
+    .left {
+        float: left;
+    }
+    .right {
+        float: right
     }
 }
 
