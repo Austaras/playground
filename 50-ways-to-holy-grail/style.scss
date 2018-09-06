@@ -114,13 +114,13 @@ $right-color: #ff6633;
 .float-container {
     overflow: hidden;
     .column {
-        display: inline-block;
-        vertical-align: top;
         padding-bottom: 32767px;
         margin-bottom: -32767px
     }
     .center {
-        width: calc(100% - #{$left + $right})
+        width: calc(100% - #{$left + $right});
+        display: inline-block;
+        vertical-align: top
     }
     .left {
         float: left;
