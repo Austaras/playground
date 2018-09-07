@@ -39,20 +39,12 @@ $right-color: #ff6633;
     width: $right
 }
 
-.table-container {
-    display: table;
-    .column {
-        display: table-cell
-    }
-}
-
 .holy-grail-container {
     box-sizing: border-box;
     padding-left: $left;
     padding-right: $right;
     overflow: hidden;
     .column {
-        position: relative;
         float: left;
         padding-bottom: 32767px;
         margin-bottom: -32767px
@@ -61,6 +53,7 @@ $right-color: #ff6633;
         width: 100%
     }
     .left {
+        position: relative;
         margin-left: -100%;
         right: $left
     }
