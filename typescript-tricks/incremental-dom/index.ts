@@ -71,7 +71,7 @@ function elementOpen(name: string) {
     return currentParent
 }
 
-function elementClose(node: string /* only for mark */): MyNode | null {
+function elementClose(_node: string /* only for mark */): MyNode | null {
     exitNode()
 
     return currentNode

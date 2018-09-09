@@ -18,7 +18,7 @@ function trap<T extends { [k: string]: any }>(object: T, key?: string) {
         }
     }
     const handler: ProxyHandler<T> = {
-        set(obj: T, prop: string, value: any, receiver: any) {
+        set(obj: T, prop: string, value: any) {
             console.log(`set ${key}.${prop} to ${value}`)
             if (typeof value === 'object') {
                 obj[prop] = trap(value, prop)

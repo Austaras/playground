@@ -1,20 +1,18 @@
-interface Req {
+const requests: {
     [key: string]: {
         [key: string]: {
             time: number,
             result: Promise<any>
         }
     }
-}
-
-const requests: Req = {}
+} = {}
 
 function cache(interval: number) {
     return function(_: any, prop: string, descriptor: PropertyDescriptor) {
         requests[prop] = {}
         const orig = descriptor.value
         descriptor.value = function(...args: any[]) {
-            const argStr = args.join('&')
+            const argStr = JSON.stringify(args)
             let cached = requests[prop][argStr]
             if (!cached || Date.now() - cached.time > interval) {
                 cached = {
