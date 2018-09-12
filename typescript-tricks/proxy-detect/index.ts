@@ -10,8 +10,7 @@ class Person {
     public children: number[]
 }
 
-function trap<T extends { [k: string]: any }>(object: T, key?: string) {
-    key = key || 'Base'
+function trap<T extends { [k: string]: any }>(object: T, key = 'Base') {
     for (const i in object) {
         if (typeof object[i] === 'object') {
             object[i] = trap(object[i], i)

@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 
-const rules = {
+const rules: Record<string, Function | null> = {
     '': null,
     hex(val: string) {
         return val.match(/^(0x|0X)?[a-fA-F\d]+$/) ? true : false
@@ -12,17 +12,17 @@ const rules = {
 
 type rule = keyof typeof rules
 
-function validate(...ruleName: rule[]) {
+function validate(...ruleNames: rule[]) {
     return (target: Object, key: string, descriptor: PropertyDescriptor) => {
         const original: Function = descriptor.value
         descriptor.value = function() {
             let error = ''
             const errorInd = 0
             for (const ind in arguments) {
-                const ruleInd = ruleName[ind]
+                const ruleName = ruleNames[ind]
                 const arg = arguments[ind]
-                if (ruleInd && !(rules[ruleInd] as Function)(arg)) {
-                    error = ruleName[ind]
+                if (ruleName && !rules[ruleName]!(arg)) {
+                    error = ruleNames[ind]
                     break
                 }
             }
@@ -39,7 +39,7 @@ function validate(...ruleName: rule[]) {
 
 class Foo {
     @validate('hex', '', 'moreThan20')
-    public bar(hex: string, sth: any, num: number) {
+    public bar(hex: string, _: any, num: number) {
         console.log(hex, num - 20)
     }
 }
