@@ -4,26 +4,10 @@ export interface User {
     html_url: string
 }
 
-let cache: User[] = []
-let since = -30
+const PAGE_SIZE = 30
 
-export async function getData(index: number[]) {
-    function mapToData() {
-        const ret: User[] = []
-        for (const i of index) {
-            ret[i] = cache.shift()!
-        }
-        return ret
-    }
-    if (index.length < cache.length) {
-        return await mapToData()
-    } else {
-        since += 30
-        return fetch(`https://api.github.com/users?since=${since}`)
+export async function getData(since: number) {
+    // github user id isn't consistent, but we suppose it to be
+    return fetch(`https://api.github.com/users?since=${since * PAGE_SIZE}`)
         .then(res => res.json() as Promise<User[]>)
-        .then(newData => {
-            cache = cache.concat(newData)
-            return mapToData()
-        })
-    }
 }
