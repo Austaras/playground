@@ -1,12 +1,13 @@
 import { fromEvent, merge, Observable, zip } from 'rxjs'
-import { filter, map, mapTo, mergeMap, partition, scan, startWith, tap } from 'rxjs/operators'
+import {
+    distinctUntilChanged, map, mapTo, mergeMap, partition, scan, startWith
+} from 'rxjs/operators'
 
 import { getData, User } from './api'
 
 interface Status {
     data: User[],
-    slots: number[],
-    pending: boolean
+    slots: number[]
 }
 
 const refresh = document.getElementById('refresh') as HTMLAnchorElement
@@ -20,20 +21,19 @@ const userSuggest$ = merge(refresh$, ...close$).pipe(
     scan((acc: Status, val: number[]) => {
         acc.slots = Object.assign(acc.slots, val)
         return acc
-    }, { data: [], slots: [], pending: false } as Status)
+    }, { data: [], slots: [], pending: false } as Status),
 )
 
 const [needMoreData$, enoughData$] =
     partition((suggest: Status) =>
-        suggest.data.length < suggest.slots.length)
-        (userSuggest$)
+        suggest.data.length < suggest.slots.length)(userSuggest$)
 
 // here I have to mannually label type of moreData$
 // beacuse https://github.com/Microsoft/TypeScript/issues/20305
 const moreData$: Observable<User[]> = needMoreData$.pipe(
-    filter(suggest => !suggest.pending),
-    tap(suggest => suggest.pending = true),
-    // in case new click happened when old request hasn't completed
+    map(status => status.data),
+    distinctUntilChanged(),
+    // in case new event happened when old request hasn't completed
     scan((_acc, _val, index) => index, 0),
     mergeMap(ind => getData(ind))
     // for more generic use, switchMap is better because we don't care old data
@@ -42,7 +42,6 @@ const moreData$: Observable<User[]> = needMoreData$.pipe(
 
 const dataSupplied$ = zip(needMoreData$, moreData$, (status, users) => {
     status.data = status.data.concat(users)
-    status.pending = false
     return status
 })
 
