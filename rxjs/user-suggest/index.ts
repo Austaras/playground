@@ -1,6 +1,7 @@
 import { fromEvent, merge, Observable, zip } from 'rxjs'
 import {
-    distinctUntilChanged, map, mapTo, mergeMap, partition, scan, startWith
+    distinctUntilChanged, map, mapTo, mergeMap, partition,
+    scan, share, startWith
 } from 'rxjs/operators'
 
 import { getData, User } from './api'
@@ -17,11 +18,15 @@ const refresh$ = fromEvent(refresh, 'click').pipe(mapTo([0, 1, 2]))
 const close$ = close.map((ele, ind) => fromEvent(ele, 'click').pipe(mapTo([ind])))
 
 const userSuggest$ = merge(refresh$, ...close$).pipe(
+    share(),
+    // should use publish & refcount here beacuse there's no need to
+    // create new subject when source completed and new observer subscribe it
+    // but since source won't compelte for simpilicity I just use share
     startWith([0, 1, 2]),
     scan((acc: Status, val: number[]) => {
         acc.slots = Object.assign(acc.slots, val)
         return acc
-    }, { data: [], slots: [], pending: false } as Status),
+    }, { data: [], slots: [], pending: false } as Status)
 )
 
 const [needMoreData$, enoughData$] =
