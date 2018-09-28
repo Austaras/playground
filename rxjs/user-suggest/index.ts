@@ -33,13 +33,13 @@ const [needMoreData$, enoughData$] =
     partition((suggest: Status) =>
         suggest.data.length < suggest.slots.length)(userSuggest$)
 
-// here I have to mannually label type of moreData$
+// here I have to mannually label type of scan
 // beacuse https://github.com/Microsoft/TypeScript/issues/20305
-const moreData$: Observable<User[]> = needMoreData$.pipe(
+const moreData$= needMoreData$.pipe(
     map(status => status.data),
     distinctUntilChanged(),
     // in case new event happened when old request hasn't completed
-    scan((_acc, _val, index) => index, 0),
+    scan((_acc, _val, index) => index as any, 0),
     mergeMap(ind => getData(ind))
     // for more generic use, switchMap is better because we don't care old data
     // but here mergeMap will be fine
