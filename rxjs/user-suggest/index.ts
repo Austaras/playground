@@ -1,4 +1,4 @@
-import { fromEvent, merge, Observable, zip } from 'rxjs'
+import { fromEvent, merge, zip } from 'rxjs'
 import {
     distinctUntilChanged, map, mapTo, mergeMap, partition,
     scan, share, startWith
@@ -35,7 +35,7 @@ const [needMoreData$, enoughData$] =
 
 // here I have to mannually label type of scan
 // beacuse https://github.com/Microsoft/TypeScript/issues/20305
-const moreData$= needMoreData$.pipe(
+const moreData$ = needMoreData$.pipe(
     map(status => status.data),
     distinctUntilChanged(),
     // in case new event happened when old request hasn't completed
