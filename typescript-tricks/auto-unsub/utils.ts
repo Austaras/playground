@@ -18,15 +18,16 @@ export function trace<T extends { [k: string]: any }>(obj: T, watch: Function[])
     return new Proxy(obj, handler)
 }
 
-export function mount(constructor: { new(...args: any[]): {} }, ser: Services): Warpped {
+export function mount(constructor: { new(...args: any[]): {} }, services: Services): Warpped {
     const param = Reflect.getMetadata('design:paramtypes', constructor)
     const data: any[] = new Array(param.length)
     const watch: Record<string, any> = {}
-    param.forEach((i: Function, ind: number) => {
-        if (i.name.includes('Service')) {
-            const name = getService(i.name)
-            watch[name] = []
-            data[ind] = trace(ser[name], watch[name])
+    param.forEach((ctor: Function, ind: number) => {
+        for (const name in services) {
+            if (services[name] instanceof ctor) {
+                data[ind] = services[name]
+                break
+            }
         }
     })
     const comp: Warpped = new constructor(...data)

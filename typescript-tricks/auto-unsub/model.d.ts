@@ -1,6 +1,5 @@
 interface Services {
     [key: string]: {
-        [key: string]: any
         sub: Function
         unsub: Function
         pub: Function
@@ -8,7 +7,5 @@ interface Services {
 }
 
 interface Warpped {
-    _watch?: {
-        [key: string]: Function[]
-    }
+    _watch?: Record<string, Function[]>
 }
