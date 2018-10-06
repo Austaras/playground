@@ -1,5 +1,5 @@
 .cache
 .vscode
-sync.sh
+location
 dist
 node_modules

@@ -8,7 +8,9 @@
     "last 2 Safari versions"
   ],
   "scripts": {
-    "build": "parcel build index.html --public-url='/' --experimental-scope-hoisting "
+    "clear": "rm -rf dist .cache",
+    "build": "parcel build index.html --public-url='/' --experimental-scope-hoisting",
+    "deploy": "rsync -vrP --del dist/ `cat location`"
   },
   "dependencies": {
     "node-sass": "^4.9.0",
