@@ -1,9 +1,5 @@
 import 'reflect-metadata'
 
-function getService(name: string) {
-    return name[0].toLowerCase() + name.replace('Service', '').slice(1)
-}
-
 export function trace<T extends { [k: string]: any }>(obj: T, watch: Function[]) {
     const handler: ProxyHandler<T> = {
         get(target: T, propKey: string) {
