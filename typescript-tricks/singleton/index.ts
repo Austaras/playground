@@ -1,6 +1,6 @@
 // Singleton pattern in JS, is redundant and stupid
 // like many other design patterns.
-// I wrote this just to dempnstrate it's possible and convenient
+// I wrote this just to demonstrate it's possible and convenient
 
 import { Singleton } from './singleton'
 
