@@ -13,7 +13,8 @@
     "emitDecoratorMetadata": true,
     "lib": [
       "dom",
-      "esnext"
+      "esnext",
+      "webworker"
     ]
   },
   "parcel-plugin-typescript": {

@@ -39,16 +39,18 @@ const moreData$ = needMoreData$.pipe(
     map(status => status.data),
     distinctUntilChanged(),
     // in case new event happened when old request hasn't completed
-    scan((_acc, _val, index) => index as any, 0),
+    scan((_acc: any, _val, index) => index, 0),
     mergeMap(ind => getData(ind))
     // for more generic use, switchMap is better because we don't care old data
     // but here mergeMap will be fine
 )
 
-const dataSupplied$ = zip(needMoreData$, moreData$, (status, users) => {
-    status.data = status.data.concat(users)
-    return status
-})
+const dataSupplied$ = zip(needMoreData$, moreData$).pipe(
+    map(([status, users]) => {
+        status.data = status.data.concat(users)
+        return status
+    })
+)
 
 merge(dataSupplied$, enoughData$).pipe(
     map(status => {

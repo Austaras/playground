@@ -8,6 +8,17 @@ h2 {
     display: inline-block;
 }
 
+body {
+    display: flex;
+    margin: 0;
+    padding: 0
+}
+
+.dataflow {
+    height: 100vh;
+    min-height: 800px
+}
+
 .refresh {
     font-size: 80%;
     margin-left: 10px;
