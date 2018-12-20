@@ -31,6 +31,7 @@ ctx.onmessage = event => {
         }
     }
     const params = paramStr.split(',').map(str => str.trim())
+    // for recursive function
     ctx[name] = new Function(...params, body)
     const ret = ctx[name](...args)
     delete ctx[name]

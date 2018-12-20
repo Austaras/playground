@@ -11,6 +11,7 @@ asyncCalc.calc(fib, 40).then(
     res => console.log('fib, may take long time', res)
 )
 
+// four ways of define function
 function add0(a: number, b: number) {
     return a + b
 }
@@ -31,7 +32,9 @@ asyncCalc.calc(add3, 1, 2).then(res => console.log('add3', res))
 const square = x => x * x
 // tslint:disable-next-line
 const mislead = () => { x: 1 }
+const empty = () => ({})
 asyncCalc.calc(square, 50).then(res => console.log('square', res))
 asyncCalc.calc(mislead).then(
     res => console.log('mislead, should get undefined', res)
 )
+asyncCalc.calc(empty).then(res => console.log('empty object', res))

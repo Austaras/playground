@@ -4,6 +4,18 @@ interface Task {
     reject: Function
 }
 
+type CopyableSimple = number | string | boolean | undefined | null | void
+    | Date | Blob | RegExp
+interface CopyableObject {
+    [key: string]: CopyableSimple | CopyableComplex
+}
+interface CopyableArray extends Array<Copyable> { }
+interface CopyableMap extends Map<Copyable, Copyable> { }
+interface CopyableSet extends Set<Copyable> { }
+type CopyableComplex =
+    CopyableObject | CopyableArray | CopyableMap | CopyableSet
+type Copyable = CopyableSimple | CopyableComplex
+
 class AsyncWorker {
     private worker = new Worker('./worker.ts')
     private task: Task
@@ -53,26 +65,24 @@ export class AsyncCalculation {
                 data, reject, resolve
             })
         })
-        for (const worker of this.workers) {
-            // if a worker is idle, use it first
-            if (worker.idle) {
-                worker.work()
-                return promise
-            }
+        let worker = this.workers.find(worker => worker.idle)
+        if (worker !== undefined) {
+            worker.work()
+            return promise
         }
         if (this.workers.length < this.concurrency) {
             // then check if worker number has reached limit
             // if no, create new worker and use it
-            this.workers.push(new AsyncWorker(this.queue))
-            const worker = this.workers[this.workers.length - 1]
+            worker = new AsyncWorker(this.queue)
+            this.workers.push(worker)
             worker.work()
             return promise
         }
         // wait untill some worker picked this work
         return promise
     }
-    public async calc<T extends Array<any>, R>(
-        func: (...args: T) => R, ...args: T
+    public async calc<T extends Copyable[], R extends Copyable>(
+        func: (this: undefined, ...args: T) => R, ...args: T
     ): Promise<R> {
         return this.dispatch({
             funcStr: func.toString(),
