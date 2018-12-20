@@ -38,3 +38,17 @@ asyncCalc.calc(mislead).then(
     res => console.log('mislead, should get undefined', res)
 )
 asyncCalc.calc(empty).then(res => console.log('empty object', res))
+
+function defaultAdd(a: number, b = 1) {
+    return a + b
+}
+function optionalAdd(a: number, b?: number) {
+    return a + (b ? b : 1)
+}
+function multiAdd(a: number, ...b: number[]) {
+    return a + b.reduce((acc, val) => acc + val, 0)
+}
+
+asyncCalc.calc(defaultAdd, 4).then(res => console.log('defalut param', res))
+asyncCalc.calc(optionalAdd, 4).then(res => console.log('optional param', res))
+asyncCalc.calc(multiAdd, 1, 2, 3, 4).then(res => console.log('rest param', res))
