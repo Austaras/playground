@@ -1,3 +1,4 @@
+export {}
 const NODE_DATA_KEY = '__ID_Data__'
 
 interface MyNode extends Node {

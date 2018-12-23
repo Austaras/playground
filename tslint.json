@@ -1,4 +1,9 @@
 {
+    "linterOptions": {
+        "exclude": [
+            "node_modules"
+        ]
+    },
     "defaultSeverity": "error",
     "extends": [
         "tslint:recommended"

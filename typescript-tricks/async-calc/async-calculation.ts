@@ -21,7 +21,7 @@ class AsyncWorker {
     private task: Task
     public idle = true
     constructor(
-        private queue: Set<Task>,
+        private queue: Task[],
     ) {
         this.worker.onmessage = event => {
             this.task.resolve(event.data)
@@ -38,11 +38,10 @@ class AsyncWorker {
         this.work()
     }
     public work() {
-        if (this.queue.size !== 0) {
+        if (this.queue.length !== 0) {
             this.idle = false
-            const work = this.queue.values().next().value
+            const work = this.queue.shift()!
             this.task = work
-            this.queue.delete(work)
             this.worker.postMessage(work.data)
         }
     }
@@ -50,7 +49,7 @@ class AsyncWorker {
 export class AsyncCalculation {
     private workers: AsyncWorker[]
     // because tasks are finished in uncertain order
-    private queue = new Set<Task>()
+    private queue: Task[] = []
     constructor(
         private concurrency: number // because I can
     ) {
@@ -61,7 +60,7 @@ export class AsyncCalculation {
     }
     private dispatch(data: Record<string, any>) {
         const promise = new Promise((resolve, reject) => {
-            this.queue.add({
+            this.queue.push({
                 data, reject, resolve
             })
         })
