@@ -6,8 +6,9 @@ interface IntRoute extends Route {
 
 export class Router {
     private routes: IntRoute[] = []
-    private view: Element
-    private base: string[]
+    // inited in function call in constructor, ts couldn't recognize by now
+    private view!: Element
+    private base!: string[]
     private current: IntRoute = { path: '' }
 
     constructor(init: RouterConfig) {
@@ -52,7 +53,7 @@ export class Router {
             console.error('You are doomed!')
         }
         if (needRedirect) {
-            history.replaceState(null, undefined, this.genPath(paths))
+            history.replaceState(null, '', this.genPath(paths))
         }
     }
 
@@ -115,7 +116,7 @@ export class Router {
     public to(pathStr: string) {
         const paths = this.parsePath(pathStr)
         this.match(paths)
-        history.pushState(null, undefined, this.genPath(paths))
+        history.pushState(null, '', this.genPath(paths))
     }
 
     public extractData() {
@@ -133,14 +134,14 @@ export class Router {
         const dataStr = '?' + Object.entries(data).map(
             ([key, value]) => key + '=' + encodeURIComponent(value.toString()))
             .join('&')
-        history.replaceState(null, undefined, location.pathname + dataStr)
+        history.replaceState(null, '', location.pathname + dataStr)
     }
 
     public back(distance?: number) {
-        history.back(distance)
+        history.go(distance ? -distance : undefined)
     }
 
     public forward(distance?: number) {
-        history.forward(distance)
+        history.go(distance)
     }
 }

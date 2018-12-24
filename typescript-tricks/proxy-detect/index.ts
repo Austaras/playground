@@ -7,7 +7,7 @@ class Person {
             width: 50
         }
     }
-    public children: number[]
+    public children?: number[]
 }
 
 function trap<T extends { [k: string]: any }>(object: T, key = 'Base') {

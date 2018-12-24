@@ -18,17 +18,17 @@ type Copyable = CopyableSimple | CopyableComplex
 
 class AsyncWorker {
     private worker = new Worker('./worker.ts')
-    private task: Task
+    private task?: Task
     public idle = true
     constructor(
         private queue: Task[],
     ) {
         this.worker.onmessage = event => {
-            this.task.resolve(event.data)
+            this.task!.resolve(event.data)
             this.final()
         }
         this.worker.onerror = event => {
-            this.task.reject(event)
+            this.task!.reject(event)
             this.final()
         }
     }

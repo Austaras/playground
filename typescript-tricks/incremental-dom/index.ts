@@ -10,7 +10,7 @@ let currentNode: Node | null = null
 let currentParent: Node | null = null
 
 class NodeData {
-    public text: string // attrs
+    public text?: string // attrs
 
     constructor(
         public name: string // key

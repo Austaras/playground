@@ -1,13 +1,15 @@
 export class Component {
-    public element: Element
+    constructor(
+        public element: Element
+    ) { }
 }
 
 export class Servant extends Component {
     constructor(name: string) {
-        super()
-        this.element = document.createElement('p')
-        this.element.innerHTML = `You are currently choosing Servant <b>${name}</b>`
-        this.element.classList.add('component')
+        const element = document.createElement('p')
+        element.innerHTML = `You are currently choosing Servant <b>${name}</b>`
+        element.classList.add('component')
+        super(element)
     }
 }
 
@@ -31,18 +33,18 @@ export class Archer extends Servant {
 
 export class Default extends Component {
     constructor() {
-        super()
-        this.element = document.createElement('p')
-        this.element.innerHTML = `Please choose your servant`
-        this.element.classList.add('component')
+        const element = document.createElement('p')
+        element.innerHTML = `Please choose your servant`
+        element.classList.add('component')
+        super(element)
     }
 }
 
 export class NotFound extends Component {
     constructor() {
-        super()
-        this.element = document.createElement('p')
-        this.element.innerHTML = `This Servant doesn't exist!`
-        this.element.classList.add('component')
+        const element = document.createElement('p')
+        element.innerHTML = `This Servant doesn't exist!`
+        element.classList.add('component')
+        super(element)
     }
 }
