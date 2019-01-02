@@ -14,7 +14,7 @@ export function trace<T extends { [k: string]: any }>(obj: T, watch: Function[])
     return new Proxy(obj, handler)
 }
 
-export function mount(constructor: { new(...args: any[]): {} }, services: Services): Warpped {
+export function mount(constructor: new (...args: any[]) => {}, services: Services): Warpped {
     const param = Reflect.getMetadata('design:paramtypes', constructor)
     const data: any[] = new Array(param.length)
     const watch: Record<string, any> = {}

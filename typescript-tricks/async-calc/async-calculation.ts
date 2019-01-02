@@ -24,16 +24,21 @@ class AsyncWorker {
         private queue: Task[],
     ) {
         this.worker.onmessage = event => {
-            this.task!.resolve(event.data)
-            this.final()
+            if (this.task) {
+                this.task.resolve(event.data)
+                this.final()
+            }
         }
         this.worker.onerror = event => {
-            this.task!.reject(event)
-            this.final()
+            if (this.task) {
+                this.task.reject(event)
+                this.final()
+            }
         }
     }
     private final() {
         this.idle = true
+        this.task = undefined
         // check if has pending tasks
         this.work()
     }
