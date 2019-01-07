@@ -1,5 +1,5 @@
 import { fromEvent, Observable, timer } from 'rxjs'
-import { map, mergeAll, reduce, takeUntil, windowCount, tap, share, mergeMap, take } from 'rxjs/operators'
+import { map, mergeMap, reduce, share, take, takeUntil } from 'rxjs/operators'
 
 const PATTERN = [
     'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
