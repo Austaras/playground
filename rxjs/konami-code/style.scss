@@ -1,0 +1,17 @@
+body {
+    margin: 0
+}
+
+.container {
+    min-width: 100vw;
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    padding-top: 20vh;
+    justify-content: space-evenly
+}
+
+img {
+    width: 256px;
+    height: 256px
+}

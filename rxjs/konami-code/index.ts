@@ -1,5 +1,7 @@
 import { fromEvent, Observable, timer } from 'rxjs'
-import { map, mergeMap, reduce, share, take, takeUntil } from 'rxjs/operators'
+import {
+    bufferCount, map, mergeMap, reduce, share, take, takeUntil, timestamp
+} from 'rxjs/operators'
 
 const PATTERN = [
     'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
@@ -16,9 +18,36 @@ function arrayEqual(a: any[], b: any[]) {
     return true
 }
 
+function bonus(keys: string[], no: number) {
+    if (arrayEqual(keys, PATTERN)) {
+        console.log(`%cLife +30! %cplayer${no}`,
+            'color: red; font-size: 16px; font-weight: bold',
+            'color: green; font-size: 16px; font-weight: bold')
+    } else {
+        console.log('not this time')
+    }
+}
+
 const timer$ = timer(TIME_LIMIT_MS)
-const ele = document.querySelector('body')!
-const keydown$ = fromEvent(ele, 'keydown') as Observable<KeyboardEvent>
+
+// the noob way
+const player1 = document.getElementById('pl1')!
+const key$ = fromEvent(player1, 'keydown') as Observable<KeyboardEvent>
+key$.pipe(
+    map(e => e.key),
+    timestamp(),
+    bufferCount(PATTERN.length, 1)
+).subscribe(keys => {
+    if (keys[keys.length - 1].timestamp - keys[0].timestamp > TIME_LIMIT_MS) {
+        console.log('not this time')
+        return
+    }
+    bonus(keys.map(i => i.value), 1)
+})
+
+// the clever way
+const player2 = document.getElementById('pl2')!
+const keydown$ = fromEvent(player2, 'keydown') as Observable<KeyboardEvent>
 const keycode$ = keydown$.pipe(
     // should use pluck, but pluck lacks type info
     map(e => e.key),
@@ -35,10 +64,4 @@ keycode$.pipe(
             return acc
         }, [code])
     ))
-).subscribe(keys => {
-    if (arrayEqual(keys, PATTERN)) {
-        console.log('%cYay!', 'color: red; font-size: 16px; font-weight: bold')
-    } else {
-        console.log('not this time')
-    }
-})
+).subscribe(keys => bonus(keys, 2))
