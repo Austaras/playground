@@ -4,10 +4,10 @@ export class BasicService {
         this.watch.push(f)
     }
     public unsub(f: Function) {
-        this.watch = this.watch.filter((i) => i !== f)
+        this.watch = this.watch.filter(i => i !== f)
     }
     public pub() {
         console.log('published by', this.constructor.name)
-        this.watch.forEach((f) => f())
+        this.watch.forEach(f => f())
     }
 }

@@ -10,10 +10,13 @@
   "scripts": {
     "clean": "rm -rf dist .cache",
     "build": "parcel build index.html --public-url='/' --experimental-scope-hoisting",
-    "deploy": "rsync -vrP --del dist/ `cat location`"
+    "deploy": "rsync -vrP --del dist/ `cat location`",
+    "serve": "parcel",
+    "s": "parcel"
   },
   "dependencies": {
     "node-sass": "^4.9.0",
+    "parcel-bundler": "^1.11.0",
     "posthtml-include": "^1.2.0",
     "posthtml-loader": "^1.0.1",
     "reflect-metadata": "^0.1.12",
