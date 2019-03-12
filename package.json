@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rm -rf dist .cache",
     "build": "parcel build index.html --public-url='/' --experimental-scope-hoisting",
-    "deploy": "rsync -vrP --del dist/ `cat location`",
+    "deploy": "cp assets/robots.txt dist && rsync -vrP --del dist/ `cat location`",
     "serve": "parcel",
     "s": "parcel"
   },
