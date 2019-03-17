@@ -9,6 +9,7 @@ body {
 
 .container {
     perspective: 1000px;
+
     &:hover .flipper {
         transform: rotateY(180deg);
     }

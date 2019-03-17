@@ -15,10 +15,10 @@ type rule = keyof typeof rules
 function validate(...ruleNames: rule[]) {
     return (target: Object, key: string, descriptor: PropertyDescriptor) => {
         const original: Function = descriptor.value
-        descriptor.value = function() {
+        descriptor.value = function(...args: any[]) {
             let error = ''
             const errorInd = 0
-            for (const ind in arguments) {
+            for (const ind in args) {
                 const ruleName = ruleNames[ind]
                 const arg = arguments[ind]
                 if (ruleName && !rules[ruleName]!(arg)) {
@@ -30,7 +30,7 @@ function validate(...ruleNames: rule[]) {
                 console.error(`${target.constructor.name}.${key} get` +
                     ` an invalid parameter, which index is ${errorInd}, disobeys rule ${error}`)
             } else {
-                original.apply(this, arguments)
+                original.apply(this, args)
             }
         }
         return descriptor
@@ -38,8 +38,10 @@ function validate(...ruleNames: rule[]) {
 }
 
 class Foo {
+    private foo = 'Foo'
     @validate('hex', '', 'moreThan20')
     public bar(hex: string, _: any, num: number) {
+        console.log(this.foo)
         console.log(hex, num - 20)
     }
 }

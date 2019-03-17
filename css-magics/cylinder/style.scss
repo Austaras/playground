@@ -8,28 +8,28 @@ body {
     width:  $circle-size;
     height: $circle-size;
     padding: 0;
-    border-radius: 50%; 
-    
+    border-radius: 50%;
+
     > * {
         display: block;
         position: absolute;
-        top:  50%; 
+        top:  50%;
         left: 50%;
         width:  $item-size;
         height: $item-size;
         margin: -($item-size / 2);
-        
+
         $angle: (360 / $item-count);
         $rot: 0;
-        
+
         @for $i from 1 through $item-count {
             &:nth-of-type(#{$i}) {
-                transform: 
-                    rotate($rot * 1deg) 
+                transform:
+                    rotate($rot * 1deg)
                     translate(($circle-size - $item-size) / 2)
                     rotate($rot * -1deg);
             }
-        
+
             $rot: $rot + $angle;
         }
     }
@@ -45,7 +45,7 @@ body {
 }
 
 #container {
-    @include on-circle($item-count: 8, $circle-size: 40em, $item-size: 5em); 
+    @include on-circle($item-count: 8, $circle-size: 40em, $item-size: 5em);
     background-color: darkgoldenrod;
     overflow: hidden
 }

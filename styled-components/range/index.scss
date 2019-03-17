@@ -1,0 +1,115 @@
+$size: 20px;
+$slider-height: 2px;
+$slider-width: 200px;
+$higher: #E9E9E9;
+$lower: #414141;
+
+// you cannot use extend here, as multiple browsers stop applying css after
+// encounter other browser's selector
+@mixin slider {
+    height: $slider-height;
+}
+
+@mixin thumb {
+    appearance: none;
+    width: $size;
+    height: $size;
+    background-image: url("range/thumb.svg");
+    background-size: contain;
+    cursor: pointer
+}
+
+@mixin higher {
+    background-color: $higher;
+}
+
+@mixin lower {
+    background-color: $lower;
+}
+
+// this is dark magic, not advised to use in porduction
+@function makelongshadow($color, $size) {
+    $x: $size / 2 + 1px;
+    $val: $x 0 0 $size $color;
+
+    @while $x < $slider-width {
+        $val: $val, $x 0 0 $size #{$color};
+        $x : $x + $slider-height
+    }
+
+    @return $val;
+  }
+
+
+input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: $slider-width;
+    min-height: $size;
+    overflow: hidden;
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    &::-moz-focus-outer {
+        border: 0 // remove firefox focus outline
+    }
+
+    // and you need seperate all three selector as behaviour mentioned before
+    &::-moz-range-track {
+        @include slider
+    }
+
+    &::-moz-range-thumb {
+        @include thumb;
+        border: none;
+        border-radius: 0;
+        background-color: transparent;
+    }
+
+    &::-moz-range-track {
+        @include higher
+    }
+
+    &::-moz-range-progress {
+        height: $slider-height;
+        @include lower
+    }
+
+    &::-webkit-slider-thumb {
+        @include thumb;
+        -webkit-appearance: none;
+        margin-top: -($size - $slider-height) / 2;
+        box-shadow: makelongshadow($higher, -($size - $slider-height) / 2);
+    }
+
+    &::-webkit-slider-runnable-track {
+        @include slider;
+        @include lower
+    }
+
+    &::-ms-track {
+        @include slider;
+        color: transparent; // remove ticks in IE
+        border: none;
+    }
+
+    &::-ms-thumb {
+        @include thumb;
+        background-color: transparent; // remove background in IE
+        margin-top: 0;
+        box-shadow: none;
+        // some versions of edge will apply style from webkit pesudo element
+        // unset those styles
+    }
+
+    &::-ms-fill-upper {
+        @include higher
+    }
+
+    &::-ms-fill-lower {
+        @include lower
+    }
+}

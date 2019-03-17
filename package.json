@@ -15,17 +15,14 @@
     "s": "parcel"
   },
   "dependencies": {
-    "node-sass": "^4.9.0",
-    "parcel-bundler": "^1.11.0",
-    "posthtml-include": "^1.2.0",
-    "posthtml-loader": "^1.0.1",
     "reflect-metadata": "^0.1.12",
-    "rxjs": "^6.2.2",
-    "typescript": "^3.0.1"
+    "rxjs": "^6.2.2"
   },
   "devDependencies": {
-    "cssnano": "^4.0.2",
-    "htmlnano": "^0.1.9",
-    "tslint": "^5.10.0"
+    "node-sass": "^4.11.0",
+    "parcel-bundler": "^1.12.1",
+    "posthtml-include": "^1.2.0",
+    "tslint": "^5.10.0",
+    "typescript": "^3.3.3333"
   }
 }
