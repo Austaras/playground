@@ -1,20 +1,32 @@
 @import "range/styles";
 @import "switch/styles";
 
+body {
+    margin-top: 10vh;
+    margin-left: 15vw;
+    font-size: 16px
+}
+
 .text {
     width: 100%;
-    padding: 20px 0 0 15%;
     box-sizing: border-box;
+    font-family: serif;
     font-style: italic;
+    font-size: 1.2em
 }
 
 .quote {
     width: 100%;
     font-size: 2em;
+    font-family: serif;
     font-style: italic;
     padding: 0 25% 0 0;
     text-align: right;
     box-sizing: border-box;
+}
+
+code {
+    font-family: monospace
 }
 
 form {

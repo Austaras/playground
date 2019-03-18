@@ -17,13 +17,13 @@ $green: #4cd964;
     cursor: pointer;
     box-sizing: border-box;
     box-shadow: inset 0 0 0 0px $green;
-    transition: .3s ease-in-out;
+    transition: .3s;
 
     .switch-button {
         $size: $height - $border-width * 2;
         display: block;
         border-radius: 100%;
-        transition: transform .3s ease-in-out;
+        transition: transform .3s;
         width: $size;
         height: $size;
         background-color: #fff;
