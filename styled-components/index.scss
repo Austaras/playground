@@ -1,4 +1,5 @@
-@import "range/index";
+@import "range/styles";
+@import "switch/styles";
 
 .text {
     width: 100%;
@@ -14,4 +15,8 @@
     padding: 0 25% 0 0;
     text-align: right;
     box-sizing: border-box;
+}
+
+form {
+    margin-top: 2em
 }

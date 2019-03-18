@@ -98,7 +98,7 @@ input[type=range] {
 
     &::-ms-thumb {
         @include thumb;
-        background-color: transparent; // remove background in IE
+        background-color: rgba($color: #fff, $alpha: 0.0); // remove background in IE
         margin-top: 0;
         box-shadow: none;
         // some versions of edge will apply style from webkit pesudo element
