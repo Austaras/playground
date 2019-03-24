@@ -7,7 +7,7 @@ $lower: #414141;
 // you cannot use extend here, as multiple browsers stop applying css after
 // encounter other browser's selector
 @mixin slider {
-    height: $slider-height;
+    height: $slider-height
 }
 
 @mixin thumb {
@@ -28,19 +28,18 @@ $lower: #414141;
 }
 
 // this is dark magic, not advised to use in porduction
-@function makelongshadow($color, $size, $height) {
-    $x: $height - $size;
-    $val: $x 0 0 $size $color;
+@function makeLongShadow($color, $width, $height, $size) {
+    $x: $size / 2 + 1px;
+    $val: null;
 
-    @while $x < $slider-width - $height {
-        $x: $x + $height;
+    @while $x < $width {
         $val: $val,
-        $x 0 0 $size #{$color}
+        $x 0 0 ($height - $size) / 2 #{$color};
+        $x: $x + $height;
     }
 
     @return $val;
 }
-
 
 input[type=range] {
     -webkit-appearance: none;
@@ -83,7 +82,7 @@ input[type=range] {
         @include thumb;
         -webkit-appearance: none;
         margin-top: -($size - $slider-height) / 2;
-        box-shadow: makelongshadow($higher, -($size - $slider-height) / 2, $slider-height);
+        box-shadow: makeLongShadow($higher, $slider-width, $slider-height, $size);
     }
 
     &::-webkit-slider-runnable-track {
