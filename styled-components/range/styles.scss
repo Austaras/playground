@@ -29,16 +29,17 @@ $lower: #414141;
 
 // this is dark magic, not advised to use in porduction
 @function makelongshadow($color, $size) {
-    $x: $size / 2 + 1px;
+    $x: $slider-height - $size;
     $val: $x 0 0 $size $color;
 
-    @while $x < $slider-width {
-        $val: $val, $x 0 0 $size #{$color};
-        $x : $x + $slider-height
+    @while $x < $slider-width - $slider-height {
+        $x: $x + $slider-height;
+        $val: $val,
+        $x 0 0 $size #{$color}
     }
 
     @return $val;
-  }
+}
 
 
 input[type=range] {
