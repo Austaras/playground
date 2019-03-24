@@ -28,12 +28,12 @@ $lower: #414141;
 }
 
 // this is dark magic, not advised to use in porduction
-@function makelongshadow($color, $size) {
-    $x: $slider-height - $size;
+@function makelongshadow($color, $size, $height) {
+    $x: $height - $size;
     $val: $x 0 0 $size $color;
 
-    @while $x < $slider-width - $slider-height {
-        $x: $x + $slider-height;
+    @while $x < $slider-width - $height {
+        $x: $x + $height;
         $val: $val,
         $x 0 0 $size #{$color}
     }
@@ -83,7 +83,7 @@ input[type=range] {
         @include thumb;
         -webkit-appearance: none;
         margin-top: -($size - $slider-height) / 2;
-        box-shadow: makelongshadow($higher, -($size - $slider-height) / 2);
+        box-shadow: makelongshadow($higher, -($size - $slider-height) / 2, $slider-height);
     }
 
     &::-webkit-slider-runnable-track {
