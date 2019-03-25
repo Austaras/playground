@@ -1,9 +1,9 @@
+import { watcherFunc, hasKey, isObj } from './shared'
+
 type Action = 'add' | 'set' | 'get' | 'delete'
 
 export function trap<T extends Record<string, any>>(
-    object: T,
-    watcher: (action: Action, key: string, prop: string, value: any) => any,
-    key = 'Base',
+    object: T, watcher: typeof watcherFunc, key = 'base'
 ) {
     for (const i in object) {
         if (typeof object[i] === 'object') {
@@ -12,9 +12,9 @@ export function trap<T extends Record<string, any>>(
     }
     const handler: ProxyHandler<T> = {
         set(obj: T, prop: string, value: any) {
-            const action: Action = obj.hasOwnProperty(prop) ? 'set' : 'add'
+            const action: Action = hasKey(obj, prop) ? 'set' : 'add'
             watcher(action, key, prop, value)
-            if (typeof value === 'object') {
+            if (isObj(value)) {
                 obj[prop] = trap(value, watcher, prop)
             } else {
                 obj[prop] = value
@@ -25,9 +25,8 @@ export function trap<T extends Record<string, any>>(
             if (prop in obj) {
                 watcher('delete', key, prop, undefined)
                 delete obj[prop]
-                return true
             }
-            return false
+            return true
         }
     }
     return new Proxy(object, handler)

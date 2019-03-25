@@ -5,7 +5,10 @@ export class Person {
         window: {
             height: 100,
             width: 50
-        }
+        },
+        furnitures: ['table', 'chair']
     }
-    public children?: number[]
+    public children: number[] = []
+    public car: { name: string, value: number }[] = []
+    public superAbility?: string
 }

@@ -33,8 +33,6 @@ function clearImmediate(num: number) {
             if (f === flag && callbacks[i]) {
                 if (callbacks[i].args) {
                     callbacks[i].handler(...callbacks[i].args!)
-                    // well, this is super slow, but since args
-                    // here is rarely used, just ignore it
                 } else {
                     callbacks[i].handler()
                 }
