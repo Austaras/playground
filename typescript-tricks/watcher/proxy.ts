@@ -1,4 +1,4 @@
-import { watcherFunc, hasKey, isObj } from './shared'
+import { hasKey, isObj, watcherFunc } from './shared'
 
 type Action = 'add' | 'set' | 'get' | 'delete'
 
