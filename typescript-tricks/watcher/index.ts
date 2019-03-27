@@ -33,6 +33,7 @@ function test(person: Person) {
 
     // only proxy can detect following
     person.superAbility = 'can fly'
+    person.children[0] = 3
     delete person.money
     delete person.house.door
 }

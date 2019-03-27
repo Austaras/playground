@@ -23,7 +23,6 @@ export function trap<T extends Record<string, any>>(
         },
         set(obj: T, prop: string, value: any) {
             const action: Action = hasKey(obj, prop) ? 'set' : 'add'
-            console.log(action, key, prop, value)
             watcher(action, key, prop, value)
             if (isObj(value)) {
                 obj[prop] = trap(value, watcher, prop)
