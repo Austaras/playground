@@ -2,6 +2,7 @@ import { hasKey, isObj, watcherFunc } from './shared'
 
 type Action = 'add' | 'set' | 'get' | 'delete'
 
+// https://github.com/Microsoft/TypeScript/issues/1863
 const sym: string = Symbol('__PROXIED__') as any
 
 export function trap<T extends Record<string, any>>(
@@ -18,7 +19,6 @@ export function trap<T extends Record<string, any>>(
             if (prop !== sym) {
                 return obj[prop]
             }
-
             return true
         },
         set(obj: T, prop: string, value: any) {
