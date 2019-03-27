@@ -9,6 +9,6 @@ export class Person {
         furnitures: ['table', 'chair']
     }
     public children: number[] = []
-    public car: { name: string, value: number }[] = []
+    public car: { name: string, value: number, wheel: number[] }[] = []
     public superAbility?: string
 }

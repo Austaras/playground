@@ -27,8 +27,9 @@ function test(person: Person) {
     person.children.sort((a, b) => a - b)
     person.house.furnitures.push('another chair')
 
-    person.car.push({ name: 'Benz', value: 100000 })
+    person.car.push({ name: 'Benz', value: 100000, wheel: [1, 2, 3] })
     person.car[0].value = 50000
+    person.car[0].wheel.push(4)
 
     // only proxy can detect following
     person.superAbility = 'can fly'

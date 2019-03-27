@@ -10,7 +10,7 @@ export function watcherFunc(action: Action, key: string, prop: string, value: an
     }
 }
 
-export function isPlainObj(o: object) {
+export function isPlainObj(o: any): o is object {
     return Object.prototype.toString.call(o) === '[object Object]'
 }
 

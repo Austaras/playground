@@ -6,24 +6,24 @@ type PatchMethod = 'push' | 'pop' | 'shift' | 'unshift'
 class WatchedArray<T> extends Array<T> {
     constructor(
         val: T[] | number,
-        private watcher: Watcher,
         private key: string,
-        private prop: string
+        private child: string,
+        private watcher: Watcher,
     ) {
         super(typeof val === 'number' ? val : val.length)
         // this constructor maybe called by native method
         // in that case just give it a native array
         if (!watcher) return Array(val) as any
         for (let i = 0; i < this.length; i++) {
-            this[i] = defineReactive((val as T[])[i], watcher, key, prop)
+            this[i] = classify((val as any[])[i], key, child, watcher) as T
         }
     }
     private callSuper(method: PatchMethod, preserve: number, args: any[]) {
         const watchedArgs = args.slice(preserve).map(val =>
-            defineReactive(val, this.watcher, this.key, this.prop))
+            classify(val, this.key, this.child, this.watcher))
         const superArgs = args.slice(0, preserve).concat(watchedArgs)
         const ret = (super[method] as Function)(...superArgs)
-        this.watcher('set', this.key, this.prop, this)
+        this.watcher('set', this.key, this.child, this)
         return ret
     }
     public push(...args: T[]) {
@@ -49,32 +49,37 @@ class WatchedArray<T> extends Array<T> {
     }
 }
 
-function defineReactive(val: any, watcher: Watcher, key: string, prop: string) {
-    if (Array.isArray(val) && !(val instanceof WatchedArray)) {
-        return new WatchedArray(val, watcher, key, prop)
-    } else if (isPlainObj(val)) {
-        return watch(val, watcher, prop)
-    } else {
-        return val
+function classify(val: unknown, key: string, child: string, watcher: Watcher) {
+    if (Array.isArray(val)) {
+        return new WatchedArray(val, key, child, watcher)
     }
+    if (isPlainObj(val)) {
+        return watch(val, watcher, child)
+    }
+    return val
+}
+
+function defineReactive(
+    obj: Record<string, any>, val: any, key: string, child: string, watcher: Watcher
+) {
+    val = classify(val, key, child, watcher)
+    Object.defineProperty(obj, child, {
+        get() {
+            return val
+        },
+        set(value: any) {
+            val = classify(value, key, child, watcher)
+            watcher('set', key, child, val)
+        }
+    })
 }
 
 export function watch<T extends Record<string, any>>(
     obj: T, watcher: Watcher, key = 'base'
 ) {
-    const store: T = {} as any
-    for (const prop in obj) {
-        if (!hasKey(obj, prop)) continue
-        store[prop] = defineReactive(obj[prop], watcher, key, prop)
-        Object.defineProperty(obj, prop, {
-            get() {
-                return store[prop]
-            },
-            set(val: T[typeof prop]) {
-                store[prop] = defineReactive(val, watcher, key, prop)
-                watcher('set', key, prop, store[prop])
-            }
-        })
+    for (const child in obj) {
+        if (!hasKey(obj, child)) continue
+        defineReactive(obj, obj[child], key, child, watcher)
     }
     return obj
 }
