@@ -37,10 +37,10 @@ function test(person: Person) {
     delete person.house.door
 }
 
-console.log('-------begin defineProperty test-------')
-test(person1)
-console.log('--------end defineProperty test--------')
-console.log()
+// console.log('-------begin defineProperty test-------')
+// test(person1)
+// console.log('--------end defineProperty test--------')
+// console.log()
 console.log('------------begin proxy test------------')
 test(person2)
 console.log('-------------end proxy test-------------')

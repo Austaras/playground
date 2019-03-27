@@ -56,8 +56,7 @@
         "only-arrow-functions": false,
         "interface-name": false,
         "object-literal-key-quotes": false,
-        "object-literal-sort-keys": false,
-        "forin": false
+        "object-literal-sort-keys": false
     },
     "rulesDirectory": []
 }
