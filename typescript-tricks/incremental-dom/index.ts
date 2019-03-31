@@ -66,7 +66,7 @@ function elementOpen(name: string) {
     renderDOM(name)
     enterNode()
 
-    // TODO: check for updates, i.t attributes
+    // TODO: check for updates, i.e attributes
     // const data = getData(node)
 
     return currentParent

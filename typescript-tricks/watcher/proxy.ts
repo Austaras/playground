@@ -1,6 +1,4 @@
-import { hasKey, isObj, watcherFunc } from './shared'
-
-type Action = 'add' | 'set' | 'get' | 'delete'
+import { Action, hasKey, isObj, watcherFunc } from './shared'
 
 // https://github.com/Microsoft/TypeScript/issues/1863
 const sym: string = Symbol('__PROXIED__') as any

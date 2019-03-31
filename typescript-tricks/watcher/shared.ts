@@ -1,4 +1,4 @@
-type Action = 'add' | 'set' | 'get' | 'delete'
+export type Action = 'add' | 'set' | 'get' | 'delete'
 export type Watcher = typeof watcherFunc
 
 export function watcherFunc(action: Action, key: string, prop: string, value: any) {
