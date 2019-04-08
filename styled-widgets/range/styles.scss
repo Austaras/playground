@@ -83,6 +83,9 @@ input[type=range] {
         -webkit-appearance: none;
         margin-top: -($size - $slider-height) / 2;
         box-shadow: makeLongShadow($higher, $slider-width, $slider-height, $size);
+        // overwrite default value in mobile Safari
+        border: none;
+        background-color: transparent
     }
 
     &::-webkit-slider-runnable-track {
