@@ -2,9 +2,7 @@ import message from './message'
 const i = 0
 console.log(message + i)
 
-class Animal {
-
-}
+class Animal {}
 
 class Dog extends Animal {
     public bark() {
@@ -16,6 +14,7 @@ class GreyHound extends Dog {
     public bark() {
         return 'test'
     }
+    public color = 'grey'
 }
 
 function f(g: (dog: Dog) => Dog): string {
@@ -23,8 +22,8 @@ function f(g: (dog: Dog) => Dog): string {
     return g(dog).bark()
 }
 
-function gf(dog: GreyHound) {
-    return dog
+function gf(dog: Animal) {
+    return dog as GreyHound
 }
 
 f(gf)
