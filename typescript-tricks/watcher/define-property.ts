@@ -1,14 +1,13 @@
 import { hasKey, isPlainObj, Watcher } from './shared'
 
-type PatchMethod = 'push' | 'pop' | 'shift' | 'unshift'
-    | 'splice' | 'sort' | 'reverse'
+type PatchMethod = 'push' | 'pop' | 'shift' | 'unshift' | 'splice' | 'sort' | 'reverse'
 
 class WatchedArray<T> extends Array<T> {
     constructor(
         val: T[] | number,
         private key: string,
         private child: string,
-        private watcher: Watcher,
+        private watcher: Watcher
     ) {
         super(typeof val === 'number' ? val : val.length)
         // this constructor maybe called by native method
@@ -18,36 +17,33 @@ class WatchedArray<T> extends Array<T> {
             this[i] = classify((val as any[])[i], key, child, watcher) as T
         }
     }
-    private callSuper(method: PatchMethod, preserve: number, args: any[]) {
-        const watchedArgs = args.slice(preserve).map(val =>
-            classify(val, this.key, this.child, this.watcher))
+    // it should be private
+    public callSuper(method: PatchMethod, preserve: number, args: any[]) {
+        const watchedArgs = args
+            .slice(preserve)
+            .map(val => classify(val, this.key, this.child, this.watcher))
         const superArgs = args.slice(0, preserve).concat(watchedArgs)
         const ret = (super[method] as Function)(...superArgs)
         this.watcher('set', this.key, this.child, this)
         return ret
     }
-    public push(...args: T[]) {
-        return this.callSuper('push', 0, args)
-    }
-    public pop() {
-        return this.callSuper('pop', 0, [])
-    }
-    public shift() {
-        return this.callSuper('shift', 0, [])
-    }
-    public unshift(...args: T[]) {
-        return this.callSuper('unshift', 0, args)
-    }
-    public sort(...args: [Function?]) {
-        return this.callSuper('sort', 1, args)
-    }
-    public reverse() {
-        return this.callSuper('reverse', 0, [])
-    }
-    public splice(...args: [number, number?, ...T[]]) {
-        return this.callSuper('splice', 2, args)
-    }
 }
+
+const patch = [
+    ['push', 0, true],
+    ['pop', 0, false],
+    ['shift', 0, false],
+    ['unshift', 0, true],
+    ['sort', 1, true],
+    ['reverse', 0, false],
+    ['splice', 2, true]
+] as const
+
+patch.forEach(p => {
+    WatchedArray.prototype[p[0]] = function(...args: any) {
+        this.callSuper(p[0], p[1], p[2] ? args : [])
+    }
+})
 
 function classify(val: unknown, key: string, child: string, watcher: Watcher) {
     if (Array.isArray(val)) {
@@ -60,7 +56,11 @@ function classify(val: unknown, key: string, child: string, watcher: Watcher) {
 }
 
 function defineReactive(
-    obj: Record<string, any>, val: any, key: string, child: string, watcher: Watcher
+    obj: Record<string, any>,
+    val: any,
+    key: string,
+    child: string,
+    watcher: Watcher
 ) {
     val = classify(val, key, child, watcher)
     Object.defineProperty(obj, child, {
@@ -74,9 +74,7 @@ function defineReactive(
     })
 }
 
-export function watch<T extends Record<string, any>>(
-    obj: T, watcher: Watcher, key = 'base'
-) {
+export function watch<T extends Record<string, any>>(obj: T, watcher: Watcher, key = 'base') {
     for (const child in obj) {
         if (!hasKey(obj, child)) continue
         defineReactive(obj, obj[child], key, child, watcher)
