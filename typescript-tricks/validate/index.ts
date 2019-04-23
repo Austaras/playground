@@ -1,6 +1,36 @@
-import 'reflect-metadata'
+type ruleFunc = (val: any) => boolean
+type Rules = Record<string, ruleFunc | null>
 
-const rules: Record<string, Function | null> = {
+export function makeValidate<T extends Rules>(rules: T) {
+    return function validate(...ruleNames: Array<keyof T>) {
+        return (target: Object, key: string, descriptor: PropertyDescriptor) => {
+            const original: Function = descriptor.value
+            descriptor.value = function(...args: any[]) {
+                let error: keyof T = ''
+                let ind: number
+                for (ind = 0; ind < ruleNames.length; ind++) {
+                    const ruleName = ruleNames[ind]
+                    const arg = arguments[ind]
+                    if (ruleName && !rules[ruleName]!(arg)) {
+                        error = ruleNames[ind]
+                        break
+                    }
+                }
+                if (error) {
+                    console.error(
+                        `${target.constructor.name}.${key} get` +
+                            ` an invalid parameter, which index is ${ind}, disobeys rule ${error}`
+                    )
+                } else {
+                    original.apply(this, args)
+                }
+            }
+            return descriptor
+        }
+    }
+}
+
+const rules = {
     '': null,
     hex(val: string) {
         return val.match(/^(0x|0X)?[a-fA-F\d]+$/) ? true : false
@@ -8,34 +38,9 @@ const rules: Record<string, Function | null> = {
     moreThan20(val: number) {
         return val > 20
     }
-}
+} as const
 
-type rule = keyof typeof rules
-
-function validate(...ruleNames: rule[]) {
-    return (target: Object, key: string, descriptor: PropertyDescriptor) => {
-        const original: Function = descriptor.value
-        descriptor.value = function(...args: any[]) {
-            let error = ''
-            const errorInd = 0
-            for (const ind in args) {
-                const ruleName = ruleNames[ind]
-                const arg = arguments[ind]
-                if (ruleName && !rules[ruleName]!(arg)) {
-                    error = ruleNames[ind]
-                    break
-                }
-            }
-            if (error) {
-                console.error(`${target.constructor.name}.${key} get` +
-                    ` an invalid parameter, which index is ${errorInd}, disobeys rule ${error}`)
-            } else {
-                original.apply(this, args)
-            }
-        }
-        return descriptor
-    }
-}
+const validate = makeValidate(rules)
 
 class Foo {
     private foo = 'Foo'
@@ -48,5 +53,6 @@ class Foo {
 
 const foo = new Foo()
 foo.bar('0x123', null, 21)
+foo.bar('01x233', null, 21)
 foo.bar('test', undefined, 21)
 foo.bar('0xfff', NaN, 19)
