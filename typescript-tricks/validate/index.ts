@@ -38,7 +38,7 @@ const rules = {
     moreThan20(val: number) {
         return val > 20
     }
-} as const
+}
 
 const validate = makeValidate(rules)
 
