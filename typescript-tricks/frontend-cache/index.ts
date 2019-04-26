@@ -1,25 +1,18 @@
-const requests: {
-    [key: string]: {
-        [key: string]: {
-            time: number,
-            result: Promise<any>
-        }
-    }
-} = {}
-
-function cache(interval: number) {
-    return function(_: any, prop: string, descriptor: PropertyDescriptor) {
-        requests[prop] = {}
+export function cache(interval: number) {
+    return function(obj: any, prop: string, descriptor: PropertyDescriptor) {
+        const sym = Symbol(prop)
+        if (obj[sym]) return
+        obj[sym] = {}
         const orig = descriptor.value
         descriptor.value = function(...args: any[]) {
             const argStr = JSON.stringify(args)
-            let cached = requests[prop][argStr]
+            let cached = obj[sym][argStr]
             if (!cached || Date.now() - cached.time > interval) {
                 cached = {
                     result: orig.apply(this, args),
                     time: Date.now()
                 }
-                requests[prop][argStr] = cached // in case cached is undefined
+                obj[sym][argStr] = cached // in case cached is undefined
             }
             return cached.result
         }
@@ -31,20 +24,20 @@ class Wiki {
     public get(term: string) {
         return fetch('https://en.wikipedia.org/w/api.php' +
             `?origin=*&action=opensearch&search=${term}&limit=1`)
-            .then((res) => res.json())
+            .then(res => res.json())
     }
 }
 
 const wiki = new Wiki()
 wiki.get('test')
-    .then((result) => console.log(result))
+    .then(result => console.log(result))
 wiki.get('test')
-    .then((result) => console.log(result))
+    .then(result => console.log(result))
 wiki.get('function')
-    .then((result) => console.log(result))
+    .then(result => console.log(result))
 setTimeout(() =>
     wiki.get('test')
-        .then((result) => console.log(result)), 2000)
+        .then(result => console.log(result)), 2000)
 setTimeout(() =>
     wiki.get('function')
-        .then((result) => console.log(result)), 500)
+        .then(result => console.log(result)), 500)

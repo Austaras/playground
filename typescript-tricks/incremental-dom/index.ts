@@ -1,4 +1,3 @@
-export {}
 const NODE_DATA_KEY = '__ID_Data__'
 
 interface MyNode extends Node {
@@ -92,7 +91,7 @@ function text(value: string) {
     return currentNode
 }
 
-function patch(node: MyNode, fn: Function, data: Record<string, any>) {
+export function patch(node: MyNode, fn: Function, data: Record<string, any>) {
     currentNode = node
 
     enterNode()
