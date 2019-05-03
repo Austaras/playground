@@ -202,7 +202,7 @@ function render(data: Dict, action: Dict) {
     {
         text('increment')
     }
-    elementClose('buttno')
+    elementClose('button')
 
     elementOpen('button', {
         click: action.dec

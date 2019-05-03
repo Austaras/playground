@@ -1,22 +1,22 @@
 $size: 20px;
 $slider-height: 2px;
 $slider-width: 200px;
-$higher: #E9E9E9;
+$higher: #e9e9e9;
 $lower: #414141;
 
 // you cannot use extend here, as multiple browsers stop applying css after
 // encounter other browser's selector
 @mixin slider {
-    height: $slider-height
+    height: $slider-height;
 }
 
 @mixin thumb {
     appearance: none;
     width: $size;
     height: $size;
-    background-image: url("range/thumb.svg");
+    background-image: url('range/thumb.svg');
     background-size: contain;
-    cursor: pointer
+    cursor: pointer;
 }
 
 @mixin higher {
@@ -33,15 +33,14 @@ $lower: #414141;
     $val: null;
 
     @while $x < $width {
-        $val: $val,
-        $x 0 0 ($height - $size) / 2 #{$color};
+        $val: $val, $x 0 0 ($height - $size) / 2 #{$color};
         $x: $x + $height;
     }
 
     @return $val;
 }
 
-input[type=range] {
+input[type='range'] {
     -webkit-appearance: none;
     appearance: none;
     width: $slider-width;
@@ -51,15 +50,19 @@ input[type=range] {
     &:focus {
         outline: none;
         box-shadow: none;
+        // still no idea why MS choose this stupid default style
+        &::-ms-thumb {
+            border: none;
+        }
     }
 
     &::-moz-focus-outer {
-        border: 0 // remove firefox focus outline
+        border: 0; // remove firefox focus outline
     }
 
     // and you need seperate all three selector as behaviour mentioned before
     &::-moz-range-track {
-        @include slider
+        @include slider;
     }
 
     &::-moz-range-thumb {
@@ -70,12 +73,12 @@ input[type=range] {
     }
 
     &::-moz-range-track {
-        @include higher
+        @include higher;
     }
 
     &::-moz-range-progress {
         height: $slider-height;
-        @include lower
+        @include lower;
     }
 
     &::-webkit-slider-thumb {
@@ -85,12 +88,12 @@ input[type=range] {
         box-shadow: makeLongShadow($higher, $slider-width, $slider-height, $size);
         // overwrite default value in mobile Safari
         border: none;
-        background-color: transparent
+        background-color: transparent;
     }
 
     &::-webkit-slider-runnable-track {
         @include slider;
-        @include lower
+        @include lower;
     }
 
     &::-ms-track {
@@ -101,7 +104,7 @@ input[type=range] {
 
     &::-ms-thumb {
         @include thumb;
-        background-color: rgba($color: #fff, $alpha: 0.0); // remove background in IE
+        background-color: rgba($color: #fff, $alpha: 0); // remove background in IE
         margin-top: 0;
         box-shadow: none;
         // some versions of edge will apply style from webkit pesudo element
@@ -109,10 +112,10 @@ input[type=range] {
     }
 
     &::-ms-fill-upper {
-        @include higher
+        @include higher;
     }
 
     &::-ms-fill-lower {
-        @include lower
+        @include lower;
     }
 }
