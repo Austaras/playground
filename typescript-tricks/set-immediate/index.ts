@@ -48,7 +48,7 @@ function clearImmediate(num: number) {
 setTimeout(() => console.log(
     `The main reason of not using setTimeout is
 it's more unpredictable and has a 1ms minimum delay in Chrome.
-setImmediate will put function to start of task queue so it will always be excuted
+setImmediate will put callback immediately to task queue so it will always be excuted
 earlier than setTimeout`))
 
 setImmediate(() => console.log(0))

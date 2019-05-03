@@ -1,6 +1,5 @@
 type TupleToUnion<T extends any[]> = T[number]
-// this
-// this is evil magic, pure evil
+// here be dragons!
 type UnionToIntersection<U> =
     (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never
 // multiple candidates for the same type variable in contra-variant positions,
@@ -10,7 +9,7 @@ type UnionToIntersection<U> =
 
 export type test = UnionToIntersection<1 | 2 | 3 | 4> // 1 & 2 & 3 & 4
 
-function CakeFactory<
+export function CakeFactory<
     T extends Record<string, any>,
     R extends Record<string, (this: T) => any>[]>(
         data: T, ...fns: R):

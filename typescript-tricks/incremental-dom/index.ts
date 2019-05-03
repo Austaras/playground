@@ -1,8 +1,12 @@
 const NODE_DATA_KEY = '__ID_Data__'
 
-interface MyNode extends Node {
-    __ID_Data__?: NodeData
+declare global {
+    interface Node {
+        __ID_Data__?: NodeData
+    }
 }
+
+type Dict = Record<string, any>
 
 // The current nodes being processed
 let currentNode: Node | null = null
@@ -10,18 +14,19 @@ let currentParent: Node | null = null
 
 class NodeData {
     public text?: string // attrs
+    public attrMap?: Dict
 
     constructor(
         public name: string // key
-    ) { }
+    ) {}
 }
 
-function getData(node: MyNode) {
+function getData(node: Node) {
     if (!node[NODE_DATA_KEY]) {
         node[NODE_DATA_KEY] = new NodeData(node.nodeName.toLowerCase())
     }
 
-    return node[NODE_DATA_KEY]
+    return node[NODE_DATA_KEY]!
 }
 
 function enterNode() {
@@ -38,19 +43,59 @@ function exitNode() {
     currentParent = currentParent!.parentNode
 }
 
-function matches(matchNode: MyNode, name: string) {
+function matches(matchNode: Node, name: string) {
     const data = getData(matchNode)
     return name === data!.name // && key === data.key
 }
 
-function renderDOM(name: string): MyNode {
-    if (currentNode && matches(currentNode, name/*, key */)) {
+function applyAttr(node: HTMLElement, add: Dict, remove: Dict) {
+    Object.entries(add).forEach(([key, value]) => {
+        if (value instanceof Function) {
+            node.addEventListener(key, value)
+            return
+        }
+        node.setAttribute(key, value)
+    })
+    Object.entries(remove).forEach(([key, value]) => {
+        if (value instanceof Function) {
+            node.removeEventListener(key, value)
+            return
+        }
+        node.removeAttribute(key)
+    })
+}
+
+function updateAttr(node: Node, newAttrMap: Dict) {
+    if (!(node instanceof HTMLElement)) return
+    const data = getData(node)
+    const attrMap = data.attrMap || {}
+    const add: Dict = {}
+    const remove: Dict = {}
+    const keys = Object.keys(Object.assign({}, attrMap, newAttrMap))
+    for (const key of keys) {
+        if (!newAttrMap[key]) {
+            remove[key] = attrMap[key]
+            continue
+        }
+        if (!attrMap[key]) {
+            add[key] = newAttrMap[key]
+            continue
+        }
+        if (newAttrMap[key] !== attrMap[key]) {
+            add[key] = attrMap[key]
+            remove[key] = attrMap[key]
+            continue
+        }
+    }
+    applyAttr(node, add, remove)
+}
+
+function renderDOM(name: string): Node {
+    if (currentNode && matches(currentNode, name /*, key */)) {
         return currentNode
     }
 
-    const node = name === '#text' ?
-        document.createTextNode('') :
-        document.createElement(name)
+    const node = name === '#text' ? document.createTextNode('') : document.createElement(name)
 
     currentParent!.insertBefore(node, currentNode)
 
@@ -59,19 +104,17 @@ function renderDOM(name: string): MyNode {
     return node
 }
 
-function elementOpen(name: string) {
+function elementOpen(name: string, attrMap?: Dict) {
     nextNode()
     /* const node = */
-    renderDOM(name)
+    const node = renderDOM(name)
+    if (attrMap) updateAttr(node, attrMap)
     enterNode()
-
-    // TODO: check for updates, i.e attributes
-    // const data = getData(node)
 
     return currentParent
 }
 
-function elementClose(_node: string /* only for mark */): MyNode | null {
+function elementClose(_node: string /* only for mark */): Node | null {
     exitNode()
 
     return currentNode
@@ -91,20 +134,52 @@ function text(value: string) {
     return currentNode
 }
 
-export function patch(node: MyNode, fn: Function, data: Record<string, any>) {
+function hook(action: Dict) {
+    Object.keys(action).forEach(key => {
+        const orig = action[key]
+        action[key] = function() {
+            orig.apply(undefined, arguments)
+            patch(document.body, render, data, action)
+        }
+    })
+}
+
+export function patch(node: Node, fn: (d: Dict, a: Dict) => void, data: Dict, action: Dict) {
     currentNode = node
 
     enterNode()
-    fn(data)
+    fn(data, action)
     exitNode()
 }
 
-function render(data: Record<string, any>) {
+const data = {
+    user: 'Alexey',
+    counter: 1
+}
+
+const action = {
+    inc() {
+        data.counter++
+    },
+    dec() {
+        data.counter--
+    },
+    input(e: Event) {
+        data.user = (e.target as HTMLInputElement).value
+    }
+}
+
+function render(data: Dict, action: Dict) {
     elementOpen('h1')
     {
         text('Hello, ' + data.user)
     }
     elementClose('h1')
+    elementOpen('input', {
+        value: data.user,
+        input: action.input
+    })
+    elementClose('input')
     elementOpen('ul')
     {
         elementOpen('li')
@@ -112,7 +187,7 @@ function render(data: Record<string, any>) {
             text('Counter: ')
             elementOpen('span')
             {
-                text(data.counter)
+                text(data.counter.toString())
             }
             elementClose('span')
         }
@@ -120,20 +195,24 @@ function render(data: Record<string, any>) {
     }
 
     elementClose('ul')
+
+    elementOpen('button', {
+        click: action.inc
+    })
+    {
+        text('increment')
+    }
+    elementClose('buttno')
+
+    elementOpen('button', {
+        click: action.dec
+    })
+    {
+        text('decrement')
+    }
+    elementClose('button')
 }
 
-document.querySelector('button')!.addEventListener('click', () => {
-    data.counter++
-    patch(document.body, render, data)
-})
-document.querySelector('input')!.addEventListener('input', e => {
-    data.user = (e.target as HTMLInputElement).value
-    patch(document.body, render, data)
-})
+hook(action)
 
-const data = {
-    user: 'Alexey',
-    counter: 1
-}
-
-patch(document.body, render, data)
+patch(document.body, render, data, action)

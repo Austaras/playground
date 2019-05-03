@@ -2,15 +2,15 @@ export type Action = 'add' | 'set' | 'get' | 'delete'
 export type Watcher = typeof watcherFunc
 
 export function watcherFunc(action: Action, key: string, prop: string, value: any) {
-    const str = `${action} ${key}.${prop} `
+    const str = `${action} ${key}.${prop}`
     if (value) {
-        console.log(str + 'to', value)
+        console.log(str + ' to', value)
     } else {
         console.log(str)
     }
 }
 
-export function isPlainObj(o: any): o is object {
+export function isPlainObj(o: unknown): o is object {
     return Object.prototype.toString.call(o) === '[object Object]'
 }
 
