@@ -4,7 +4,9 @@ import { Action, hasKey, isObj, watcherFunc } from './shared'
 const sym: string = Symbol('__PROXIED__') as any
 
 export function trap<T extends Record<string, any>>(
-    object: T, watcher: typeof watcherFunc, key = 'base'
+    object: T,
+    watcher: typeof watcherFunc,
+    key = 'base'
 ) {
     if (object[sym]) return object
     for (const i in object) {
@@ -19,7 +21,7 @@ export function trap<T extends Record<string, any>>(
             }
             return true
         },
-        set(obj: T, prop: string, value: any) {
+        set(obj: T, prop: keyof T & string, value: any) {
             const action: Action = hasKey(obj, prop) ? 'set' : 'add'
             watcher(action, key, prop, value)
             if (isObj(value)) {
