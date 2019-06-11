@@ -5,44 +5,41 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center
+    align-items: center;
 }
 
 $width: 200px;
 $height: 200px;
 .circle {
     width: 2 * $width;
-    height: 2* $height;
+    height: 2 * $height;
     overflow: hidden;
 }
 
 .sector {
     width: $width;
     height: $height;
-    overflow: hidden;
-    position: relative;
-    &:nth-child(odd)>.item {
+    &:nth-child(odd) {
         background-color: #8f2a1e;
         &:hover {
             background-color: gold;
         }
     }
-    &:nth-child(even)>.item {
+    &:nth-child(even) {
         background-color: #313a31;
         &:hover {
-            background-color: gray
+            background-color: gray;
         }
     }
+    position: relative;
+    border-radius: 100% 0 0 0;
+    clip-path: polygon(0 100%, 100% 100%, 0 42.2649%);
     transform-origin: right bottom;
     $total: 12;
-    $skew: 90deg - 360deg / $total;
     @for $ind from 1 through $total {
         &:nth-child(#{$ind}) {
             top: -$height * ($ind - 1);
-            transform: rotate(($ind - 1) * 360deg / $total) skew($skew);
-            >.item {
-                transform: skew(-$skew);
-            }
+            transform: rotate(($ind - 1) * 360deg / $total);
         }
     }
 }
