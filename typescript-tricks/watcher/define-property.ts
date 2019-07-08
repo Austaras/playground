@@ -39,9 +39,9 @@ const patch = [
     ['splice', 2, true]
 ] as const
 
-patch.forEach(p => {
-    WatchedArray.prototype[p[0]] = function(...args: any) {
-        this.callSuper(p[0], p[1], p[2] ? args : [])
+patch.forEach(([method, preserve, hasArg]) => {
+    WatchedArray.prototype[method] = function(...args: any) {
+        return this.callSuper(method, preserve, hasArg ? args : [])
     }
 })
 
