@@ -5,7 +5,7 @@ interface Task {
 }
 
 type CopyableSimple = number | string | boolean | undefined | null | void
-    | Date | Blob | RegExp
+| Date | Blob | RegExp
 interface CopyableObject {
     [key: string]: CopyableSimple | CopyableComplex
 }

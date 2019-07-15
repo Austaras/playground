@@ -3,14 +3,14 @@ type Rules = Record<string, ruleFunc | null>
 
 export function makeValidate<T extends Rules>(rules: T) {
     return function validate(...ruleNames: Array<keyof T>) {
-        return (target: Object, key: string, descriptor: PropertyDescriptor) => {
+        return (target: object, key: string, descriptor: PropertyDescriptor) => {
             const original: Function = descriptor.value
             descriptor.value = function(...args: any[]) {
                 let error: keyof T = ''
                 let ind: number
                 for (ind = 0; ind < ruleNames.length; ind++) {
                     const ruleName = ruleNames[ind]
-                    const arg = arguments[ind]
+                    const arg = args[ind]
                     if (ruleName && !rules[ruleName]!(arg)) {
                         error = ruleNames[ind]
                         break

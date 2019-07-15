@@ -64,9 +64,7 @@ export class Router {
         }
         const to = location.pathname.split('/')
             .slice(this.base.length + 1, -1)
-        paths.forEach(path => {
-            path === '..' ? to.pop() : to.push(path)
-        })
+        paths.forEach(path => path === '..' ? to.pop() : to.push(path))
         if (to.length === 0) to.push('')
         return to
     }

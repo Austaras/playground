@@ -19,6 +19,7 @@ const add1 = function(a: number, b: number) {
     return a + b
 }
 const add2 = (a: number, b: number) => a + b
+// eslint-disable-next-line
 const add3 = (a: number, b: number) => {
     return a + b
 }
@@ -30,7 +31,7 @@ asyncCalc.calc(add3, 1, 2).then(res => console.log('add3', res))
 
 // @ts-ignore: noImplicitAny
 const square = x => x * x
-// tslint:disable-next-line
+// eslint-disable-next-line
 const mislead = () => { x: 1 }
 const empty = () => ({})
 asyncCalc.calc(square, 50).then(res => console.log('square', res))

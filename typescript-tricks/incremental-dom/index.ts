@@ -91,7 +91,7 @@ function updateAttr(node: Node, newAttrMap: Dict) {
 }
 
 function renderDOM(name: string): Node {
-    if (currentNode && matches(currentNode, name /*, key */)) {
+    if (currentNode && matches(currentNode, name /* key */)) {
         return currentNode
     }
 
@@ -137,8 +137,8 @@ function text(value: string) {
 function hook(action: Dict) {
     Object.keys(action).forEach(key => {
         const orig = action[key]
-        action[key] = function() {
-            orig.apply(undefined, arguments)
+        action[key] = function(...args: any[]) {
+            orig(args)
             patch(document.body, render, data, action)
         }
     })

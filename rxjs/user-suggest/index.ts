@@ -7,7 +7,7 @@ import {
 import { getData, User } from './api'
 
 interface Status {
-    data: User[],
+    data: User[]
     slots: number[]
 }
 

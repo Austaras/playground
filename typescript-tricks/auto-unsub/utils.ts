@@ -44,5 +44,4 @@ export function unmount(comp: Warpped, services: Services) {
 }
 
 export function Inject(constructor: Function) {
-    /* tslint:disable:no-empty */
 }

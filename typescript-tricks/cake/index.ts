@@ -11,8 +11,8 @@ export type test = UnionToIntersection<1 | 2 | 3 | 4> // 1 & 2 & 3 & 4
 
 export function CakeFactory<
     T extends Record<string, any>,
-    R extends Record<string, (this: T) => any>[]>(
-        data: T, ...fns: R):
+    R extends Record<string,(this: T) => any>[]>(
+    data: T, ...fns: R):
     T & UnionToIntersection<TupleToUnion<R>> {
     const res = Object.assign(data)
     fns.forEach(fn => Object.entries(fn).forEach(([key, func]) => res[key] = func))
@@ -23,19 +23,19 @@ const batman = CakeFactory({
     name: 'Batman',
     secertId: 'Bruce Wayne'
 },
-    {
-        fly() {
-            console.log('Bat Wings!')
-        },
-        isRich() {
-            return true
-        }
+{
+    fly() {
+        console.log('Bat Wings!')
     },
-    {
-        why() {
-            console.log(`Beacuse I'm ${this.name}`)
-        }
+    isRich() {
+        return true
     }
+},
+{
+    why() {
+        console.log(`Beacuse I'm ${this.name}`)
+    }
+}
 )
 
 batman.why()

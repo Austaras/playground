@@ -34,7 +34,7 @@ export class Archer extends Servant {
 export class Default extends Component {
     constructor() {
         const element = document.createElement('p')
-        element.innerHTML = `Please choose your servant`
+        element.innerHTML = 'Please choose your servant'
         element.classList.add('component')
         super(element)
     }

@@ -8,10 +8,10 @@ interface RouterConfig {
 interface Route {
     path: string
 
-    redirect?: string,
+    redirect?: string
     match?: 'full' | 'prefix'
 
-    content?: { new(...args: any[]): Component }
+    content?: new (...args: any[]) => Component
     keepAlive?: boolean
     children?: Array<Route>
 }
