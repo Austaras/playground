@@ -26,7 +26,6 @@
     "node-sass": "^4.11.0",
     "parcel-bundler": "^1.12.1",
     "posthtml-include": "^1.2.0",
-    "tslint": "^5.10.0",
     "typescript": "^3.3.3"
   }
 }

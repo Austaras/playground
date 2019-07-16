@@ -1,4 +1,5 @@
 import message from './message'
+
 const i = 0
 console.log(message + i)
 

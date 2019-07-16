@@ -30,6 +30,11 @@
             "warn",
             "as-needed"
         ],
+        "array-bracket-spacing": [
+            "warn",
+            "never"
+        ],
+        "comma-spacing": "warn",
         "curly": [
             "warn",
             "multi-line"
@@ -41,6 +46,7 @@
             "warn",
             "never"
         ],
+        "key-spacing": "warn",
         "max-len": [
             "warn",
             {
@@ -74,16 +80,25 @@
                 "allowTemplateLiterals": true
             }
         ],
+        "quote-props": [
+            "warn",
+            "as-needed"
+        ],
         "radix": "warn",
         "semi": [
             "warn",
             "never"
         ],
+        "space-before-blocks": "warn",
         "space-before-function-paren": [
             "warn",
             "never"
         ],
         "spaced-comment": "warn",
+        "space-in-parens": [
+            "warn",
+            "never"
+        ],
         "space-infix-ops": [
             "warn"
         ],
