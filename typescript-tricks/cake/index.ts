@@ -9,9 +9,11 @@ type UnionToIntersection<U> =
 
 export type test = UnionToIntersection<1 | 2 | 3 | 4> // 1 & 2 & 3 & 4
 
+type Methods<T> = Record<string, (this: T) => any>[]
+
 export function CakeFactory<
     T extends Record<string, any>,
-    R extends Record<string,(this: T) => any>[]>(
+    R extends Methods<T>>(
     data: T, ...fns: R):
     T & UnionToIntersection<TupleToUnion<R>> {
     const res = Object.assign(data)
