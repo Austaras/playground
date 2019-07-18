@@ -137,8 +137,8 @@ function text(value: string) {
 function hook(action: Dict) {
     Object.keys(action).forEach(key => {
         const orig = action[key]
-        action[key] = function(...args: any[]) {
-            orig(args)
+        action[key] = function(ev: Event) {
+            orig(ev)
             patch(document.body, render, data, action)
         }
     })
