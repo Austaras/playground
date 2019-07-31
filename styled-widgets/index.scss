@@ -1,10 +1,10 @@
-@import "range/styles";
-@import "switch/styles";
+@import 'dropdown/styles';
+@import 'range/styles';
+@import 'switch/styles';
 
 body {
-    margin-top: 10vh;
-    margin-left: 15vw;
-    font-size: 16px
+    margin: 10vh 15vw 0;
+    font-size: 16px;
 }
 
 .text {
@@ -12,7 +12,7 @@ body {
     box-sizing: border-box;
     font-family: serif;
     font-style: italic;
-    font-size: 1.2em
+    font-size: 1.2em;
 }
 
 .quote {
@@ -28,10 +28,17 @@ body {
 code {
     font-family: monospace;
     font-weight: bold;
-    font-style: normal
+    font-style: normal;
 }
 
 form {
     margin-top: 2em;
     margin-bottom: 1em;
+}
+
+.xxx {
+    background-color: aqua;
+    &:focus {
+        background-color: wheat;
+    }
 }

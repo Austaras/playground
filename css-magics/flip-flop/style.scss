@@ -4,7 +4,7 @@ body {
     display: flex;
     min-height: 100vh;
     align-items: center;
-    justify-content: space-around
+    justify-content: space-around;
 }
 
 .container {
@@ -29,7 +29,6 @@ body {
     transform-style: preserve-3d;
     position: relative;
 }
-
 
 .cover,
 .text {

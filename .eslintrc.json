@@ -58,10 +58,6 @@
         "no-caller": "warn",
         "no-eval": "warn",
         "no-multi-spaces": "warn",
-        "no-new-wrappers": "warn",
-        "no-throw-literal": "warn",
-        "no-trailing-spaces": "warn",
-        "no-var": "warn",
         "no-multiple-empty-lines": [
             "warn",
             {
@@ -69,11 +65,15 @@
                 "maxEOF": 0
             }
         ],
+        "no-new-wrappers": "warn",
+        "no-throw-literal": "warn",
+        "no-trailing-spaces": "warn",
+        "no-var": "warn",
         "no-undef-init": "warn",
         "no-unused-expressions": "warn",
         "object-shorthand": "warn",
         "quotes": [
-            "error",
+            "warn",
             "single",
             {
                 "avoidEscape": true,

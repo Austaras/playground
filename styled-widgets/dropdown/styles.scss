@@ -1,0 +1,75 @@
+.button {
+    appearance: none;
+    padding: 0 0 0 8px;
+    box-sizing: border-box;
+    border: #b9aeb0 1px solid;
+    background-color: #fff;
+    border-radius: 6px;
+    line-height: 2;
+    background: linear-gradient(180deg, #f0f0f0 0%, #f0f0f0 50%, #efefef 50%, #e4e4e4 100%);
+    i {
+        display: inline-block;
+        box-sizing: border-box;
+        line-height: 2;
+        width: 30px;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+        font-weight: bold;
+        background: linear-gradient(180deg, #63b0fa 0%, #087dff 100%);
+        img {
+            vertical-align: baseline;
+            height: 14px;
+        }
+    }
+}
+
+.alt {
+    display: none;
+}
+
+.main {
+    display: block;
+    & + .alt + .menu {
+        transform-origin: top;
+        transform: scaleY(0);
+    }
+    &:focus {
+        position: fixed;
+        top: -1000px;
+        & + .alt {
+            display: block;
+        }
+        & + .alt + .menu {
+            transform: scaleY(1);
+        }
+    }
+}
+
+.menu {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    transition: transform 0.25s ease-out;
+    $blur: 10;
+	box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+    &:before {
+        content: '';
+        position: absolute;
+        top: -$blur * 2px;
+        left: -$blur * 2px;
+        right: -$blur * 2px;
+        bottom: -$blur * 2px;
+        filter: blur($blur * 1px) saturate(2);
+    }
+    list-style-type: none;
+    li {
+        padding: 0 2em;
+        background: rgba(235, 235, 235, 0.85);
+        background-clip: border-box;
+        line-height: 2;
+    }
+}
+
+.after {
+    height: 50px;
+}
