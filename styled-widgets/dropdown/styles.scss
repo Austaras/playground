@@ -10,14 +10,11 @@
     i {
         display: inline-block;
         box-sizing: border-box;
-        line-height: 2;
         width: 30px;
-        border-top-right-radius: 6px;
-        border-bottom-right-radius: 6px;
+        border-radius: 0 6px 6px 0;
         font-weight: bold;
         background: linear-gradient(180deg, #63b0fa 0%, #087dff 100%);
         img {
-            vertical-align: baseline;
             height: 14px;
         }
     }
@@ -50,22 +47,12 @@
     margin: 0;
     padding: 0;
     transition: transform 0.25s ease-out;
-    $blur: 10;
-	box-shadow: 0 8px 16px rgba(0,0,0,0.25);
-    &:before {
-        content: '';
-        position: absolute;
-        top: -$blur * 2px;
-        left: -$blur * 2px;
-        right: -$blur * 2px;
-        bottom: -$blur * 2px;
-        filter: blur($blur * 1px) saturate(2);
-    }
+    backdrop-filter: blur(2px) saturate(2);
+    background-color: rgba(235, 235, 235, 0.85);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
     list-style-type: none;
     li {
         padding: 0 2em;
-        background: rgba(235, 235, 235, 0.85);
-        background-clip: border-box;
         line-height: 2;
     }
 }
