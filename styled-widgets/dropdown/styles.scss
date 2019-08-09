@@ -1,5 +1,6 @@
 .button {
     appearance: none;
+    cursor: pointer;
     padding: 0 0 0 8px;
     box-sizing: border-box;
     border: #b9aeb0 1px solid;
@@ -44,16 +45,22 @@
 
 .menu {
     position: absolute;
+    border-radius: 5px;
     margin: 0;
     padding: 0;
     transition: transform 0.25s ease-out;
-    backdrop-filter: blur(2px) saturate(2);
+    backdrop-filter: blur(1px) saturate(2);
     background-color: rgba(235, 235, 235, 0.85);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
     list-style-type: none;
+    overflow: hidden;
     li {
         padding: 0 2em;
         line-height: 2;
+        cursor: pointer;
+        &:hover {
+            background-color: rgba(10, 132, 255, 0.7);
+        }
     }
 }
 
