@@ -9,7 +9,10 @@ export class Handler {
         if (this.middlewares.length === 0) {
             callback(payload)
         } else {
-            this.middlewares.reduce((f, g) => load => f(g(load)))(callback)(payload)
+            this.middlewares.reduce((f, g) => (next, load) => f(load => g(next, load), load))(
+                callback,
+                payload
+            )
         }
     }
 }
