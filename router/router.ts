@@ -59,7 +59,7 @@ export class Router {
 
     private parsePath(pathStr: string) {
         const paths = pathStr.split('/')
-        if (pathStr[0] === '/') {
+        if (pathStr.startsWith('/')) {
             return paths.slice(this.base.length + 1)
         }
         const to = location.pathname.split('/')

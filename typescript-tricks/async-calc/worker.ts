@@ -23,7 +23,7 @@ ctx.onmessage = event => {
             // for functions not like x => x * x
             paramStr = paramStr.slice(1, -1)
         }
-        if (body[0] !== '{') {
+        if (body.startsWith('{')) {
             // for functions like x => x * x
             body = 'return ' + body
         } else {

@@ -33,7 +33,7 @@ export function makeValidate<T extends Rules>(rules: T) {
 const rules = {
     '': null,
     hex(val: string) {
-        return val.match(/^(0x|0X)?[a-fA-F\d]+$/) ? true : false
+        return /^(0x|0X)?[a-fA-F\d]+$/.exec(val) ? true : false
     },
     moreThan20(val: number) {
         return val > 20

@@ -45,7 +45,7 @@ function exitNode() {
 
 function matches(matchNode: Node, name: string) {
     const data = getData(matchNode)
-    return name === data!.name // && key === data.key
+    return name === data.name // && key === data.key
 }
 
 function applyAttr(node: HTMLElement, add: Dict, remove: Dict) {
