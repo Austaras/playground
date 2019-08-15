@@ -1,7 +1,16 @@
-import { Route, RouterConfig } from './routerConfig'
+import { CompRoute, RedirectRoute, RouterConfig } from './routerConfig'
 
-interface IntRoute extends Route {
+interface IntCompRoute extends CompRoute {
+    parent?: IntCompRoute
     cache?: Element
+}
+
+type IntRoute = RedirectRoute | IntCompRoute
+
+function randomStr() {
+    return Math.random()
+        .toString(36)
+        .substring(2, 15)
 }
 
 export class Router {
@@ -9,7 +18,7 @@ export class Router {
     // inited in function call in constructor, ts couldn't recognize by now
     private view!: Element
     private base!: string[]
-    private current: IntRoute = { path: '' }
+    private current: IntRoute = { path: '' } as any
 
     constructor(init: RouterConfig) {
         this.routes = init.routes
@@ -18,34 +27,48 @@ export class Router {
             e.preventDefault()
             this.match(this.parsePath(location.pathname))
         })
-        this.match(this.parsePath(location.pathname))
+        this.match(this.parsePath(location.pathname).slice(this.base.length))
+        // remove base
     }
 
-    private match(paths: string[]) {
+    private match(paths: string[]): void {
         let needRedirect = false
+        const segs = paths.length === 0 ? [''] : paths.slice(0)
+        const redirect: string[] = []
+        segs.reverse()
 
-        if (paths.length === 0) paths = ['']
-        let res
-        for (const key in paths) {
-            do {
-                for (const route of this.routes) {
-                    if (paths[key] === route.path) {
-                        res = route
-                        break
-                    }
-                    if (route.path === '**') res = route
+        let res: IntRoute | undefined
+        let routes = this.routes
+        while (segs.length > 0) {
+            const path = segs.pop()!
+            redirect.push(path)
+            res = undefined
+            for (const route of routes) {
+                if (path === route.path) {
+                    res = route
+                    break
                 }
-                if (res && res.redirect) {
-                    paths[key] = res.redirect
+                if (route.path === '**') res = route
+            }
+            if (res) {
+                if ('redirect' in res) {
+                    segs.push(res.redirect)
+                    redirect.pop()
                     needRedirect = true
+                } else {
+                    routes = res.children || []
                 }
-            } while (!res || res.redirect)
+            } else {
+                segs.push(randomStr())
+                segs.reverse()
+                return this.match(segs)
+            }
         }
-        if (res && res.content) {
+        if (res && 'content' in res) {
             const ele = res.cache || new res.content().element
             res.cache = ele
             this.setView(ele)
-            if (!this.current.keepAlive) {
+            if ('keepAlive' in this.current && !this.current.keepAlive) {
                 this.current.cache = undefined
             }
             this.current = res
@@ -53,18 +76,19 @@ export class Router {
             console.error('You are doomed!')
         }
         if (needRedirect) {
-            history.replaceState(null, '', this.genPath(paths))
+            history.replaceState(null, '', this.genPath(redirect))
         }
     }
 
     private parsePath(pathStr: string) {
         const paths = pathStr.split('/')
+        // absolute path
         if (pathStr.startsWith('/')) {
-            return paths.slice(this.base.length + 1)
+            return paths.slice(1)
         }
-        const to = location.pathname.split('/')
-            .slice(this.base.length + 1, -1)
-        paths.forEach(path => path === '..' ? to.pop() : to.push(path))
+        // relative path
+        const to = location.pathname.split('/').slice(this.base.length + 1, -1)
+        paths.forEach(path => (path === '..' ? to.pop() : to.push(path)))
         if (to.length === 0) to.push('')
         return to
     }
@@ -88,11 +112,11 @@ export class Router {
             if (!to) return // is a normal <a> tag
             // make my <a> tags look like normal a tags
             item.removeAttribute('route-to')
-            item.href = to
+            const paths = this.parsePath(to)
+            item.href = [...this.base, ...paths].join('/')
             item.onclick = e => {
                 e.preventDefault()
-                this.match(this.parsePath(to))
-                console.log(to)
+                this.match(paths)
                 this.to(to)
             }
         })
@@ -129,9 +153,11 @@ export class Router {
     }
 
     public setData(data: { [key: string]: number | string | boolean }) {
-        const dataStr = '?' + Object.entries(data).map(
-            ([key, value]) => key + '=' + encodeURIComponent(value.toString()))
-            .join('&')
+        const dataStr =
+            '?' +
+            Object.entries(data)
+                .map(([key, value]) => key + '=' + encodeURIComponent(value))
+                .join('&')
         history.replaceState(null, '', location.pathname + dataStr)
     }
 

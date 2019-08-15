@@ -5,13 +5,19 @@ interface RouterConfig {
     routes: Array<Route>
 }
 
-interface Route {
+interface BaseRoute {
     path: string
-
-    redirect?: string
     match?: 'full' | 'prefix'
+}
 
-    content?: new (...args: any[]) => Component
+interface RedirectRoute extends BaseRoute {
+    redirect: string
+}
+
+interface CompRoute extends BaseRoute {
+    content: new (...args: any[]) => Component
     keepAlive?: boolean
     children?: Array<Route>
 }
+
+type Route = RedirectRoute | CompRoute
