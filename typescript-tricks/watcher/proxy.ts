@@ -1,7 +1,7 @@
 import { Action, hasKey, isObj, watcherFunc } from './shared'
 
 // https://github.com/Microsoft/TypeScript/issues/1863
-const sym: string = Symbol('__PROXIED__') as any
+const sym: string = Symbol.for('__PROXIED__') as any
 
 export function trap<T extends Record<string, any>>(
     object: T,

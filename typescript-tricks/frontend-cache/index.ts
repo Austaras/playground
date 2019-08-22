@@ -1,6 +1,7 @@
 export function cache(interval: number) {
     return function(obj: any, prop: string, descriptor: PropertyDescriptor) {
-        const sym = Symbol(prop)
+        // don't set cache twice
+        const sym = Symbol.for(prop)
         if (obj[sym]) return
         obj[sym] = {}
         const orig = descriptor.value
@@ -20,6 +21,7 @@ export function cache(interval: number) {
 }
 
 class Wiki {
+    @cache(1000)
     @cache(1000)
     public get(term: string) {
         return fetch('https://en.wikipedia.org/w/api.php' +
