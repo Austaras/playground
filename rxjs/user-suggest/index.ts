@@ -37,9 +37,9 @@ const [needMoreData$, enoughData$] =
 // beacuse https://github.com/Microsoft/TypeScript/issues/20305
 const moreData$ = needMoreData$.pipe(
     map(status => status.data),
-    distinctUntilChanged(),
     // in case new event happened when old request hasn't completed
-    scan((_acc: any, _val, index) => index, 0),
+    distinctUntilChanged(),
+    scan((_acc, _val, index) => index, 0),
     mergeMap(getData)
     // for more generic use, switchMap is better because we don't care old data
     // but here mergeMap will be fine

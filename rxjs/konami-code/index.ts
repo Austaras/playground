@@ -10,7 +10,7 @@ const PATTERN = [
 ]
 const TIME_LIMIT_MS = 5000
 
-function arrayEqual(a: any[], b: any[]) {
+function arrayEqual<T>(a: T[], b: T[]) {
     if (a.length !== b.length) return false
     for (const i in a) {
         if (a[i] !== b[i]) return false
