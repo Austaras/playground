@@ -13,7 +13,7 @@ merge(add$.pipe(mapTo(1)), minus$.pipe(mapTo(-1)))
         startWith(0),
         scan((acc, val) => acc += val)
     )
-    .subscribe(val => render(val))
+    .subscribe(render)
 
 function render(count: number) {
     text.innerText = `Count currently is ${count}`

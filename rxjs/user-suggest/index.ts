@@ -40,7 +40,7 @@ const moreData$ = needMoreData$.pipe(
     distinctUntilChanged(),
     // in case new event happened when old request hasn't completed
     scan((_acc: any, _val, index) => index, 0),
-    mergeMap(ind => getData(ind))
+    mergeMap(getData)
     // for more generic use, switchMap is better because we don't care old data
     // but here mergeMap will be fine
 )
@@ -61,7 +61,7 @@ merge(dataSupplied$, enoughData$).pipe(
         return ret
     }), // map [1] to [empty, user, empty]
     scan((acc, val) => Object.assign(acc, val))
-).subscribe(data => render(data))
+).subscribe(render)
 
 const links: HTMLAnchorElement[] =
     Array.from(document.querySelectorAll('.username'))
