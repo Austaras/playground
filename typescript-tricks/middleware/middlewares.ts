@@ -1,6 +1,8 @@
 export type Next = (payload: object) => any
 export type Middleware = (next: Next, payload: object) => any
 
+export const doNothingMiddleware: Middleware = (next: Next, payload: object) => next(payload)
+
 export const thanosMiddleware: Middleware = (next: Next, payload: object) => {
     if (Math.random() > 0.5) {
         return next(payload)
@@ -10,7 +12,8 @@ export const thanosMiddleware: Middleware = (next: Next, payload: object) => {
     }
 }
 
-export const doNothingMiddleware: Middleware = (next: Next, payload: object) => next(payload)
+export const nextTickMiddleware: Middleware = (next: Next, payload: object) =>
+    Promise.resolve().then(() => next(payload))
 
 export const logMiddleware: Middleware = (next: Next, payload: object) => {
     console.log(payload)
