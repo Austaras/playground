@@ -38,7 +38,7 @@ export class Router {
         segs.reverse()
 
         let res: IntRoute | undefined
-        let routes = this.routes
+        let { routes } = this
         while (segs.length > 0) {
             const path = segs.pop()!
             redirect.push(path)
@@ -142,7 +142,7 @@ export class Router {
     }
 
     public extractData() {
-        const search = location.search
+        const { search } = location
         if (search === '') return {}
         const pair = search.slice(1).split('&')
         return pair.reduce((obj: Record<string, string>, curr) => {
