@@ -23,6 +23,7 @@ function* PrimeSieve() {
 }
 
 const prime = PrimeSieve()
-for (let i = 0; i <= 100; i++) {
-    console.log(prime.next().value)
+for (const i of prime) {
+    if (i > 100) break
+    console.log(i)
 }
