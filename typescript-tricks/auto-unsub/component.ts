@@ -6,7 +6,7 @@ export class Component {
     public a = 'a'
     constructor(private ser: BasicService) {
         this.ser.sub(() => {
-            console.log('subscribing by', this.constructor.name)
+            console.log(`%csubscribing by ${this.constructor.name}`, 'color: coral ')
         })
     }
 

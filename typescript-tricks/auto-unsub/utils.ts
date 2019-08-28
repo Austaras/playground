@@ -19,12 +19,9 @@ export function mount(constructor: new (...args: any[]) => {}, services: Service
     const data: any[] = new Array(param.length)
     const watch: Record<string, any> = {}
     param.forEach((ctor: Function, ind: number) => {
-        for (const name in services) {
-            if (services[name] instanceof ctor) {
-                data[ind] = services[name]
-                break
-            }
-        }
+        const [name, service] = Object.entries(services).find(([_, inst]) => inst instanceof ctor)!
+        watch[name] = []
+        data[ind] = trace(service, watch[name])
     })
     const comp: Warpped = new constructor(...data)
     comp._watch = watch
@@ -43,5 +40,4 @@ export function unmount(comp: Warpped, services: Services) {
     comp = {}
 }
 
-export function Inject(constructor: Function) {
-}
+export function Inject(_constructor: Function) {}

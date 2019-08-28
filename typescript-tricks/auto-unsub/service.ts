@@ -7,7 +7,7 @@ export class BasicService {
         this.watch = this.watch.filter(i => i !== f)
     }
     public pub() {
-        console.log('published by', this.constructor.name)
+        console.log(`%cpublished by ${this.constructor.name}`, 'color: green')
         this.watch.forEach(f => f())
     }
 }
