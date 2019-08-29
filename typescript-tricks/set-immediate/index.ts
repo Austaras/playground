@@ -7,9 +7,7 @@ let id = 0
 const flag = '__SET_IMMEDIATE_MESSAGE__'
 const callbacks: Record<number, Callback> = {}
 
-function setImmediate<Args extends any[]>(
-    handler: ((...args: Args) => any), ...args: Args
-): number {
+function setImmediate<Args extends any[]>(handler: (...args: Args) => any, ...args: Args): number {
     callbacks[id] = { handler }
     if (args) {
         callbacks[id].args = args
@@ -22,34 +20,37 @@ function clearImmediate(num: number) {
     delete callbacks[num]
 }
 
-(window as any).setImmediate = (window as any).setImmediate ?
-    (window as any).setImmediate : (() => {
-        window.addEventListener('message', event => {
-            if (typeof event.data !== 'string' || event.source !== window) {
-                return
-            }
-            const f = event.data.slice(0, flag.length)
-            const i = +event.data.slice(flag.length)
-            if (f === flag && callbacks[i]) {
-                if (callbacks[i].args) {
-                    callbacks[i].handler(...callbacks[i].args!)
-                } else {
-                    callbacks[i].handler()
-                }
-                delete callbacks[i]
-            }
-        })
-        return setImmediate
-    })();
+window.setImmediate = window.setImmediate
+    ? window.setImmediate
+    : (() => {
+          window.addEventListener('message', event => {
+              if (typeof event.data !== 'string' || event.source !== window) {
+                  return
+              }
+              const f = event.data.slice(0, flag.length)
+              const i = +event.data.slice(flag.length)
+              if (f === flag && callbacks[i]) {
+                  if (callbacks[i].args) {
+                      callbacks[i].handler(...callbacks[i].args!)
+                  } else {
+                      callbacks[i].handler()
+                  }
+                  delete callbacks[i]
+              }
+          })
+          return setImmediate
+      })()
 
-(window as any).clearImmediate = (window as any).clearImmediate ?
-    (window as any).clearImmediate : clearImmediate
+window.clearImmediate = window.clearImmediate ? window.clearImmediate : clearImmediate
 
-setTimeout(() => console.log(
-    `The main reason of not using setTimeout is
+setTimeout(() =>
+    console.log(
+        `The main reason of not using setTimeout is
 it's more unpredictable and has a 1ms minimum delay in Chrome.
 setImmediate will put callback immediately to task queue so it will always be excuted
-earlier than setTimeout`))
+earlier than setTimeout`
+    )
+)
 
 setImmediate(() => console.log(0))
 setImmediate(() => console.log(1))

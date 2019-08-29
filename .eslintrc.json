@@ -148,6 +148,7 @@
         "@typescript-eslint/no-use-before-define": "off",
         "@typescript-eslint/prefer-function-type": "warn",
         "@typescript-eslint/prefer-for-of": "warn",
+        "@typescript-eslint/prefer-string-starts-ends-with": "warn",
         "@typescript-eslint/type-annotation-spacing": [
             "warn",
             {

@@ -71,7 +71,7 @@ function updateAttr(node: Node, newAttrMap: Dict) {
     const attrMap = data.attrMap || {}
     const add: Dict = {}
     const remove: Dict = {}
-    const keys = Object.keys(Object.assign({}, attrMap, newAttrMap))
+    const keys = Object.keys(attrMap).concat(Object.keys(newAttrMap))
     for (const key of keys) {
         if (!newAttrMap[key]) {
             remove[key] = attrMap[key]
