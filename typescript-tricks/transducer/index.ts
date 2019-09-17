@@ -1,5 +1,5 @@
 import { pipe } from './transducer'
-import { filter, map, tap } from './reducer'
+import { filter, map, take } from './reducer'
 
 function range(start = 0, end = 0) {
     const arr = []
@@ -14,7 +14,7 @@ const op = pipe(
     map((i: number) => i + 55),
     filter((i: number) => i % 2 === 0),
     map((i: number) => `${i}`),
-    tap((i: string) => console.log(i))
+    take(10)
 )
 
-hundred.reduce(op((a, c) => a.concat([c])), [])
+console.log(hundred.reduce(op((a, c) => a.concat([c])), []))

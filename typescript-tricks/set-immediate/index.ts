@@ -7,7 +7,7 @@ let id = 0
 const flag = '__SET_IMMEDIATE_MESSAGE__'
 const callbacks: Record<number, Callback> = {}
 
-function setImmediate<Args extends any[]>(handler: (...args: Args) => any, ...args: Args): number {
+function setImmediate<Args extends any[]>(handler: (...args: Args) => void, ...args: Args): number {
     callbacks[id] = { handler }
     if (args) {
         callbacks[id].args = args
