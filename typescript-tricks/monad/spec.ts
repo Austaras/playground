@@ -5,25 +5,8 @@ interface MonadCtor {
     of: <T>(arg: T) => Monad<T>
 }
 
-function LeftId<T, U>(M: MonadCtor, v: T, f: (i: T) => U) {
-    const fn = (i: T) => M.of(i).map(f)
-    return mEqual(M.of(v).flatMap(fn), fn(v))
-}
-
-function RightId<T>(M: MonadCtor, v: T) {
-    const m = M.of(v)
-    return mEqual(m.flatMap(i => M.of(i)), m)
-}
-
-function Associative<T, U, V>(M: MonadCtor, v: T, f: (i: T) => U, g: (i: U) => V) {
-    const m = M.of(v)
-    const fn = (i: T) => M.of(f(i))
-    const gn = (i: U) => M.of(g(i))
-    return mEqual(m.flatMap(fn).flatMap(gn), m.flatMap(i => fn(i).flatMap(gn)))
-}
-
 type Dict = Record<string, any>
-export function mEqual(a: Dict, b: Dict) {
+function mEqual(a: Dict, b: Dict) {
     if (Object.getPrototypeOf(a) !== Object.getPrototypeOf(b)) return false
     const keys = Object.keys(a)
     if (keys.length !== Object.keys(b).length) {
@@ -39,6 +22,23 @@ export function mEqual(a: Dict, b: Dict) {
         if (a[key] !== b[key]) return false
     }
     return true
+}
+
+function LeftId<T, U>(M: MonadCtor, v: T, f: (i: T) => U) {
+    const fn = (i: T) => M.of(i).map(f)
+    return mEqual(M.of(v).flatMap(fn), fn(v))
+}
+
+function RightId<T>(M: MonadCtor, v: T) {
+    const m = M.of(v)
+    return mEqual(m.flatMap(i => M.of(i)), m)
+}
+
+function Associative<T, U, V>(M: MonadCtor, v: T, f: (i: T) => U, g: (i: U) => V) {
+    const m = M.of(v)
+    const fn = (i: T) => M.of(f(i))
+    const gn = (i: U) => M.of(g(i))
+    return mEqual(m.flatMap(fn).flatMap(gn), m.flatMap(i => fn(i).flatMap(gn)))
 }
 
 const f = (i: number) => i * 5

@@ -12,6 +12,8 @@ export function curry<P extends any[], R>(fn: (...args: P) => R): Curry<P, R> {
     return (arg: any) => curried(arg) as any
 }
 
+export function compose<U, V>(f: (arg: U) => V, g: () => U): () => V
+export function compose<T, U, V>(f: (arg: U) => V, g: (arg: T) => U): (arg: T) => V
 export function compose<T, U, V>(f: (arg: U) => V, g: (arg: T) => U) {
     return (arg: T) => f(g(arg))
 }

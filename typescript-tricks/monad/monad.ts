@@ -75,15 +75,17 @@ export class IO<T extends () => any, R = ReturnType<T>> extends Monad<R> {
     }
     public unsafePerformIO = this.value
     public map<U>(fn: (arg: R) => U): IO<() => U> {
-        return new IO(compose(
-            fn,
-            this.value
-        ) as () => U)
+        return new IO(
+            compose(
+                fn,
+                this.value
+            )
+        )
     }
     public flat(): R {
         return this.unsafePerformIO()
     }
     public apply<R1 extends isFunc<R>>(other: IO<() => Parameters<R1>[number]>): IO<() => ReturnType<R1>> {
-        return this.flatMap((fn) => other.map(fn as R1))
+        return this.flatMap(fn => other.map(fn as R1))
     }
 }

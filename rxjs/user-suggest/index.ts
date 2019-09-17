@@ -1,5 +1,14 @@
 import { fromEvent, merge, zip } from 'rxjs'
-import { distinctUntilChanged, map, mapTo, mergeMap, partition, scan, share, startWith } from 'rxjs/operators'
+import {
+    distinctUntilChanged,
+    map,
+    mapTo,
+    mergeMap,
+    partition,
+    scan,
+    share,
+    startWith
+} from 'rxjs/operators'
 
 import { getData, User } from './api'
 
@@ -53,12 +62,13 @@ const dataSupplied$ = zip(needMoreData$, moreData$).pipe(
 merge(dataSupplied$, enoughData$)
     .pipe(
         map(status => {
+            // map [1] to [empty, user, empty]
             const ret: User[] = []
             while (status.slots.length !== 0) {
                 ret[status.slots.shift()!] = status.data.shift()!
             }
             return ret
-        }), // map [1] to [empty, user, empty]
+        }),
         scan((acc, val) => Object.assign(acc, val))
     )
     .subscribe(render)
