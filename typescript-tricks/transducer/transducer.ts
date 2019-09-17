@@ -1,25 +1,27 @@
-type Tail<T extends any[]> = ((...args: T) => any) extends ((_: any, ...rest: infer U) => any)
-    ? U
-    : never
+import { Reducer } from './utils'
 
-export type Step<T> = (acc: any, val: T, ind: number) => any
-export type Reducer<T, R> = (step: Step<R>) => Step<T>
-type HeadParam<T extends Reducer<any, any>[]> = T extends [(args: Step<infer U>) => any, ...any[]]
-    ? U
-    : never
-type HeadReturn<T extends Reducer<any, any>[]> = T extends [(...args: any) => Step<infer U>, ...any[]]
-    ? U
-    : never
+// primary
+export const map = <T, R>(f: (val: T, ind: number) => R) => <S>(reducer: Reducer<R, S>) => (
+    acc: S,
+    val: T,
+    ind: number
+) => reducer(acc, f(val, ind), ind)
 
-type Pipeable<T extends Reducer<any, any>[], A, R> = {
-    done: Reducer<A, R>
-    next: Pipeable<Tail<T>, A, HeadParam<T>>
-    wrong: never
-}[T extends [] ? 'done' : R extends HeadReturn<T> ? 'next' : 'wrong']
+export const filter = <T>(predicate: (val: T, ind: number) => boolean) => <S>(
+    reducer: Reducer<T, S>
+) => (acc: S, val: T, ind: number) => (predicate(val, ind) ? reducer(acc, val, ind) : acc)
 
-export function pipe<T extends Reducer<any, any>[], A, R>(
-    first: Reducer<A, R>,
-    ...rest: T
-): Pipeable<T, A, R> {
-    return rest.reduce((f, g) => arg => f(g(arg)), first) as any
+// secondary
+export const mapTo = <T, R>(value: R) => map((_: T) => value)
+export const take = <T>(num: number) => <S>(reducer: Reducer<T, S>) => {
+    let count = 0
+    return (acc: S, val: T, ind: number) => (count++ >= num ? acc : reducer(acc, val, ind))
+}
+export const tap = <T>(action: (val: T, ind: number) => void) => <S>(reducer: Reducer<T, S>) => (
+    acc: S,
+    val: T,
+    ind: number
+) => {
+    action(val, ind)
+    return reducer(acc, val, ind)
 }

@@ -1,5 +1,5 @@
-import { pipe } from './transducer'
-import { filter, map, take } from './reducer'
+import { filter, map, take } from './transducer'
+import { pipe, transduce } from './utils'
 
 function range(start = 0, end = 0) {
     const arr = []
@@ -9,12 +9,21 @@ function range(start = 0, end = 0) {
     return arr
 }
 
-const hundred = range(0, 100)
-const op = pipe(
+function* rangeG(start = 0, end = 0) {
+    let num = start
+    while (num < end) {
+        yield num
+        num ++
+    }
+}
+
+const transducer = pipe(
     map((i: number) => i + 55),
     filter((i: number) => i % 2 === 0),
     map((i: number) => `${i}`),
     take(10)
 )
+const reducer = (a: string[], v: string) => a.concat([v])
 
-console.log(hundred.reduce(op((a, c) => a.concat([c])), []))
+console.log(transduce(range(0, 100), transducer(reducer), []))
+console.log(transduce(rangeG(0, 100), transducer(reducer), []))
