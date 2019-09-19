@@ -8,14 +8,14 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 // but bare type parameters before extends in a conditional type are distributed
 // across any union constituents, so we need to pack it into a function
 
-export type SomeLongNameType = UnionToIntersection<1 | 2 | 3 | 4> // 1 & 2 & 3 & 4
+type Prettier<T> = [T] extends [infer U] ? { [K in keyof U]: U[K] } : never
 
 type Methods<T> = Record<string, (this: T) => any>[]
 
 export function CakeFactory<T extends Record<string, any>, R extends Methods<T>>(
     data: T,
     ...fns: R
-): T & UnionToIntersection<TupleToUnion<R>> {
+): Prettier<T & UnionToIntersection<TupleToUnion<R>>> {
     const res = Object.assign(data)
     fns.forEach(fn => Object.entries(fn).forEach(([key, func]) => (res[key] = func)))
     return res
