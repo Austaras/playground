@@ -8,7 +8,9 @@ type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 // but bare type parameters before extends in a conditional type are distributed
 // across any union constituents, so we need to pack it into a function
 
-type Prettier<T> = [T] extends [infer U] ? { [K in keyof U]: U[K] } : never
+type Prettier<T> = T extends infer U ? { [K in keyof U]: U[K] } : never
+
+export type SomeLongNameType = Prettier<UnionToIntersection<{ a: 1 } | { b: 2 }>>
 
 type Methods<T> = Record<string, (this: T) => any>[]
 
