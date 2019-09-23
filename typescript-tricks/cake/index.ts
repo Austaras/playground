@@ -12,7 +12,7 @@ type Prettier<T> = T extends infer U ? { [K in keyof U]: U[K] } : never
 
 export type SomeLongNameType = Prettier<UnionToIntersection<{ a: 1 } | { b: 2 }>>
 
-type Methods<T> = Record<string, (this: T) => any>[]
+type Methods<T> = Record<string, (this: T, ...args: any[]) => any>[]
 
 export function CakeFactory<T extends Record<string, any>, R extends Methods<T>>(
     data: T,
@@ -37,11 +37,11 @@ const batman = CakeFactory(
         }
     },
     {
-        why() {
+        why(_question: string) {
             console.log(`Beacuse I'm ${this.name}`)
         }
     }
 )
 
-batman.why()
+batman.why('test')
 console.log(`is Batman rich? ${batman.isRich() ? 'sure' : 'no'}`)

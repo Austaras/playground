@@ -13,7 +13,7 @@ function* rangeG(start = 0, end = 0) {
     let num = start
     while (num < end) {
         yield num
-        num ++
+        num++
     }
 }
 
@@ -23,7 +23,6 @@ const transducer = pipe(
     map((i: number) => `${i}`),
     take(10)
 )
-const reducer = (a: string[], v: string) => a.concat([v])
 
-console.log(transduce(range(0, 100), transducer(reducer), []))
-console.log(transduce(rangeG(0, 100), transducer(reducer), []))
+console.log(transduce(range(0, 100), transducer((a, v) => a.concat([v])), [] as string[]))
+console.log(transduce(rangeG(0, 100), transducer((a, v) => `${a} ${v}`), ''))
