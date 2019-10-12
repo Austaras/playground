@@ -1,17 +1,17 @@
-import { Middleware, Next } from './middlewares'
+import { Middleware, Cont } from './middlewares'
 
 export class Handler {
     private middlewares: Middleware[] = []
     public applyMiddleware(...middlewares: Middleware[]) {
         this.middlewares.push(...middlewares)
     }
-    public handle(payload: object, callback: Next = () => {}) {
+    public handle(payload: object, callback: Cont = () => {}) {
         if (this.middlewares.length === 0) {
             callback(payload)
         } else {
-            this.middlewares.reduce((f, g) => (next, load) => f(load => g(next, load), load))(
-                callback,
-                payload
+            this.middlewares.reduce((f, g) => (load, cont) => f(load, load => g(load, cont)))(
+                payload,
+                callback
             )
         }
     }

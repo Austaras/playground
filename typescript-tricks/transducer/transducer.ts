@@ -7,7 +7,11 @@ export const map = <T, R>(f: (val: T, ind: number) => R) => <S>(reducer: Reducer
     ind: number
 ) => reducer(acc, f(val, ind), ind)
 
-export const filter = <T>(predicate: (val: T, ind: number) => boolean) => <S>(
+interface Filter {
+    <T>(p: (v: T, i: number) => boolean): <R>(r: Reducer<T, R>) => Reducer<T, R>
+    <T, S extends T>(p: (v: T, i: number) => v is S): <R>(reducer: Reducer<T, R>) => Reducer<S, R>
+}
+export const filter: Filter = <T>(predicate: (val: T, ind: number) => boolean) => <S>(
     reducer: Reducer<T, S>
 ) => (acc: S, val: T, ind: number) => (predicate(val, ind) ? reducer(acc, val, ind) : acc)
 

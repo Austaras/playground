@@ -1,24 +1,24 @@
-export type Next = (payload: object) => any
-export type Middleware = (next: Next, payload: object) => any
+export type Cont = (payload: object) => any
+export type Middleware = (payload: object, next: Cont) => any
 
-export const doNothingMiddleware: Middleware = (next: Next, payload: object) => next(payload)
+export const doNothingMiddleware: Middleware = (payload, cont) => cont(payload)
 
-export const thanosMiddleware: Middleware = (next: Next, payload: object) => {
+export const thanosMiddleware: Middleware = (payload, cont) => {
     if (Math.random() > 0.5) {
-        return next(payload)
+        return cont(payload)
     } else {
         console.log('snapped')
         return payload
     }
 }
 
-export const nextTickMiddleware: Middleware = (next: Next, payload: object) =>
-    Promise.resolve().then(() => next(payload))
+export const nextTickMiddleware: Middleware = (payload, cont) =>
+    Promise.resolve().then(() => cont(payload))
 
-export const logMiddleware: Middleware = (next: Next, payload: object) => {
+export const logMiddleware: Middleware = (payload, cont) => {
     console.log(payload)
-    return next(payload)
+    return cont(payload)
 }
 
-export const makeAddMiddleware = (key: string, value: any) => (next: Next, payload: any) =>
-    next({ ...payload, [key]: value })
+export const makeAddMiddleware = (key: string, value: any): Middleware => (payload, cont) =>
+    cont({ ...payload, [key]: value })
