@@ -68,7 +68,7 @@ function applyAttr(node: HTMLElement, add: Dict, remove: Dict) {
 function updateAttr(node: Node, newAttrMap: Dict) {
     if (!(node instanceof HTMLElement)) return
     const data = getData(node)
-    const attrMap = data.attrMap || {}
+    const attrMap = data.attrMap ?? {}
     const add: Dict = {}
     const remove: Dict = {}
     const keys = Object.keys(attrMap).concat(Object.keys(newAttrMap))

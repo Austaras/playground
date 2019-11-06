@@ -14,7 +14,7 @@ function* PrimeFilter(prime: number, input: IterableIterator<number>) {
 
 function* PrimeSieve() {
     let c = Counter()
-    for(;;) {
+    while (true) {
         const prime = c.next().value as number
         yield prime
         const newC = PrimeFilter(prime, c)

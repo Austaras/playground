@@ -4,25 +4,28 @@ interface Task {
     reject: Function
 }
 
-type CopyableSimple = number | string | boolean | undefined | null | void
-| Date | Blob | RegExp
-interface CopyableObject {
-    [key: string]: CopyableSimple | CopyableComplex
-}
-interface CopyableArray extends Array<Copyable> { }
-interface CopyableMap extends Map<Copyable, Copyable> { }
-interface CopyableSet extends Set<Copyable> { }
-type CopyableComplex =
-    CopyableObject | CopyableArray | CopyableMap | CopyableSet
-type Copyable = CopyableSimple | CopyableComplex
+type Copyable =
+    | number
+    | string
+    | boolean
+    | undefined
+    | null
+    | void
+    | Date
+    | Blob
+    | RegExp
+    | {
+          [key: string]: Copyable
+      }
+    | Copyable[]
+    | Map<Copyable, Copyable>
+    | Set<Copyable>
 
 class AsyncWorker {
     private worker = new Worker('./worker.ts')
     private task?: Task
     public idle = true
-    constructor(
-        private queue: Task[],
-    ) {
+    constructor(private queue: Task[]) {
         this.worker.onmessage = event => {
             if (this.task) {
                 this.task.resolve(event.data)
@@ -66,7 +69,9 @@ export class AsyncCalculation {
     private dispatch(data: Record<string, any>) {
         const promise = new Promise((resolve, reject) => {
             this.queue.push({
-                data, reject, resolve
+                data,
+                reject,
+                resolve
             })
         })
         let worker = this.workers.find(worker => worker.idle)
@@ -86,7 +91,8 @@ export class AsyncCalculation {
         return promise
     }
     public async calc<T extends Copyable[], R extends Copyable>(
-        func: (this: undefined, ...args: T) => R, ...args: T
+        func: (this: undefined, ...args: T) => R,
+        ...args: T
     ): Promise<R> {
         return this.dispatch({
             funcStr: func.toString(),

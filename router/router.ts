@@ -56,7 +56,7 @@ export class Router {
                     redirect.pop()
                     needRedirect = true
                 } else {
-                    routes = res.children || []
+                    routes = res.children ?? []
                 }
             } else {
                 segs.push(randomStr())
@@ -65,7 +65,7 @@ export class Router {
             }
         }
         if (res && 'content' in res) {
-            const ele = res.cache || new res.content().element
+            const ele = res.cache ?? new res.content().element
             res.cache = ele
             this.setView(ele)
             if ('keepAlive' in this.current && !this.current.keepAlive) {
@@ -100,7 +100,7 @@ export class Router {
     private parseHtml() {
         const base = document.getElementsByTagName('base')[0]
         if (base) {
-            const baseHref = (base.getAttribute('href') || '/').split('/')
+            const baseHref = (base.getAttribute('href') ?? '/').split('/')
             baseHref.shift()
             this.base = baseHref
         } else {
