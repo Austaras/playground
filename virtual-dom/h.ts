@@ -1,14 +1,21 @@
+/* eslint-disable prefer-rest-params */
+
 export function h<T = {}>(
     type: HTMLElementTagName,
     config?: JSXConfig<T> | null,
-    ...children: JSXChildrenType[]
+    ...children: JSXChildren[]
 ): JSXElement<T> {
     const props: JSXElement<T>['props'] = { ...config } as any
-    if (children.length === 1) {
-        props.children = children[0]
+    const len = arguments.length
+    if (len === 3 && arguments[2] !== null) {
+        props.children = arguments[2]
     }
-    if (children.length > 1) {
-        props.children = children.slice(0)
+    if (len > 3) {
+        const arr = []
+        for (let i = 2; i < len; i++) {
+            arr[i - 2] = arguments[i]
+        }
+        props.children = arr
     }
     return { type, props }
 }

@@ -1,10 +1,9 @@
 import { Properties } from 'csstype'
 
-type TypeOrArr<T> = T[] | T
 declare global {
     namespace JSX {
-        interface IntrinsicElements {
-            [elemName: string]: any
+        type IntrinsicElements = {
+            [elemName in HTMLElementTagName]: JSXProps
         }
     }
 
@@ -26,9 +25,10 @@ declare global {
         title?: string
         translate?: 'yes' | 'no'
     }
+    type TypeOrArr<T> = T[] | T
 
     interface JSXProps extends JSXAttributes {
-        children: JSXChildren
+        children?: JSXChildren
     }
     interface JSXElement<T = {}> {
         type: HTMLElementTagName
@@ -39,5 +39,5 @@ declare global {
 
     type text = string | number
     type JSXChildrenType = JSXElement | text | null
-    type JSXChildren = TypeOrArr<JSXChildrenType>
+    type JSXChildren = TypeOrArr<JSXElement | text | null>
 }
