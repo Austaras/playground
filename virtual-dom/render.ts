@@ -1,4 +1,4 @@
-import { isObject, isEmpty, isVoid, has } from './utils'
+import { isEmpty, has } from './utils'
 
 const TYPE_TEXT = Symbol.for('text')
 enum EFFECT {
