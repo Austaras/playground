@@ -1,5 +1,7 @@
 import { Properties } from 'csstype'
 
+import { HElement } from './h'
+
 declare global {
     namespace JSX {
         type IntrinsicElements = {
@@ -9,7 +11,13 @@ declare global {
 
     type HTMLElementTagName = keyof HTMLElementTagNameMap
 
-    interface JSXAttributes {
+    type JSXEvent = (event: Event) => void
+    interface JSXEventProps {
+        onClick?: JSXEvent
+        onFocus?: JSXEvent
+        onChange?: JSXEvent
+    }
+    interface JSXAttributes extends JSXEventProps {
         accessKey?: string
         className?: string
         contentEditable?: boolean
@@ -30,14 +38,21 @@ declare global {
     interface JSXProps extends JSXAttributes {
         children?: JSXChildren
     }
-    interface JSXElement<T = {}> {
+    type FunctionComponent<T = {}, R = JSXElement> = (props: T) => R
+    type ClassComponent<T = {}, S = {}, R = JSXElement> = HElement<T, S, R>
+    interface JSXNode<T = {}> {
         type: HTMLElementTagName
         props: JSXProps & T
     }
+    interface JSXElement<T = {}, R = JSXNode> {
+        type: HTMLElementTagName | FunctionComponent<T, R> | ClassComponent<T, R>
+        props: JSXProps & T
+    }
 
+    type JSXType = HTMLElementTagName | FunctionComponent | ClassComponent
     type JSXConfig<T = {}> = JSXAttributes & T
 
     type text = string | number
-    type JSXChildrenType = JSXElement | text | null
+    type JSXChild = JSXElement | text | null
     type JSXChildren = TypeOrArr<JSXElement | text | null>
 }

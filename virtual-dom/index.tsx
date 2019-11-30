@@ -1,14 +1,29 @@
 import { h } from './h'
-import { render } from './render'
+import { render, useState } from './render'
 
 const root = document.getElementById('root')!
-const long = new Array(1000).fill(0)
+const long = new Array(500).fill(0)
 const getColor = (num: number) => {
     if (num === 500) return 'blue'
     if (num < 500) return 'red'
     return 'green'
 }
-const App = (arr: number[]) => (
+
+const Counter = () => {
+    const [count, setCount] = useState(0)
+    return (
+        <div>
+            <div>{count}</div>
+            <button onClick={() => setCount(count + 1)}>+</button>
+            <button onClick={() => setCount(c => c - 1)}>-</button>
+        </div>
+    )
+}
+
+interface Props {
+    arr: number[]
+}
+const App = ({ arr }: Props) => (
     <div>
         <h1 title='test' style={{ color: getColor(arr.length), fontWeight: 'normal' }}>
             <i>Hello VDOM</i>
@@ -20,10 +35,11 @@ const App = (arr: number[]) => (
             <span>This is a long number, 1</span>
             {arr.map((_, i) => (i % 2 === 0 ? <span>{i % 10}</span> : null))}
         </div>
+        <Counter />
     </div>
 )
-render(App(long), root)
+render(<App arr={long} />, root)
 
-setTimeout(() => render(App(long.slice(0, 100)), root), 1000)
+setTimeout(() => render(<App arr={long.slice(0, 100)} />, root), 1500)
 
-setTimeout(() => render(App(long.concat(long)), root), 3000)
+setTimeout(() => render(<App arr={long.concat(long)} />, root), 3000)

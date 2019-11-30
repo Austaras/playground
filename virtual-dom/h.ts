@@ -1,7 +1,7 @@
 /* eslint-disable prefer-rest-params */
 
 export function h<T = {}>(
-    type: HTMLElementTagName,
+    type: JSXType,
     config?: JSXConfig<T> | null,
     ...children: JSXChildren[]
 ): JSXElement<T> {
@@ -18,4 +18,14 @@ export function h<T = {}>(
         props.children = arr
     }
     return { type, props }
+}
+
+export abstract class HElement<P = {}, S = {}, R = JSXElement> {
+    abstract state: S
+    constructor(props: P) {}
+    public abstract render(): R
+    public setState(state: Partial<S>) {
+        this.state = { ...this.state, state }
+        this.render()
+    }
 }

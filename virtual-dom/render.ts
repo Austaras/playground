@@ -14,6 +14,10 @@ interface TextNode {
 
 interface BasicFiber {
     parent?: Fiber
+    hooks?: {
+        state: any
+        queue: any[]
+    }[]
     child?: Fiber
     sibling?: Fiber
     alternate?: Fiber
@@ -21,7 +25,7 @@ interface BasicFiber {
 }
 
 interface NormalFiber extends BasicFiber {
-    type?: HTMLElementTagName
+    type?: JSXType
     dom?: HTMLElement
     props: JSXProps
 }
@@ -43,10 +47,19 @@ function setStyle(dom: HTMLElement, style: JSXProps['style']) {
 function createNode(fiber: Fiber) {
     if (fiber.type === undefined) return undefined
     if (fiber.type === TYPE_TEXT) return document.createTextNode(fiber.props as string)
-    const node: HTMLElement = document.createElement(fiber.type)
+    const node: HTMLElement = document.createElement(fiber.type as HTMLElementTagName)
     const { children, style, ...native } = fiber.props
     let prop: keyof typeof native
-    for (prop in native) (node[prop] as any) = native[prop]
+    for (prop in native) {
+        if (prop.startsWith('on')) {
+            const event = prop[2].toLowerCase() + prop.slice(3)
+            // @ts-ignore
+            node.addEventListener(event, native[prop])
+        } else {
+            // @ts-ignore
+            node[prop] = native[prop]
+        }
+    }
     if (style) {
         setStyle(node, style)
     }
@@ -100,7 +113,6 @@ function updateDom(fiber: Fiber, prevProps: JSXProps | text) {
         return (fiber.dom!.nodeValue = fiber.props as string)
     }
     const [remove, place, update] = diffObject(fiber.props, prevProps as JSXProps, excludeProps)
-    if (fiber.props.style) console.log(remove, place, update)
     remove.forEach(k => fiber.dom!.removeAttribute(k))
     place.forEach(k => {
         if (k === 'style') {
@@ -115,6 +127,13 @@ function updateDom(fiber: Fiber, prevProps: JSXProps | text) {
             // TODO: better
             fiber.dom!.removeAttribute('style')
             setStyle(fiber.dom!, fiber.props.style)
+        } else if (k.startsWith('on')) {
+            // TODO: event delegation
+            const event = k[2].toLowerCase() + k.slice(3)
+            // @ts-ignore
+            fiber.dom.removeEventListener(event, prevProps[k])
+            // @ts-ignore
+            fiber.dom.addEventListener(event, fiber.props[k])
         } else {
             // @ts-ignore
             fiber.dom[k] = fiber.props[k]
@@ -124,11 +143,19 @@ function updateDom(fiber: Fiber, prevProps: JSXProps | text) {
 
 function commitWork(fiber: Fiber | undefined) {
     if (!fiber) return
-    const domParent = fiber.parent!.dom!
+    let domParentFiber = fiber.parent!
+    while (!domParentFiber.dom) {
+        domParentFiber = domParentFiber.parent!
+    }
+    const domParent = domParentFiber.dom
     if (fiber.dom) {
         switch (fiber.effectTag) {
             case EFFECT.PLACEMENT: {
-                domParent.appendChild(fiber.dom)
+                let delFiber = fiber
+                while (!delFiber.dom) {
+                    delFiber = delFiber.child!
+                }
+                domParent.appendChild(delFiber.dom)
                 break
             }
             case EFFECT.UPDATE: {
@@ -144,12 +171,15 @@ function commitWork(fiber: Fiber | undefined) {
     commitWork(fiber.sibling)
 }
 
+let count = 0
 function workloop(deadline: IdleDeadline) {
     let shouldYield = false
     while (nextUnitofWork && !shouldYield) {
         nextUnitofWork = performUnitOfWork(nextUnitofWork)
         shouldYield = deadline.timeRemaining() < 1
+        count ++
     }
+    console.log(count)
 
     if (!nextUnitofWork && wipRoot) {
         deletions.forEach(commitWork)
@@ -184,12 +214,21 @@ function buildChildren(children: JSXChildren | undefined) {
     return result
 }
 
+let wipFiber: Fiber | null = null
+let hookIndex = 0
 function performUnitOfWork(fiber: Fiber) {
-    if (!fiber.dom) {
-        fiber.dom = createNode(fiber)
+    if (fiber.type instanceof Function) {
+        wipFiber = fiber
+        hookIndex = 0
+        wipFiber.hooks = []
+        const children = [fiber.type(fiber.props)]
+        reconcile(fiber, children)
+    } else {
+        if (!fiber.dom) {
+            fiber.dom = createNode(fiber)
+        }
+        reconcile(fiber, buildChildren((fiber.props as any).children))
     }
-
-    reconcile(fiber, buildChildren((fiber.props as any).children))
 
     if (fiber.child) {
         return fiber.child
@@ -203,6 +242,36 @@ function performUnitOfWork(fiber: Fiber) {
     }
 
     return null
+}
+
+type Update<T> = ((arg: T) => T) | T
+export function useState<T>(initial: T): [T, (arg: Update<T>) => void] {
+    const oldHook = wipFiber!.alternate?.hooks?.[hookIndex]
+    const hook = {
+        state: oldHook ? oldHook.state : initial,
+        queue: [] as Update<T>[]
+    }
+
+    const setState = (action: Update<T>) => {
+        hook.queue.push(action)
+        // TODO: don't
+        wipRoot = {
+            dom: currentRoot!.dom,
+            props: currentRoot!.props,
+            alternate: currentRoot
+        } as any
+        nextUnitofWork = wipRoot
+        deletions = []
+    }
+
+    const actions = oldHook ? oldHook.queue : []
+    actions.forEach(action => {
+        hook.state = action instanceof Function ? action(hook.state) : action
+    })
+
+    wipFiber!.hooks!.push(hook)
+    hookIndex++
+    return [hook.state, setState]
 }
 
 function reconcile(wipFiber: Fiber, elements: RenderElement[]) {
