@@ -1,3 +1,4 @@
+import { Component } from './render'
 import { isEmpty } from './utils'
 
 export const TYPE_TEXT = Symbol.for('text')
@@ -20,6 +21,7 @@ export interface BasicFiber {
         state: any
         queue: any[]
     }[]
+    instance?: Component
     child?: Fiber
     sibling?: Fiber
     alternate?: Fiber

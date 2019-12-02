@@ -20,13 +20,3 @@ export function h<T = {}>(type: JSXType<T>, config?: JSXConfig<T> | null): JSXEl
     }
     return { type, props }
 }
-
-export abstract class Component<P = {}, S = {}, R = JSXElement> {
-    abstract state: S
-    constructor(public props: P) {}
-    public abstract render(): R
-    public setState(state: Partial<S>) {
-        this.state = { ...this.state, state }
-        this.render()
-    }
-}

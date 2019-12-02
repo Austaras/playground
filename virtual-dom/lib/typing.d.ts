@@ -1,21 +1,26 @@
 import { Properties } from 'csstype'
 
-import { Component } from './h'
+import { Component } from './render'
 
 declare global {
     namespace JSX {
         type IntrinsicElements = {
-            [elemName in HTMLElementTagName]: JSXProps
+            [elemName in Exclude<HTMLElementTagName, 'input'>]: JSXProps
+        } & {
+            input: InputProps
         }
     }
 
     type HTMLElementTagName = keyof HTMLElementTagNameMap
 
-    type JSXEvent = (event: Event) => void
+    type JSXEvent<E = HTMLElement> = (
+        event: Event & {
+            target: E
+        }
+    ) => void
     interface JSXEventProps {
         onClick?: JSXEvent
         onFocus?: JSXEvent
-        onChange?: JSXEvent
     }
     interface JSXAttributes extends JSXEventProps {
         accessKey?: string
@@ -35,21 +40,28 @@ declare global {
     }
     type TypeOrArr<T> = T[] | T
 
-    interface JSXProps extends JSXAttributes {
+    interface JSXHasChildren {
         children?: JSXChildren
     }
+
+    interface JSXProps extends JSXAttributes, JSXHasChildren {}
+    interface InputProps extends JSXAttributes, JSXHasChildren {
+        value?: text
+        onChange?: JSXEvent<HTMLInputElement>
+        onInput?: JSXEvent<HTMLInputElement>
+    }
     type FunctionComponent<T = {}, R = JSXElement> = (props: T) => R
-    type ClassComponent<T = {}, S = {}, R = JSXElement> = Component<T, S, R>
+    type ClassComponent<T = {}, S = {}, R = JSXElement> = new (props: T) => Component<T, S, R>
     interface JSXNode<T = {}> {
         type: HTMLElementTagName
         props: JSXProps & T
     }
     interface JSXElement<T = {}, R = JSXNode> {
-        type: HTMLElementTagName | FunctionComponent<T, R> | ClassComponent<T, R>
+        type: JSXType<T, R>
         props: JSXProps & T
     }
 
-    type JSXType<T = {}, R = JSXNode> = JSXElement<T, R>['type']
+    type JSXType<T = {}, R = JSXNode> = HTMLElementTagName | FunctionComponent<T, R> | ClassComponent<T, R>
     type JSXConfig<T = {}> = JSXAttributes & T
 
     type text = string | number

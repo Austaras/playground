@@ -1,5 +1,5 @@
-import { sanitizeChildren, EFFECT, Fiber, RenderElement } from './fiber'
 import { createNode, updateDom } from './dom'
+import { sanitizeChildren, EFFECT, Fiber, RenderElement, NormalFiber } from './fiber'
 
 let nextUnitofWork: Fiber | undefined
 let wipRoot: Fiber | undefined
@@ -17,6 +17,24 @@ export function render(element: JSXElement | JSXElement[], container: HTMLElemen
     nextUnitofWork = wipRoot
 }
 
+export abstract class Component<P = {}, S = {}, R = JSXElement> {
+    abstract state: S
+    public fiber!: NormalFiber
+    constructor(public props: P) {}
+    public abstract render(): R
+    public setState(state: Partial<S>) {
+        this.state = { ...this.state, ...state }
+        wipRoot = {
+            type: this.fiber.type as ClassComponent,
+            instance: this,
+            props: this.fiber.props,
+            parent: this.fiber.parent,
+            alternate: this.fiber
+        } as any
+        nextUnitofWork = wipRoot
+    }
+}
+
 function commitWork(fiber: Fiber | undefined) {
     if (!fiber) return
     let domParentFiber = fiber.parent!
@@ -27,11 +45,11 @@ function commitWork(fiber: Fiber | undefined) {
     if (fiber.dom) {
         switch (fiber.effectTag) {
             case EFFECT.PLACEMENT: {
-                let delFiber = fiber
-                while (!delFiber.dom) {
-                    delFiber = delFiber.child!
+                let newFiber = fiber
+                while (!newFiber.dom) {
+                    newFiber = newFiber.child!
                 }
-                domParent.appendChild(delFiber.dom)
+                domParent.appendChild(newFiber.dom)
                 break
             }
             case EFFECT.UPDATE: {
@@ -66,10 +84,19 @@ let wipFiber: Fiber | null = null
 let hookIndex = 0
 function performUnitOfWork(fiber: Fiber) {
     if (fiber.type instanceof Function) {
-        wipFiber = fiber
-        hookIndex = 0
-        wipFiber.hooks = []
-        const children = [fiber.type(fiber.props)]
+        let children
+        if (fiber.type.prototype instanceof Component) {
+            if (!fiber.instance) {
+                fiber.instance = new (fiber.type as ClassComponent)(fiber.props)
+                fiber.instance.fiber = fiber as NormalFiber
+            }
+            children = [fiber.instance.render()]
+        } else {
+            wipFiber = fiber
+            hookIndex = 0
+            wipFiber.hooks = []
+            children = [(fiber.type as FunctionComponent)(fiber.props)]
+        }
         reconcile(fiber, children)
     } else {
         if (!fiber.dom) {
@@ -93,6 +120,7 @@ function performUnitOfWork(fiber: Fiber) {
 type Update<T> = ((arg: T) => T) | T
 export function useState<T>(initial: T): [T, (arg: Update<T>) => void] {
     const oldHook = wipFiber!.alternate?.hooks?.[hookIndex]
+    const currentFiber = wipFiber as NormalFiber
     const hook = {
         state: oldHook ? oldHook.state : initial,
         queue: [] as Update<T>[]
@@ -100,11 +128,11 @@ export function useState<T>(initial: T): [T, (arg: Update<T>) => void] {
 
     const setState = (action: Update<T>) => {
         hook.queue.push(action)
-        // TODO: don't
         wipRoot = {
-            dom: currentRoot!.dom,
-            props: currentRoot!.props,
-            alternate: currentRoot
+            type: currentFiber.type as FunctionComponent,
+            props: currentFiber.props,
+            parent: currentFiber.parent,
+            alternate: currentFiber
         } as any
         nextUnitofWork = wipRoot
         deletions = []
@@ -130,13 +158,13 @@ function reconcile(wipFiber: Fiber, elements: RenderElement[]) {
         const sameType = oldFiber && element && oldFiber.type === element.type
         if (sameType) {
             newFiber = {
-                type: oldFiber!.type as any,
-                props: (element as JSXElement).props,
-                dom: oldFiber!.dom as any,
+                type: oldFiber!.type,
+                props: element.props,
+                dom: oldFiber!.dom,
                 parent: wipFiber,
                 alternate: oldFiber,
                 effectTag: EFFECT.UPDATE
-            }
+            } as any
         } else {
             if (element) {
                 newFiber = {
