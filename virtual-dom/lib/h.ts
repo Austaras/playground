@@ -1,10 +1,11 @@
 /* eslint-disable prefer-rest-params */
 
 export function h<T = {}>(
-    type: JSXType,
+    type: JSXType<T>,
     config?: JSXConfig<T> | null,
     ...children: JSXChildren[]
-): JSXElement<T> {
+): JSXElement<T>
+export function h<T = {}>(type: JSXType<T>, config?: JSXConfig<T> | null): JSXElement<T> {
     const props: JSXElement<T>['props'] = { ...config } as any
     const len = arguments.length
     if (len === 3 && arguments[2] !== null) {
@@ -20,9 +21,9 @@ export function h<T = {}>(
     return { type, props }
 }
 
-export abstract class HElement<P = {}, S = {}, R = JSXElement> {
+export abstract class Component<P = {}, S = {}, R = JSXElement> {
     abstract state: S
-    constructor(props: P) {}
+    constructor(public props: P) {}
     public abstract render(): R
     public setState(state: Partial<S>) {
         this.state = { ...this.state, state }

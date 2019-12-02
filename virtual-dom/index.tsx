@@ -1,5 +1,4 @@
-import { h } from './h'
-import { render, useState } from './render'
+import { h, render, useState } from './lib'
 
 const root = document.getElementById('root')!
 const long = new Array(500).fill(0)
@@ -35,11 +34,7 @@ const App = ({ arr }: Props) => (
             <span>This is a long number, 1</span>
             {arr.map((_, i) => (i % 2 === 0 ? <span>{i % 10}</span> : null))}
         </div>
-        <Counter />
     </div>
 )
-render(<App arr={long} />, root)
 
-setTimeout(() => render(<App arr={long.slice(0, 100)} />, root), 1500)
-
-setTimeout(() => render(<App arr={long.concat(long)} />, root), 3000)
+render([<App arr={long} />, <Counter />], root)

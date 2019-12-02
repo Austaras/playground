@@ -6,9 +6,7 @@ function* Counter() {
 
 function* PrimeFilter(prime: number, input: IterableIterator<number>) {
     for (const i of input) {
-        if (i % prime !== 0) {
-            yield i
-        }
+        if (i % prime !== 0) yield i
     }
 }
 

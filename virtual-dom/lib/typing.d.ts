@@ -1,6 +1,6 @@
 import { Properties } from 'csstype'
 
-import { HElement } from './h'
+import { Component } from './h'
 
 declare global {
     namespace JSX {
@@ -39,7 +39,7 @@ declare global {
         children?: JSXChildren
     }
     type FunctionComponent<T = {}, R = JSXElement> = (props: T) => R
-    type ClassComponent<T = {}, S = {}, R = JSXElement> = HElement<T, S, R>
+    type ClassComponent<T = {}, S = {}, R = JSXElement> = Component<T, S, R>
     interface JSXNode<T = {}> {
         type: HTMLElementTagName
         props: JSXProps & T
@@ -49,7 +49,7 @@ declare global {
         props: JSXProps & T
     }
 
-    type JSXType = HTMLElementTagName | FunctionComponent | ClassComponent
+    type JSXType<T = {}, R = JSXNode> = JSXElement<T, R>['type']
     type JSXConfig<T = {}> = JSXAttributes & T
 
     type text = string | number
