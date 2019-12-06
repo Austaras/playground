@@ -1,4 +1,4 @@
-import { Component } from './render'
+import { Component } from './component'
 import { isEmpty } from './utils'
 
 export const TYPE_TEXT = Symbol.for('text')
@@ -14,13 +14,17 @@ export interface TextNode {
 }
 
 export type RenderElement = TextNode | JSXElement
-
+export interface StateHook {
+    state: any
+    queue: any[]
+    dispatcher: (arg: any) => void
+}
+export interface EffectHook {
+    dep: any[]
+}
 export interface BasicFiber {
     parent?: Fiber
-    hooks?: {
-        state: any
-        queue: any[]
-    }[]
+    hooks?: (StateHook | EffectHook)[]
     instance?: Component
     child?: Fiber
     sibling?: Fiber

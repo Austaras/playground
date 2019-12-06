@@ -1,6 +1,6 @@
 import { Properties } from 'csstype'
 
-import { Component } from './render'
+import { Component } from './component'
 
 declare global {
     namespace JSX {
@@ -46,7 +46,8 @@ declare global {
 
     interface JSXProps extends JSXAttributes, JSXHasChildren {}
     interface InputProps extends JSXAttributes, JSXHasChildren {
-        value?: text
+        type?: 'text' | 'password' | 'checkbox'
+        value?: text | boolean
         onChange?: JSXEvent<HTMLInputElement>
         onInput?: JSXEvent<HTMLInputElement>
     }

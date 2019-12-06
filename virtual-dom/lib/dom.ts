@@ -29,7 +29,7 @@ export function createNode(fiber: Fiber) {
 }
 
 const excludeProps = new Set(['children'] as const)
-export function updateDom(fiber: Fiber, prevProps: JSXProps | text) {
+export function updateNode(fiber: Fiber, prevProps: JSXProps | text) {
     if (fiber.type === TYPE_TEXT) {
         return (fiber.dom!.nodeValue = fiber.props as string)
     }

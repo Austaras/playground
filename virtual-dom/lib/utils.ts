@@ -28,3 +28,10 @@ export function diffObject<T extends object, S extends keyof T>(now: T, prev: T,
     }
     return [remove, place, update]
 }
+
+export const depEqual = (a: unknown[], b: unknown[]) => {
+    for (const i in a) {
+        if (a[i] !== b[i]) return false
+    }
+    return true
+}
