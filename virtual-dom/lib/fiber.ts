@@ -22,9 +22,12 @@ export interface StateHook {
 export interface EffectHook {
     dep: any[]
 }
+export interface RefHook {
+    current: any
+}
 export interface BasicFiber {
     parent?: Fiber
-    hooks?: (StateHook | EffectHook)[]
+    hooks?: (StateHook | EffectHook | RefHook)[]
     instance?: Component
     child?: Fiber
     sibling?: Fiber

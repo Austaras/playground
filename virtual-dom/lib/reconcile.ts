@@ -1,6 +1,15 @@
 import { Component, FIBER } from './component'
 import { createNode, updateNode } from './dom'
-import { EFFECT, Fiber, NormalFiber, RenderElement, sanitizeChildren, EffectHook, StateHook } from './fiber'
+import {
+    EFFECT,
+    EffectHook,
+    Fiber,
+    NormalFiber,
+    RefHook,
+    RenderElement,
+    sanitizeChildren,
+    StateHook
+} from './fiber'
 import { depEqual } from './utils'
 
 let nextUnitofWork: Fiber | undefined
@@ -97,7 +106,6 @@ function commitWork(fiber: Fiber | undefined) {
 }
 
 function reconcile(wipFiber: Fiber, elements: RenderElement[]) {
-    if (elements.length > 10) console.log(elements)
     let index = 0
     let prevSibling: Fiber | null = null
     let oldFiber = wipFiber.alternate?.child
@@ -182,7 +190,7 @@ export function useState<T>(initial: T): [T, (arg: Action<T>) => void] {
 
     wipFiber!.hooks!.push(hook)
     hookIndex++
-    return [hook.state, hook.dispatcher]
+    return [hook.state as T, hook.dispatcher as (arg: Action<T>) => void]
 }
 
 export function useEffect(eff: () => void, dep: any[]): void {
@@ -193,4 +201,19 @@ export function useEffect(eff: () => void, dep: any[]): void {
 
     wipFiber!.hooks!.push({ dep })
     hookIndex++
+}
+
+type RefVal<T> = T | (() => T)
+export function useRef<T>(initial: RefVal<T>) {
+    const oldHook = wipFiber!.alternate?.hooks?.[hookIndex] as RefHook | undefined
+    if (!oldHook) {
+        const current = initial instanceof Function ? initial() : initial
+        wipFiber!.hooks!.push({ current })
+    } else {
+        wipFiber!.hooks!.push(oldHook)
+    }
+    hookIndex++
+    return wipFiber!.hooks![hookIndex - 1] as {
+        current: T
+    }
 }

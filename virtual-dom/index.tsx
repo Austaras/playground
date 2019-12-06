@@ -1,4 +1,4 @@
-import { Component, h, render, useEffect, useState } from './lib'
+import { Component, h, render, useEffect, useState, useRef } from './lib'
 
 const getColor = (num: number) => {
   if (num === 500) return 'blue'
@@ -45,10 +45,11 @@ class Hello extends Component {
   }
 }
 
-function App({ long }: { long: number[] }) {
-  const [arr, setArr] = useState(long)
-  useEffect(() => setTimeout(() => setArr(long.slice(0, 100)), 1500), [setArr])
-  useEffect(() => setTimeout(() => setArr(long.concat(long)), 3000), [setArr])
+function App() {
+  const { current } = useRef(() => new Array(500).fill(0) as number[])
+  const [arr, setArr] = useState(current)
+  useEffect(() => setTimeout(() => setArr(current.slice(0, 100)), 1500), [current, setArr])
+  useEffect(() => setTimeout(() => setArr(current.concat(current)), 3000), [current, setArr])
   return (
     <div className={arr.length.toString()}>
       <h1 title='test' style={{ color: getColor(arr.length), fontWeight: 'normal' }}>
@@ -67,4 +68,4 @@ function App({ long }: { long: number[] }) {
   )
 }
 
-render(<App long={new Array(500).fill(0)} />, document.getElementById('root')!)
+render(<App />, document.getElementById('root')!)
