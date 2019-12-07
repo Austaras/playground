@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 import { Component } from './component'
 import { isEmpty } from './utils'
 
@@ -70,4 +71,15 @@ export function sanitizeChildren(children: JSXChildren | undefined) {
         }
     }
     return result
+}
+
+export function genAlt(fiber: Fiber, ...more: (Exclude<keyof Fiber, 'child'>)[]): Fiber
+export function genAlt(fiber: Fiber): Fiber {
+    const res: any = { child: fiber.child }
+    if (arguments.length > 1) {
+        for (let i = 1; i < arguments.length; i++) {
+            res[arguments[i]] = fiber[arguments[i] as keyof Fiber]
+        }
+    }
+    return res
 }

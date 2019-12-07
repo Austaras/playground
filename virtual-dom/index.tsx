@@ -1,4 +1,4 @@
-import { Component, h, render, useEffect, useState, useRef } from './lib'
+import { Component, h, render, useEffect, useRef, useState } from './lib'
 
 const getColor = (num: number) => {
   if (num === 500) return 'blue'

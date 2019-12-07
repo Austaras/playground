@@ -4,6 +4,7 @@ import {
     EFFECT,
     EffectHook,
     Fiber,
+    genAlt,
     NormalFiber,
     RefHook,
     RenderElement,
@@ -52,12 +53,12 @@ function performUnitOfWork(fiber: Fiber) {
             wipFiber.hooks = []
             children = [(fiber.type as FunctionComponent)(fiber.props)]
         }
-        reconcile(fiber, children)
+        reconcileChildren(fiber, children)
     } else {
         if (!fiber.dom) {
             fiber.dom = createNode(fiber)
         }
-        reconcile(fiber, sanitizeChildren((fiber.props as JSXProps).children))
+        reconcileChildren(fiber, sanitizeChildren((fiber.props as JSXProps).children))
     }
 
     if (fiber.child) {
@@ -65,7 +66,7 @@ function performUnitOfWork(fiber: Fiber) {
     }
     let nextFiber = fiber
     while (nextFiber) {
-        if (nextFiber.sibling) {
+        if (nextFiber.sibling && nextFiber !== wipRoot) {
             return nextFiber.sibling
         }
         nextFiber = nextFiber.parent!
@@ -105,7 +106,7 @@ function commitWork(fiber: Fiber | undefined) {
     commitWork(fiber.sibling)
 }
 
-function reconcile(wipFiber: Fiber, elements: RenderElement[]) {
+function reconcileChildren(wipFiber: Fiber, elements: RenderElement[]) {
     let index = 0
     let prevSibling: Fiber | null = null
     let oldFiber = wipFiber.alternate?.child
@@ -115,14 +116,13 @@ function reconcile(wipFiber: Fiber, elements: RenderElement[]) {
         let newFiber: Fiber
         const sameType = oldFiber && element && oldFiber.type === element.type
         if (sameType) {
-            newFiber = {
-                type: oldFiber!.type,
-                props: element.props,
-                dom: oldFiber!.dom,
-                parent: wipFiber,
-                alternate: oldFiber,
-                effectTag: EFFECT.UPDATE
-            } as any
+            oldFiber!.alternate = genAlt(oldFiber!, 'props', 'hooks', 'sibling')
+            newFiber = oldFiber!
+            newFiber.parent = wipFiber
+            newFiber.props = element.props
+            newFiber.sibling = undefined
+            newFiber.effectTag = EFFECT.UPDATE
+            oldFiber = newFiber.alternate
         } else {
             if (element) {
                 newFiber = {
@@ -176,7 +176,7 @@ export function useState<T>(initial: T): [T, (arg: Action<T>) => void] {
             state: initial,
             queue: [],
             dispatcher: (action: Action<T>) => {
-                currentFiber.alternate = { ...currentFiber }
+                currentFiber.alternate = genAlt(currentFiber, 'hooks')
                 ;(currentFiber.alternate.hooks![index] as StateHook).queue.push(action)
                 update(currentFiber)
             }

@@ -1,4 +1,4 @@
-import { NormalFiber } from './fiber'
+import { genAlt, NormalFiber } from './fiber'
 import { update } from './reconcile'
 
 export const FIBER = Symbol.for('fiber')
@@ -10,12 +10,7 @@ export abstract class Component<P = {}, S = {}, R = JSXElement> {
     public abstract render(): R
     public setState(state: Partial<S>) {
         this.state = { ...this.state, ...state }
-        update({
-            type: this[FIBER].type as ClassComponent,
-            instance: this,
-            props: this[FIBER].props,
-            parent: this[FIBER].parent,
-            alternate: this[FIBER]
-        } as any)
+        this[FIBER].alternate = genAlt(this[FIBER], 'instance')
+        update(this[FIBER])
     }
 }
