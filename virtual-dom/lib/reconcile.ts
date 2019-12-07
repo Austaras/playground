@@ -1,5 +1,5 @@
 import { Component, FIBER } from './component'
-import { createNode, updateNode } from './dom'
+import { createNode, appendNode, removeNode, updateNode } from './dom'
 import {
     EFFECT,
     EffectHook,
@@ -30,7 +30,7 @@ function workloop(deadline: IdleDeadline) {
         effects.forEach(e => e())
         effects = []
         currentRoot = wipRoot
-        delete currentRoot.alternate
+        currentRoot.alternate = undefined
         wipRoot = undefined
     }
     if (nextUnitofWork) requestIdleCallback(workloop)
@@ -79,26 +79,22 @@ function commitWork(fiber: Fiber | undefined) {
     while (!domParentFiber.dom) {
         domParentFiber = domParentFiber.parent!
     }
-    const domParent = domParentFiber.dom
+    const domParent = domParentFiber.dom as HTMLElement
     if (fiber.dom) {
         switch (fiber.effectTag) {
-            case EFFECT.PLACEMENT: {
-                let newFiber = fiber
-                while (!newFiber.dom) {
-                    newFiber = newFiber.child!
-                }
-                domParent.appendChild(newFiber.dom)
+            case EFFECT.APPEND: {
+                appendNode(domParent, fiber)
                 break
             }
             case EFFECT.UPDATE: {
                 if (fiber.props !== fiber.alternate!.props) {
                     updateNode(fiber, fiber.alternate!.props)
                 }
-                delete fiber.alternate
+                fiber.alternate = undefined
                 break
             }
             case EFFECT.DELETION: {
-                if (domParent.contains(fiber.dom)) return domParent.removeChild(fiber.dom)
+                return removeNode(domParent, fiber)
             }
         }
     }
@@ -129,7 +125,7 @@ function reconcileChildren(wipFiber: Fiber, elements: RenderElement[]) {
                     type: element.type,
                     props: element.props,
                     parent: wipFiber,
-                    effectTag: EFFECT.PLACEMENT
+                    effectTag: EFFECT.APPEND
                 } as any
             }
             if (oldFiber) {

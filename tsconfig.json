@@ -13,5 +13,6 @@
       "dom",
       "esnext"
     ]
-  }
+  },
+  "exclude": ["./virtual-dom"]
 }

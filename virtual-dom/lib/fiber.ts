@@ -4,8 +4,8 @@ import { isEmpty } from './utils'
 
 export const TYPE_TEXT = Symbol.for('text')
 export enum EFFECT {
+    APPEND,
     UPDATE,
-    PLACEMENT,
     DELETION
 }
 

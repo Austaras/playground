@@ -13,7 +13,7 @@
         "plugin:@typescript-eslint/recommended-requiring-type-checking"
     ],
     "parserOptions": {
-        "project": "./tsconfig.json",
+        "project": ["./tsconfig.json", "./virtual-dom/tsconfig.json"],
         "ecmaVersion": 10,
         "sourceType": "module",
         "ecmaFeatures": {
@@ -29,7 +29,6 @@
         "dot-notation": "warn",
         "eol-last": "warn",
         "eqeqeq": "warn",
-        "func-call-spacing": ["warn", "never"],
         "key-spacing": "warn",
         "max-len": [
             "warn",
@@ -96,6 +95,7 @@
             "warn",
             { "assertionStyle": "as", "objectLiteralTypeAssertions": "allow-as-parameter" }
         ],
+        "@typescript-eslint/func-call-spacing": ["warn", "never"],
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-member-accessibility": [
             "warn",

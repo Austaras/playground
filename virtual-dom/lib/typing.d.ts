@@ -13,14 +13,13 @@ declare global {
 
     type HTMLElementTagName = keyof HTMLElementTagNameMap
 
-    type JSXEvent<E = HTMLElement> = (
-        event: Event & {
-            target: E
-        }
-    ) => void
+    type JSXEvent<E = HTMLElement> = Event & {
+        target: E
+    }
+    type JSXEventCb<E = HTMLElement> = (event: JSXEvent<E>) => void
     interface JSXEventProps {
-        onClick?: JSXEvent
-        onFocus?: JSXEvent
+        onClick?: JSXEventCb
+        onFocus?: JSXEventCb
     }
     interface JSXAttributes extends JSXEventProps {
         accessKey?: string
@@ -43,13 +42,14 @@ declare global {
     interface JSXHasChildren {
         children?: JSXChildren
     }
-
     interface JSXProps extends JSXAttributes, JSXHasChildren {}
-    interface InputProps extends JSXAttributes, JSXHasChildren {
+    interface JSXInputEvent {
+        onChange?: JSXEventCb<HTMLInputElement>
+        onInput?: JSXEventCb<HTMLInputElement>
+    }
+    interface InputProps extends JSXAttributes, JSXHasChildren, JSXInputEvent {
         type?: 'text' | 'password' | 'checkbox'
         value?: text | boolean
-        onChange?: JSXEvent<HTMLInputElement>
-        onInput?: JSXEvent<HTMLInputElement>
     }
     type FunctionComponent<T = {}, R = JSXElement> = (props: T) => R
     type ClassComponent<T = {}, S = {}, R = JSXElement> = new (props: T) => Component<T, S, R>
