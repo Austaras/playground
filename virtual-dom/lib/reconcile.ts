@@ -149,6 +149,7 @@ function reconcileChildren(wipFiber: Fiber, elements: RenderElement[]) {
 }
 
 export function update(fiber: Fiber) {
+    // TODO: scheduler
     wipRoot = fiber
     nextUnitofWork = wipRoot
     deletions = []

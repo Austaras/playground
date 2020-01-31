@@ -3,7 +3,7 @@ import { Component } from './component'
 import { isEmpty } from './utils'
 
 export const TYPE_TEXT = Symbol.for('text')
-export enum EFFECT {
+export const enum EFFECT {
     APPEND,
     UPDATE,
     DELETION

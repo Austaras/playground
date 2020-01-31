@@ -9,6 +9,7 @@ const PAGE_SIZE = 30
 export async function getData(since: number) {
     // github user id isn't consistent, but we suppose it is
     // just ignore those overlap
-    return fetch(`https://api.github.com/users?since=${since * PAGE_SIZE}`)
-        .then(res => res.json() as Promise<User[]>)
+    return fetch(`https://api.github.com/users?since=${since * PAGE_SIZE}`).then(
+        res => res.json() as Promise<User[]>
+    )
 }

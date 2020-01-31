@@ -1,12 +1,17 @@
 import { fromEvent, Observable, timer } from 'rxjs'
-import {
-    bufferCount, map, mergeMap, reduce, share, take, takeUntil, timestamp
-} from 'rxjs/operators'
+import { bufferCount, map, mergeMap, reduce, share, take, takeUntil, timestamp } from 'rxjs/operators'
 
 const PATTERN = [
-    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
-    'b', 'a'
+    'ArrowUp',
+    'ArrowUp',
+    'ArrowDown',
+    'ArrowDown',
+    'ArrowLeft',
+    'ArrowRight',
+    'ArrowLeft',
+    'ArrowRight',
+    'b',
+    'a'
 ]
 const TIME_LIMIT_MS = 5000
 
@@ -20,9 +25,11 @@ function arrayEqual<T>(a: T[], b: T[]) {
 
 function bonus(keys: string[], no: number) {
     if (arrayEqual(keys, PATTERN)) {
-        console.log(`%cLife +30! %cplayer${no}`,
+        console.log(
+            `%cLife +30! %cplayer${no}`,
             'color: red; font-size: 16px; font-weight: bold',
-            'color: green; font-size: 16px; font-weight: bold')
+            'color: green; font-size: 16px; font-weight: bold'
+        )
     } else {
         console.log('not this time')
     }
@@ -42,7 +49,10 @@ key$.pipe(
         console.log('not this time')
         return
     }
-    bonus(keys.map(i => i.value), 1)
+    bonus(
+        keys.map(i => i.value),
+        1
+    )
 })
 
 // the clever way
@@ -54,14 +64,21 @@ const keycode$ = keydown$.pipe(
     share()
 )
 
-keycode$.pipe(
-    mergeMap(code => keycode$.pipe(
-        take(PATTERN.length - 1),
-        // it is a cold observable, so will only begin time count when subscribe
-        takeUntil(timer$),
-        reduce((acc: string[], val: string) => {
-            acc.push(val)
-            return acc
-        }, [code])
-    ))
-).subscribe(keys => bonus(keys, 2))
+keycode$
+    .pipe(
+        mergeMap(code =>
+            keycode$.pipe(
+                take(PATTERN.length - 1),
+                // it is a cold observable, so will only begin time count when subscribe
+                takeUntil(timer$),
+                reduce(
+                    (acc: string[], val: string) => {
+                        acc.push(val)
+                        return acc
+                    },
+                    [code]
+                )
+            )
+        )
+    )
+    .subscribe(keys => bonus(keys, 2))

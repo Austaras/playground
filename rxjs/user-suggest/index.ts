@@ -1,14 +1,5 @@
 import { fromEvent, merge, zip } from 'rxjs'
-import {
-    distinctUntilChanged,
-    map,
-    mapTo,
-    mergeMap,
-    partition,
-    scan,
-    share,
-    startWith
-} from 'rxjs/operators'
+import { distinctUntilChanged, map, mapTo, mergeMap, partition, scan, share, startWith } from 'rxjs/operators'
 
 import { getData, User } from './api'
 

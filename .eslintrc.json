@@ -13,7 +13,7 @@
         "plugin:@typescript-eslint/recommended-requiring-type-checking"
     ],
     "parserOptions": {
-        "project": ["./tsconfig.json", "./virtual-dom/tsconfig.json"],
+        "project": ["./**/tsconfig.json"],
         "ecmaVersion": 10,
         "sourceType": "module",
         "ecmaFeatures": {
@@ -66,14 +66,6 @@
         "quote-props": ["warn", "as-needed"],
         "radix": "warn",
         "semi": ["warn", "never"],
-        "space-before-function-paren": [
-            "warn",
-            {
-                "anonymous": "never",
-                "named": "never",
-                "asyncArrow": "always"
-            }
-        ],
         "spaced-comment": "warn",
         "space-in-parens": ["warn", "never"],
         "space-infix-ops": ["warn"],
@@ -153,6 +145,14 @@
         "@typescript-eslint/prefer-function-type": "warn",
         "@typescript-eslint/prefer-for-of": "warn",
         "@typescript-eslint/prefer-string-starts-ends-with": "warn",
+        "@typescript-eslint/space-before-function-paren": [
+            "warn",
+            {
+                "anonymous": "never",
+                "named": "never",
+                "asyncArrow": "always"
+            }
+        ],
         "@typescript-eslint/type-annotation-spacing": [
             "warn",
             {
