@@ -31,11 +31,16 @@ function test(person: Person) {
     person.car[0].value = 50000
     person.car[0].wheel.push(4)
 
-    // only proxy can detect following
+    console.warn('only proxy can detect following')
     person.superAbility = 'can fly'
     person.children[0] = 3
     delete person.money
     delete person.house.door
+
+    console.warn("this is evil, don't even try")
+    person.children.length = 7
+    person.children.length = 4
+
 }
 
 console.log('-------begin defineProperty test-------')
