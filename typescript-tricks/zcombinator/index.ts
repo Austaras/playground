@@ -17,7 +17,7 @@ const fg = (g: GA) => (f: FA) => g(n => f(f)(n))
 const FG = fg(ga)(fg(ga))
 console.log(FG(10))
 
-// λf. (λx. f(x x))(λx. f(x x))
+// λf. (λx.λv. f(x x v))(λx. f(x x v))
 const Z = (g: GA) => ((f: FA) => g(n => f(f)(n)))(f => g(n => f(f)(n)))
 const FZ = Z(ga), FZ1 = ga(Z(ga)) // ZF = F(ZF)
 console.log(FZ(10), FZ1(10))
