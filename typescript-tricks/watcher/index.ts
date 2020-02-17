@@ -40,7 +40,6 @@ function test(person: Person) {
     console.warn("this is evil, don't even try")
     person.children.length = 7
     person.children.length = 4
-
 }
 
 console.log('-------begin defineProperty test-------')

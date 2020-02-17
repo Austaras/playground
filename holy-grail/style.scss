@@ -6,7 +6,7 @@ ul {
     height: 90vh;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap
+    flex-wrap: wrap;
 }
 
 li {
@@ -16,27 +16,27 @@ li {
 $left: 100px;
 $right: 120px;
 .container {
-    width: 100%
+    width: 100%;
 }
 
 .column {
-    overflow: auto
+    overflow: auto;
 }
 
 .center {
-    background-color: #d6d6d6
+    background-color: #d6d6d6;
 }
 
 $left-color: #77bbdd;
 .left {
     background-color: $left-color;
-    width: $left
+    width: $left;
 }
 
 $right-color: #ff6633;
 .right {
     background-color: $right-color;
-    width: $right
+    width: $right;
 }
 
 .holy-grail-container {
@@ -47,38 +47,38 @@ $right-color: #ff6633;
     .column {
         float: left;
         padding-bottom: 32767px;
-        margin-bottom: -32767px
+        margin-bottom: -32767px;
     }
     .center {
-        width: 100%
+        width: 100%;
     }
     .left {
         position: relative;
         margin-left: -100%;
-        right: $left
+        right: $left;
     }
     .right {
-        margin-right: -$right
+        margin-right: -$right;
     }
 }
 
 .double-wings-container {
     .column {
-        float: left
+        float: left;
     }
     .left {
         margin-left: -100%;
-        right: $left
+        right: $left;
     }
     .right {
-        margin-left: -$right
+        margin-left: -$right;
     }
     .center-content {
         border-left: $left solid $left-color;
-        border-right: $right solid $right-color
+        border-right: $right solid $right-color;
     }
     &:after {
-        content: " ";
+        content: ' ';
         display: block;
         height: 0;
         clear: both;
@@ -89,18 +89,18 @@ $right-color: #ff6633;
     position: relative;
     .center {
         margin-left: $left;
-        margin-right: $right
+        margin-right: $right;
     }
     .left {
         position: absolute;
         top: 0;
-        bottom: 0
+        bottom: 0;
     }
     .right {
         position: absolute;
         top: 0;
-        bottom:0;
-        right: 0
+        bottom: 0;
+        right: 0;
     }
 }
 
@@ -108,18 +108,18 @@ $right-color: #ff6633;
     overflow: hidden;
     .column {
         padding-bottom: 32767px;
-        margin-bottom: -32767px
+        margin-bottom: -32767px;
     }
     .center {
         width: calc(100% - #{$left + $right});
         display: inline-block;
-        vertical-align: top
+        vertical-align: top;
     }
     .left {
         float: left;
     }
     .right {
-        float: right
+        float: right;
     }
 }
 
@@ -127,12 +127,12 @@ $right-color: #ff6633;
     display: flex;
     .center {
         order: 2;
-        flex-grow: 1
+        flex-grow: 1;
     }
     .left,
     .right {
         flex-grow: 0;
-        flex-shrink: 0
+        flex-shrink: 0;
     }
     .right {
         order: 3;
@@ -143,9 +143,9 @@ $right-color: #ff6633;
     display: grid;
     grid-template-columns: $left auto $right;
     .center {
-        order: 2
+        order: 2;
     }
     .right {
-        order: 3
+        order: 3;
     }
 }
