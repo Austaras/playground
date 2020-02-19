@@ -1,2 +1,1 @@
-My playground for front-end develpoement, see [live](https://playground.shockwave.me/) here
-
+My playground for front-end and js, see [live](https://playground.shockwave.me/) here

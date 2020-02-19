@@ -24,7 +24,7 @@ const Counter = ({ init = 0, multi = 1 }: CounterProps) => {
 }
 
 class Hello extends Component {
-  private update = (e: JSXEvent<HTMLInputElement>) => this.setState({name: e.target.value})
+  private update = (e: JSXEvent<HTMLInputElement>) => this.setState({ name: e.target.value })
   public state = {
     name: 'React'
   }
