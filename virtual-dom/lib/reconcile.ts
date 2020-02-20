@@ -1,10 +1,10 @@
 import { Component, FIBER } from './component'
-import { createNode, appendNode, removeNode, updateNode } from './dom'
+import { createNode, appendNode, removeNode, updateNode } from './render'
 import {
     EFFECT,
     EffectHook,
     Fiber,
-    genAlt,
+    copyFiber,
     NormalFiber,
     RefHook,
     RenderElement,
@@ -112,7 +112,7 @@ function reconcileChildren(wipFiber: Fiber, elements: RenderElement[]) {
         let newFiber: Fiber
         const sameType = oldFiber && element && oldFiber.type === element.type
         if (sameType) {
-            oldFiber!.alternate = genAlt(oldFiber!, 'props', 'hooks', 'sibling')
+            oldFiber!.alternate = copyFiber(oldFiber!, 'props', 'hooks', 'sibling')
             newFiber = oldFiber!
             newFiber.parent = wipFiber
             newFiber.props = element.props
@@ -173,7 +173,7 @@ export function useState<T>(initial: T): [T, (arg: Action<T>) => void] {
             state: initial,
             queue: [],
             dispatcher: (action: Action<T>) => {
-                currentFiber.alternate = genAlt(currentFiber, 'hooks')
+                currentFiber.alternate = copyFiber(currentFiber, 'hooks')
                 ;(currentFiber.alternate.hooks![index] as StateHook).queue.push(action)
                 update(currentFiber)
             }

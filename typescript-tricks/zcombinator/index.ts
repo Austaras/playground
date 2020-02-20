@@ -9,8 +9,15 @@ const F1 = fa(fa)
 console.log(F1(10))
 
 type G<T> = (n: T) => T
-type FB <T>= (g: G<T>) => G<T>
-// lift f(f) out, js is eager so use η-reduction
+type FB<T> = (g: G<T>) => G<T>
+// lift f(f) out
+const fo: FA<number> = f => ((g => n => (n === 0 ? 1 : n * g(n - 1))) as FB<number>)(f(f))
+try {
+    fo(fo)
+} catch {
+    console.log('it will overflow, sadly')
+}
+// js is eager so use η-reduction
 const fb: FA<number> = f => ((g => n => (n === 0 ? 1 : n * g(n - 1))) as FB<number>)(n => f(f)(n))
 const F2 = fb(fb)
 console.log(F2(10))
