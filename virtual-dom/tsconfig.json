@@ -2,6 +2,7 @@
     "extends": "../tsconfig.json",
     "exclude": [],
     "compilerOptions": {
+        "target": "ES2018",
         "jsx": "react",
         "jsxFactory": "h"
     }

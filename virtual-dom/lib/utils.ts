@@ -7,7 +7,7 @@ const has = Object.prototype.hasOwnProperty
 export const DELETE = Symbol('delete')
 export function diffProperties<T extends object>(now: T, prev: T, exclude?: Set<keyof T>) {
     const result: any[] = []
-    const keys = Array.from(new Set(Object.keys(now).concat(Object.keys(prev)) as (keyof T)[]))
+    const keys = new Set(Object.keys(now).concat(Object.keys(prev)) as (keyof T)[])
     for (const key of keys) {
         if (exclude && exclude.has(key)) continue
         if (has.call(now, key)) {
