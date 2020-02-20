@@ -42,6 +42,10 @@ export interface NormalFiber extends BasicFiber {
     props: JSXProps
 }
 
+export interface RenderedFiber extends NormalFiber {
+    dom: HTMLElement
+}
+
 export interface TextFiber extends BasicFiber {
     type: typeof TYPE_TEXT
     dom?: Text
@@ -73,7 +77,7 @@ export function sanitizeChildren(children: JSXChildren | undefined) {
     return result
 }
 
-export function copyFiber(fiber: Fiber, ...more: (Exclude<keyof Fiber, 'child'>)[]): Fiber
+export function copyFiber(fiber: Fiber, ...more: Exclude<keyof Fiber, 'child'>[]): Fiber
 export function copyFiber(fiber: Fiber): Fiber {
     const res: any = { child: fiber.child }
     if (arguments.length > 1) {

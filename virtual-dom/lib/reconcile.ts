@@ -9,7 +9,8 @@ import {
     RefHook,
     RenderElement,
     sanitizeChildren,
-    StateHook
+    StateHook,
+    RenderedFiber
 } from './fiber'
 import { depEqual } from './utils'
 
@@ -88,7 +89,7 @@ function commitWork(fiber: Fiber | undefined) {
             }
             case EFFECT.UPDATE: {
                 if (fiber.props !== fiber.alternate!.props) {
-                    updateNode(fiber, fiber.alternate!.props)
+                    updateNode(fiber as RenderedFiber, fiber.alternate!.props)
                 }
                 fiber.alternate = undefined
                 break
