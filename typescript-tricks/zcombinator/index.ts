@@ -29,7 +29,7 @@ const fg: FG = g => f => g(n => f(f)(n))
 const FG = fg(ga)(fg(ga))
 console.log(FG(10))
 
-// λf. (λx.λv. f(x x v))(λx.λv. f(x x v))
+// λf. (λx. f(λv. x x v))(λx. f(λv. x x v))
 const Z = <T>(g: FB<T>) => ((f: FA<T>) => g(n => f(f)(n)))(f => g(n => f(f)(n)))
 const ZF = Z(ga),
     FZF = ga(Z(ga))

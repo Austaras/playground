@@ -1,5 +1,6 @@
 import { Component, FIBER } from './component'
 import { createNode, appendNode, removeNode, updateNode } from './render'
+import { schedule } from './schedule'
 import {
     EFFECT,
     EffectHook,
@@ -20,13 +21,21 @@ let currentRoot: Fiber | undefined
 let deletions: Fiber[] = []
 let effects: (() => void)[] = []
 
+const pendingWorks = new Set<Fiber>()
+
 function workloop(deadline: IdleDeadline) {
+    if (wipRoot === undefined) {
+        wipRoot = pendingWorks.values().next().value
+        pendingWorks.delete(wipRoot!)
+        nextUnitofWork = wipRoot
+    }
     while (nextUnitofWork && deadline.timeRemaining() > 1) {
         nextUnitofWork = performUnitOfWork(nextUnitofWork)
     }
 
     if (!nextUnitofWork && wipRoot) {
         deletions.forEach(commitWork)
+        deletions = []
         commitWork(wipRoot.child)
         effects.forEach(e => e())
         effects = []
@@ -34,7 +43,12 @@ function workloop(deadline: IdleDeadline) {
         currentRoot.alternate = undefined
         wipRoot = undefined
     }
-    if (nextUnitofWork) requestIdleCallback(workloop)
+    if (nextUnitofWork || pendingWorks.size > 0) schedule(workloop)
+}
+
+export function update(fiber: Fiber) {
+    pendingWorks.add(fiber)
+    if (pendingWorks.size === 1) schedule(workloop)
 }
 
 let wipFiber: Fiber | null = null
@@ -149,18 +163,10 @@ function reconcileChildren(wipFiber: Fiber, elements: RenderElement[]) {
     }
 }
 
-export function update(fiber: Fiber) {
-    // TODO: scheduler
-    wipRoot = fiber
-    nextUnitofWork = wipRoot
-    deletions = []
-    requestIdleCallback(workloop)
-}
-
 type Action<T> = ((arg: T) => T) | T
 export function useState<T>(initial: T): [T, (arg: Action<T>) => void] {
-    const oldHook = wipFiber!.alternate?.hooks?.[hookIndex] as StateHook | undefined
     const currentFiber = wipFiber as NormalFiber
+    const oldHook = currentFiber.alternate?.hooks?.[hookIndex] as StateHook | undefined
     const index = hookIndex
     let hook: StateHook
     if (oldHook) {
@@ -191,7 +197,7 @@ export function useState<T>(initial: T): [T, (arg: Action<T>) => void] {
     return [hook.state as T, hook.dispatcher as (arg: Action<T>) => void]
 }
 
-export function useEffect(eff: () => void, dep: any[]): void {
+export function useEffect(eff: () => void, dep: unknown[]): void {
     const oldHook = wipFiber!.alternate?.hooks?.[hookIndex] as EffectHook | undefined
     if (!oldHook || !depEqual(oldHook.dep, dep)) {
         effects.push(eff)
