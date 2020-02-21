@@ -47,6 +47,11 @@ function workloop(deadline: IdleDeadline) {
 }
 
 export function update(fiber: Fiber) {
+    if (fiber === wipRoot) {
+        wipRoot = fiber
+        nextUnitofWork = wipRoot
+        return
+    }
     pendingWorks.add(fiber)
     if (pendingWorks.size === 1) schedule(workloop)
 }
