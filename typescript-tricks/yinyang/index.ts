@@ -1,6 +1,17 @@
 export {}
 
-type YinYang = (a: YinYang) => Generator<string>
+// type YinYang = (a: YinYang) => void
+// function Yin(yinNext: YinYang) {
+//     console.log('@')
+//     console.log('*')
+//     yinNext((yangNext: YinYang) => {
+//         console.log('*')
+//         yinNext(yangNext)
+//     })
+// }
+// this will do the work, but I want a more controllable example
+
+type YinYang = (next: YinYang) => Generator<string>
 
 function* solution() {
     function* yin(yinNext: YinYang) {
