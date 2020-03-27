@@ -5,7 +5,7 @@
 import { Singleton } from './singleton'
 
 const singA = new Singleton()
-console.log(singA)
+console.log(singA.x)
 singA.x = 2
 const singB = new Singleton()
-console.log(singB)
+console.log(singB.x)

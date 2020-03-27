@@ -14,9 +14,7 @@ type Copyable =
     | Date
     | Blob
     | RegExp
-    | {
-          [key: string]: Copyable
-      }
+    | { [key: string]: Copyable }
     | Copyable[]
     | Map<Copyable, Copyable>
     | Set<Copyable>
