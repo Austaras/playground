@@ -2,9 +2,9 @@ import { Handler } from './handler'
 import {
     doNothingMiddleware,
     logMiddleware,
+    makeAddMiddleware,
     nextTickMiddleware,
-    thanosMiddleware,
-    makeAddMiddleware
+    thanosMiddleware
 } from './middlewares'
 
 const handler = new Handler()

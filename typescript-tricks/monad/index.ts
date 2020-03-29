@@ -1,6 +1,6 @@
 import './spec'
-import { compose, curry } from './utils'
 import { IO } from './monad'
+import { compose, curry } from './utils'
 
 const map = curry(<T, R>(fn: (arg: T) => R, m: IO<() => T>): IO<() => R> => m.map(fn))
 

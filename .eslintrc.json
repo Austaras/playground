@@ -66,19 +66,27 @@
         "quote-props": ["warn", "as-needed"],
         "radix": "warn",
         "semi": ["warn", "never"],
+        "space-before-function-paren": [
+            "warn",
+            {
+                "anonymous": "never",
+                "named": "never",
+                "asyncArrow": "always"
+            }
+        ],
         "spaced-comment": "warn",
         "space-in-parens": ["warn", "never"],
         "space-infix-ops": ["warn"],
-        "valid-typeof": [
-            "warn",
-            {
-                "requireStringLiterals": true
-            }
-        ],
+        "sort-imports": ["warn", { "ignoreDeclarationSort": true }],
+        "valid-typeof": ["error", { "requireStringLiterals": true }],
+        "import/first": "warn",
         "import/newline-after-import": "warn",
         "import/order": [
             "warn",
             {
+                "alphabetize": {
+                    "order": "asc"
+                },
                 "groups": [
                     ["internal", "external", "builtin"],
                     ["index", "sibling", "parent"]
@@ -93,7 +101,6 @@
             "warn",
             { "assertionStyle": "as", "objectLiteralTypeAssertions": "allow-as-parameter" }
         ],
-        "@typescript-eslint/func-call-spacing": ["warn", "never"],
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-member-accessibility": [
             "warn",
@@ -104,6 +111,7 @@
                 }
             }
         ],
+        "@typescript-eslint/func-call-spacing": ["warn", "never"],
         "@typescript-eslint/member-delimiter-style": [
             "warn",
             {

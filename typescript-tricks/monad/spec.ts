@@ -1,4 +1,4 @@
-import { Identity, makeEither, Maybe, Monad, IO } from './monad'
+import { IO, Identity, Maybe, Monad, makeEither } from './monad'
 
 interface MonadCtor {
     name: string

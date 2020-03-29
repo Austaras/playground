@@ -1,4 +1,4 @@
-import { hasKey, isPlainObj, Watcher } from './shared'
+import { Watcher, hasKey, isPlainObj } from './shared'
 
 type PatchMethod = 'push' | 'pop' | 'shift' | 'unshift' | 'splice' | 'sort' | 'reverse'
 
