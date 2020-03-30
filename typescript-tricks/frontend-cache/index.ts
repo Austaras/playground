@@ -23,23 +23,18 @@ export function cache(interval: number) {
 class Wiki {
     @cache(1000)
     @cache(1000)
-    public get(term: string) {
-        return fetch('https://en.wikipedia.org/w/api.php' +
-            `?origin=*&action=opensearch&search=${term}&limit=1`)
-            .then(res => res.json())
+    public async get(term: string) {
+        const res = await fetch(
+            `https://en.wikipedia.org/w/api.php?origin=*&action=opensearch&search=${term}&limit=1`
+        )
+        const data = await res.json()
+        return data
     }
 }
 
 const wiki = new Wiki()
-wiki.get('test')
-    .then(result => console.log(result))
-wiki.get('test')
-    .then(result => console.log(result))
-wiki.get('function')
-    .then(result => console.log(result))
-setTimeout(() =>
-    wiki.get('test')
-        .then(result => console.log(result)), 2000)
-setTimeout(() =>
-    wiki.get('function')
-        .then(result => console.log(result)), 500)
+wiki.get('test').then(result => console.log(result))
+wiki.get('test').then(result => console.log(result))
+wiki.get('function').then(result => console.log(result))
+setTimeout(() => wiki.get('test').then(result => console.log(result)), 2000)
+setTimeout(() => wiki.get('function').then(result => console.log(result)), 500)
