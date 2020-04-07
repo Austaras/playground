@@ -1,19 +1,17 @@
 import { Component, FIBER } from './component'
-import { createNode, appendNode, removeNode, updateNode } from './render'
-import { schedule } from './schedule'
 import {
     EFFECT,
-    EffectHook,
     Fiber,
-    copyFiber,
+    Hook,
     NormalFiber,
-    RefHook,
     RenderElement,
-    sanitizeChildren,
+    RenderedFiber,
     StateHook,
-    RenderedFiber
+    copyFiber,
+    sanitizeChildren
 } from './fiber'
-import { depEqual } from './utils'
+import { appendNode, createNode, removeNode, updateNode } from './render'
+import { schedule } from './schedule'
 
 let nextUnitofWork: Fiber | undefined
 let wipRoot: Fiber | undefined
@@ -168,61 +166,19 @@ function reconcileChildren(wipFiber: Fiber, elements: RenderElement[]) {
     }
 }
 
-type Action<T> = ((arg: T) => T) | T
-export function useState<T>(initial: T): [T, (arg: Action<T>) => void] {
-    const currentFiber = wipFiber as NormalFiber
-    const oldHook = currentFiber.alternate?.hooks?.[hookIndex] as StateHook | undefined
-    const index = hookIndex
-    let hook: StateHook
-    if (oldHook) {
-        hook = {
-            state: oldHook.state,
-            queue: [],
-            dispatcher: oldHook.dispatcher
-        }
-    } else {
-        hook = {
-            state: initial,
-            queue: [],
-            dispatcher: (action: Action<T>) => {
-                currentFiber.alternate = copyFiber(currentFiber, 'hooks')
-                ;(currentFiber.alternate.hooks![index] as StateHook).queue.push(action)
-                update(currentFiber)
-            }
-        }
-    }
-
-    const actions = oldHook ? oldHook.queue : []
-    actions.forEach(action => {
-        hook.state = action instanceof Function ? action(hook.state) : action
-    })
-
+export const getOldHook = () => wipFiber!.alternate?.hooks?.[hookIndex]
+export function setNewHook(hook: Hook) {
     wipFiber!.hooks!.push(hook)
     hookIndex++
-    return [hook.state as T, hook.dispatcher as (arg: Action<T>) => void]
 }
-
-export function useEffect(eff: () => void, dep: unknown[]): void {
-    const oldHook = wipFiber!.alternate?.hooks?.[hookIndex] as EffectHook | undefined
-    if (!oldHook || !depEqual(oldHook.dep, dep)) {
-        effects.push(eff)
-    }
-
-    wipFiber!.hooks!.push({ dep })
-    hookIndex++
-}
-
-type RefVal<T> = T | (() => T)
-export function useRef<T>(initial: RefVal<T>) {
-    const oldHook = wipFiber!.alternate?.hooks?.[hookIndex] as RefHook | undefined
-    if (!oldHook) {
-        const current = initial instanceof Function ? initial() : initial
-        wipFiber!.hooks!.push({ current })
-    } else {
-        wipFiber!.hooks!.push(oldHook)
-    }
-    hookIndex++
-    return wipFiber!.hooks![hookIndex - 1] as {
-        current: T
+export type Action<T> = ((arg: T) => T) | T
+export function getDispatcher<T>() {
+    const currentFiber = wipFiber as NormalFiber
+    const index = hookIndex
+    return (action: Action<T>) => {
+        currentFiber.alternate = copyFiber(currentFiber, 'hooks')
+        ;(currentFiber.alternate.hooks![index] as StateHook).queue.push(action)
+        update(currentFiber)
     }
 }
+export const addEffect = (eff: () => void) => effects.push(eff)

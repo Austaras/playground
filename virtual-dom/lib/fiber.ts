@@ -26,9 +26,10 @@ export interface EffectHook {
 export interface RefHook {
     current: any
 }
+export type Hook = StateHook | EffectHook | RefHook
 export interface BasicFiber {
     parent?: Fiber
-    hooks?: (StateHook | EffectHook | RefHook)[]
+    hooks?: Hook[]
     instance?: Component
     child?: Fiber
     sibling?: Fiber

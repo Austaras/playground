@@ -85,7 +85,8 @@
             "warn",
             {
                 "alphabetize": {
-                    "order": "asc"
+                    "order": "asc",
+                    "caseInsensitive": true
                 },
                 "groups": [
                     ["internal", "external", "builtin"],
