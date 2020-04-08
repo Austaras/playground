@@ -50,14 +50,14 @@ function matches(matchNode: Node, name: string) {
 
 function applyAttr(node: HTMLElement, add: Dict, remove: Dict) {
     Object.entries(add).forEach(([key, value]) => {
-        if (value instanceof Function) {
+        if (typeof value === 'function') {
             node.addEventListener(key, value)
             return
         }
         node.setAttribute(key, value)
     })
     Object.entries(remove).forEach(([key, value]) => {
-        if (value instanceof Function) {
+        if (typeof value === 'function') {
             node.removeEventListener(key, value)
             return
         }

@@ -1,4 +1,4 @@
-import { Fiber, TYPE_TEXT, RenderedFiber, TextFiber } from './fiber'
+import { Fiber, RenderedFiber, TYPE_TEXT, TextFiber } from './fiber'
 import { update } from './reconcile'
 import { DELETE, diffProperties } from './utils'
 

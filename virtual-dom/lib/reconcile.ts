@@ -57,7 +57,7 @@ export function update(fiber: Fiber) {
 let wipFiber: Fiber | null = null
 let hookIndex = 0
 function performUnitOfWork(fiber: Fiber) {
-    if (fiber.type instanceof Function) {
+    if (typeof fiber.type === 'function') {
         let children
         if (fiber.type.prototype instanceof Component) {
             if (!fiber.instance) {

@@ -22,7 +22,7 @@ export function useState<T>(initial: T): [T, (arg: Action<T>) => void] {
 
     const actions = oldHook ? oldHook.queue : []
     actions.forEach(action => {
-        hook.state = action instanceof Function ? action(hook.state) : action
+        hook.state = typeof action === 'function' ? action(hook.state) : action
     })
 
     setNewHook(hook)
@@ -44,7 +44,7 @@ export function useRef<T>(initial: RefVal<T>) {
 
     if (!oldHook) {
         oldHook = {
-            current: initial instanceof Function ? initial() : initial
+            current: typeof initial === 'function' ? (initial as () => T)() : initial
         }
     }
 
