@@ -71,7 +71,8 @@ function updateStyle(dom: HTMLElement, styles: any[]) {
 const excludeProps = new Set(['children'] as const)
 export function updateNode(fiber: RenderedFiber | TextFiber, prevProps: JSXProps | text) {
     if (fiber.type === TYPE_TEXT) {
-        return (fiber.dom!.nodeValue = fiber.props as string)
+        fiber.dom!.nodeValue = fiber.props as string
+        return
     }
     const diff = diffProperties(fiber.props, prevProps as JSXProps, excludeProps)
     const ev: EventRecord = {}

@@ -55,6 +55,6 @@ earlier than setTimeout`
 setImmediate(() => console.log(0))
 setImmediate(() => console.log(1))
 setImmediate(i => console.log(i), 2) // you can doesn't mean you should
-const cancel = setImmediate(() => 'do something bad!')
-clearImmediate(cancel)
+const cancelFn = setImmediate(() => 'do something bad!')
+clearImmediate(cancelFn)
 setImmediate(() => console.log("no you don't"))
