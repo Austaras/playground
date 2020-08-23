@@ -34,6 +34,7 @@ ctx.onmessage = event => {
     }
     const params = paramStr.split(',').map(str => str.trim())
     // for recursive function
+    // eslint-disable-next-line @typescript-eslint/no-implied-eval
     ctx[name] = new Function(...params, body)
     const ret = ctx[name](...args)
     delete ctx[name]

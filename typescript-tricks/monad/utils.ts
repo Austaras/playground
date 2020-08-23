@@ -1,5 +1,5 @@
 type Head<T extends any[]> = T extends [infer U, ...any[]] ? U : never
-type Tail<T extends any[]> = ((...args: T) => any) extends ((_: any, ...rest: infer U) => any) ? U : never
+type Tail<T extends any[]> = T extends [any, ...infer U] ? U : never
 type HasTail<T extends any[]> = T extends ([] | [any]) ? false : true
 
 type Curry<P extends any[], R> = (arg0: Head<P>) => HasTail<P> extends true ? Curry<Tail<P>, R> : R
