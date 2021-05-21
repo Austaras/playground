@@ -1,11 +1,13 @@
+@use 'sass:math';
+
 body {
     margin: 0;
-    color: lightgray
+    color: lightgray;
 }
 
 @mixin on-circle($item-count, $circle-size, $item-size) {
     position: relative;
-    width:  $circle-size;
+    width: $circle-size;
     height: $circle-size;
     padding: 0;
     border-radius: 50%;
@@ -13,20 +15,19 @@ body {
     > * {
         display: block;
         position: absolute;
-        top:  50%;
+        top: 50%;
         left: 50%;
-        width:  $item-size;
+        width: $item-size;
         height: $item-size;
-        margin: -($item-size / 2);
+        margin: -(math.div($item-size, 2));
 
-        $angle: (360 / $item-count);
+        $angle: math.div(360, $item-count);
         $rot: 0;
 
         @for $i from 1 through $item-count {
             &:nth-of-type(#{$i}) {
-                transform:
-                    rotate($rot * 1deg)
-                    translate(($circle-size - $item-size) / 2)
+                transform: rotate($rot * 1deg)
+                    translate(math.div(($circle-size - $item-size), 2))
                     rotate($rot * -1deg);
             }
 
@@ -41,13 +42,13 @@ body {
     width: 100%;
     display: flex;
     justify-content: space-around;
-    align-items: center
+    align-items: center;
 }
 
 #container {
     @include on-circle($item-count: 8, $circle-size: 40em, $item-size: 5em);
     background-color: darkgoldenrod;
-    overflow: hidden
+    overflow: hidden;
 }
 
 .item {
@@ -56,5 +57,5 @@ body {
     line-height: 5em;
     border-radius: 50%;
     background-color: cornflowerblue;
-    text-align: center
+    text-align: center;
 }

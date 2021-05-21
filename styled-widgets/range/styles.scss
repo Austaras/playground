@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 $size: 20px;
 $slider-height: 2px;
 $slider-width: 200px;
@@ -29,11 +31,11 @@ $lower: #414141;
 
 // this is dark magic, not advised to use in porduction
 @function makeLongShadow($color, $width, $height, $size) {
-    $x: $size / 2 + 1px;
+    $x: math.div($size, 2) + 1px;
     $val: null;
 
     @while $x < $width {
-        $val: $val, $x 0 0 ($height - $size) / 2 #{$color};
+        $val: $val, $x 0 0 math.div(($height - $size), 2) #{$color};
         $x: $x + $height;
     }
 
@@ -84,7 +86,7 @@ input[type='range'] {
     &::-webkit-slider-thumb {
         @include thumb;
         -webkit-appearance: none;
-        margin-top: -($size - $slider-height) / 2;
+        margin-top: -(math.div(($size - $slider-height), 2));
         box-shadow: makeLongShadow($higher, $slider-width, $slider-height, $size);
         // overwrite default value in mobile Safari
         border: none;

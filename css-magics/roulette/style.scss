@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 body {
     margin: 0;
     background-color: skyblue;
@@ -39,7 +41,7 @@ $height: 200px;
     @for $ind from 1 through $total {
         &:nth-child(#{$ind}) {
             top: -$height * ($ind - 1);
-            transform: rotate(($ind - 1) * 360deg / $total);
+            transform: rotate(math.div(($ind - 1) * 360deg, $total));
         }
     }
 }
