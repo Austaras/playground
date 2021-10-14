@@ -1,35 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Konami Code</title>
+    <link rel="stylesheet" href="style.scss" />
+    <link rel="shortcut icon" href="../../assets/favicon.png" type="image/png" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible"
-        content="ie=edge">
-  <title>Konami Code</title>
-  <link rel="stylesheet"
-        href="style.scss">
-  <link rel="shortcut icon"
-        href="../../assets/favicon.png"
-        type="image/png">
-</head>
+  <body>
+    <div class="container">
+      <div class="joystick" id="pl1" tabindex="0">
+        <img src="../../assets/joystick.png" />
+      </div>
 
-<body>
-  <div class="container">
-    <div class="joystick"
-         id="pl1"
-         tabindex="0">
-      <img src="../../assets/joystick.png">
+      <div class="joystick" id="pl2" tabindex="1">
+        <img src="../../assets/joystick.png" />
+      </div>
     </div>
-
-    <div class="joystick"
-         id="pl2"
-         tabindex="1">
-      <img src="../../assets/joystick.png">
-    </div>
-  </div>
-  <script src="./index.ts"></script>
-</body>
-
+    <script src="./index.ts" type="module"></script>
+  </body>
 </html>

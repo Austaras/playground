@@ -1,0 +1,8 @@
+{
+  "extends": "@parcel/config-default",
+  "transformers": {
+    "{*.tsx,typescript-tricks/async-calc/*.ts,typescript-tricks/auto-unsub/*.ts}": [
+      "@parcel/transformer-typescript-tsc"
+    ]
+  }
+}

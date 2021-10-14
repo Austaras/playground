@@ -1,51 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>User Suggest</title>
+    <link rel="shortcut icon" href="../../assets/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="index.scss" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible"
-        content="ie=edge">
-  <title>User Suggest</title>
-  <link rel="shortcut icon"
-        href="../../assets/favicon.png"
-        type="image/png">
-  <link rel="stylesheet"
-        href="index.scss">
-</head>
-
-<body>
-  <div class="container">
-    <div class="header">
-      <h2>Who to follow</h2>
-      <a id="refresh">Refresh</a>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h2>Who to follow</h2>
+        <a id="refresh">Refresh</a>
+      </div>
+      <ul class="suggestions">
+        <li class="suggestion">
+          <img class="avatar" />
+          <a target="_blank" class="username">this will not be displayed</a>
+          <a class="close">x</a>
+        </li>
+        <li class="suggestion">
+          <img class="avatar" />
+          <a target="_blank" class="username">neither this</a>
+          <a class="close">x</a>
+        </li>
+        <li class="suggestion">
+          <img class="avatar" />
+          <a target="_blank" class="username">nor this</a>
+          <a class="close">x</a>
+        </li>
+      </ul>
     </div>
-    <ul class="suggestions">
-      <li class="suggestion">
-        <img class="avatar" />
-        <a target="_blank"
-           class="username">this will not be displayed</a>
-        <a class="close">x</a>
-      </li>
-      <li class="suggestion">
-        <img class="avatar" />
-        <a target="_blank"
-           class="username">neither this</a>
-        <a class="close">x</a>
-      </li>
-      <li class="suggestion">
-        <img class="avatar" />
-        <a target="_blank"
-           class="username">nor this</a>
-        <a class="close">x</a>
-      </li>
-    </ul>
-  </div>
 
-  <img class="dataflow"
-       src="../../assets/dataflow.webp">
-  <script src="./index.ts"></script>
-</body>
-
+    <img class="dataflow" src="../../assets/dataflow.webp" />
+    <script src="./index.ts" type="module"></script>
+  </body>
 </html>
