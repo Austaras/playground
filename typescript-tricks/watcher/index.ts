@@ -34,7 +34,9 @@ function test(person: Person) {
     console.warn('only proxy can detect following')
     person.superAbility = 'can fly'
     person.children[0] = 3
+    // @ts-ignore
     delete person.money
+    // @ts-ignore
     delete person.house.door
 
     console.warn("this is evil, don't even try")
