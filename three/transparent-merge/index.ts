@@ -58,49 +58,24 @@ const transparent = new MeshStandardMaterial({
   colorWrite: false
 })
 
+const transparentReal = transparent.clone()
+transparentReal.colorWrite = true
+
 const bigBox = new BoxGeometry(20, 20, 20)
-const smallBox = new BoxGeometry(5, 5, 5)
+const smallBox = new BoxGeometry(4, 4, 4)
 
-const mesh1 = new Mesh(bigBox, metal)
-const mesh2 = new Mesh(smallBox, transparent)
-mesh2.position.set(0, 0, 12.5)
-const mesh3 = new Mesh(smallBox, transparent)
-mesh3.position.set(0, 0, 17.5)
-const mesh4 = new Mesh(smallBox, transparent)
-mesh4.position.set(0, 0, 22.5)
-const mesh5 = new Mesh(smallBox, transparent)
-mesh5.position.set(0, 0, 27.5)
+const bigMesh = new Mesh(bigBox, metal)
+scene.add(bigMesh)
 
-scene.add(mesh1)
+for (let i = 0; i < 4; i++) {
+  const smallMesh = new Mesh(smallBox, transparent)
+  smallMesh.position.set(0, 0, 10 + 4 * (i + 0.5))
+  scene.add(smallMesh)
 
-scene.add(mesh2)
-scene.add(mesh3)
-scene.add(mesh4)
-scene.add(mesh5)
-
-{
-  const second = transparent.clone()
-
-  second.colorWrite = true
-
-  const mesh2 = new Mesh(smallBox, second)
-  mesh2.position.set(0, 0, 12.5)
-  const mesh3 = new Mesh(smallBox, second)
-  mesh3.position.set(0, 0, 17.5)
-  const mesh4 = new Mesh(smallBox, second)
-  mesh4.position.set(0, 0, 22.5)
-  const mesh5 = new Mesh(smallBox, second)
-  mesh5.position.set(0, 0, 27.5)
-
-  mesh2.renderOrder = 1
-  mesh3.renderOrder = 1
-  mesh4.renderOrder = 1
-  mesh5.renderOrder = 1
-
-  scene.add(mesh2)
-  scene.add(mesh3)
-  scene.add(mesh4)
-  scene.add(mesh5)
+  const smallMeshReal = new Mesh(smallBox, transparentReal)
+  smallMeshReal.renderOrder = 1
+  smallMeshReal.position.set(0, 0, 10 + 4 * (i + 0.5))
+  scene.add(smallMeshReal)
 }
 
 function render() {
